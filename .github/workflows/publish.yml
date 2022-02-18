@@ -34,6 +34,8 @@ jobs:
           npm install --global yarn
           yarn
       - name: graphql codegen
+        env:
+          NEXT_PUBLIC_BASE_URL: http://chrisinajar.com:4000/graphql
         run: |
           yarn generate
       - name: build project
