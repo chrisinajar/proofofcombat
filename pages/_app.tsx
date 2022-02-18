@@ -1,4 +1,6 @@
+import React from "react";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 
 import { ApolloProvider } from "@apollo/client";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,13 +14,18 @@ const theme = createTheme({});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={apolloClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline enableColorScheme />
+    <React.Fragment>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ApolloProvider client={apolloClient}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline enableColorScheme />
 
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </ApolloProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ApolloProvider>
+    </React.Fragment>
   );
 }
 

@@ -8,7 +8,12 @@ import Button from "@mui/material/Button";
 
 import { useSignupMutation } from "src/generated/graphql";
 
-export function Signup(): JSX.Element {
+type SignupProps = {
+  onSignup?: () => void;
+};
+
+export function Signup(props: SignupProps): JSX.Element {
+  const { onSignup } = props;
   const result = useSignupMutation();
   const [user, setUser] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -33,6 +38,10 @@ export function Signup(): JSX.Element {
           password,
         },
       });
+
+      if (onSignup) {
+        onSignup();
+      }
     } catch (e) {}
   }
 

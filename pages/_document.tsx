@@ -1,3 +1,4 @@
+import React from "react";
 import Document, {
   DocumentContext,
   Html,
@@ -24,7 +25,6 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <body>
           <Main />

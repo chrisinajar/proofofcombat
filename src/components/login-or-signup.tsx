@@ -13,7 +13,7 @@ export function LoginOrSignup(): JSX.Element {
     <Container maxWidth="sm">
       {showSignup && (
         <React.Fragment>
-          <Signup />
+          <Signup onSignup={() => setShowSignup(false)} />
           <Typography>
             Already have an account?
             <Button onClick={() => setShowSignup(false)}>Login here</Button>
