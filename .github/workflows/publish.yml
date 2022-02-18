@@ -24,7 +24,7 @@ jobs:
       - name: Use Node.js (.nvmrc)
         uses: actions/setup-node@v1
         with:
-          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          node-version: "${{ steps.nvm.outputs.NVMRC }}"
 
       - name: install dependencies
         env:
@@ -34,3 +34,6 @@ jobs:
           yarn
           yarn generate
           yarn build
+          git add --force out
+          git ci -am "Build"
+          git subtree push --prefix out origin gh-pages
