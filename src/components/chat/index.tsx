@@ -12,9 +12,18 @@ const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
 
 const chatLimit = 140;
 
+type ChatMessage = {
+  id: number;
+  message: string;
+  from: string;
+};
+type Hello = {
+  chat: ChatMessage[];
+};
+
 export function Chat(): JSX.Element {
   const { data } = useGetChatTokenQuery();
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState<ChatMessage[]>([]);
   const [isChatFocused, setChatFocus] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
 
@@ -35,27 +44,29 @@ export function Chat(): JSX.Element {
       },
     });
 
-    socketRef.current.on("hello", (data) => {
+    socketRef.current.on("hello", (data: Hello) => {
       setChat(data.chat);
     });
 
-    socketRef.current.on("chat", (data) => {
+    socketRef.current.on("chat", (data: ChatMessage) => {
       console.log("Got chat event!", data);
       setChat((oldChat) => [data, ...oldChat]);
     });
 
     return () => {
-      socketRef.current.disconnect();
-      socketRef.current = null;
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = undefined;
+      }
     };
-  }, [socketUrl, data?.chat?.token]);
+  }, [data?.chat?.token]);
 
   function cleanChatMessage(str: string): string {
     return str.trim();
   }
   const cleanMessage = cleanChatMessage(message);
 
-  function handleChange(e: React.ChangeEvent) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
     if (cleanChatMessage(value).length <= chatLimit) {
       setMessage(value);
@@ -72,7 +83,7 @@ export function Chat(): JSX.Element {
       {
         message,
       },
-      (data) => {
+      (data: ChatMessage) => {
         console.log("Got a reply!", data);
         setChat((oldChat) => [data, ...oldChat]);
       }
