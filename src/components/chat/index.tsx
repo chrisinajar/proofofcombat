@@ -10,7 +10,7 @@ export function Chat(): JSX.Element {
   const socketRef = useRef<Socket>();
 
   if (!socketRef.current && data?.chat?.token) {
-    socketRef.current = io("http://localhost:5000", {
+    socketRef.current = io(process.env.NEXT_PUBLIC_CHAT_URL, {
       withCredentials: true,
       auth: {
         token: data.chat.token,
@@ -20,5 +20,7 @@ export function Chat(): JSX.Element {
 
   console.log(socketRef.current);
 
-  return <React.Fragment>chat is basically done though seriously</React.Fragment>;
+  return (
+    <React.Fragment>chat is basically done though seriously</React.Fragment>
+  );
 }
