@@ -44,7 +44,10 @@ export function Login(): JSX.Element {
   return (
     <React.Fragment>
       <FormGroup>
-        <Typography>Login to existing account.</Typography>
+        <Typography>
+          This is a game about clicking numbers and watching numbers go up,
+          login if you have an account already.
+        </Typography>
         <br />
         <TextField
           helperText={!!error && error.message}

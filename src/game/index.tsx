@@ -31,15 +31,12 @@ export default function Home(): JSX.Element {
   return (
     <Layout showHero>
       <br />
+      You are logged in!
       <br />
-      <br />
-      Hey, you're logged in!!
-      <br />
-      <br />
+      I am actively adding new features to this kind of constantly.
       <br />
       <br />
       <Chat />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
     </Layout>
   );
 }

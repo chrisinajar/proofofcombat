@@ -84,6 +84,19 @@ export type LoginResponse = {
   token: Scalars['String'];
 };
 
+export type Monster = {
+  __typename?: 'Monster';
+  combat: MonsterCombatStats;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type MonsterCombatStats = ComatStats & {
+  __typename?: 'MonsterCombatStats';
+  health: Scalars['Int'];
+  maxHealth: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAccount: BaseAccount;
@@ -113,6 +126,12 @@ export type Query = {
   chat: ChatResponse;
   hello?: Maybe<Scalars['String']>;
   me: LoginResponse;
+  monster: Monster;
+};
+
+
+export type QueryMonsterArgs = {
+  id: Scalars['ID'];
 };
 
 export type GetChatTokenQueryVariables = Exact<{ [key: string]: never; }>;
