@@ -41,5 +41,5 @@ jobs:
       - name: push assets
         run: |
           git add --force out
-          git ci -am "Build"
+          git commit -am "Build"
           git subtree push --prefix out origin gh-pages
