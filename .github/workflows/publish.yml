@@ -28,3 +28,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
+
+      - name: install dependencies
+        run: |
+          npm install --global yarn
+          yarn
+          yarn generate
+          yarn build
