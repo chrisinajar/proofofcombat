@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/proofofcombat/",
+  basePath: "/proofofcombat",
   assetPrefix: "/proofofcombat/",
   reactStrictMode: true,
 };
