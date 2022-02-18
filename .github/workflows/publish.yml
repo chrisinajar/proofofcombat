@@ -1,0 +1,30 @@
+name: Publish UI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Allow setting envs
+        run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
+
+      - name: Export CHANGELOGS_GITHUB_TOKEN
+        run: echo "CHANGELOGS_GITHUB_TOKEN=${{ secrets.VERSION_TOKEN }}" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+
+      - name: Use Node.js (.nvmrc)
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
