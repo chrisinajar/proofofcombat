@@ -38,8 +38,9 @@ jobs:
       - name: build project
         run: |
           yarn build
-      - name: push assets
-        run: |
-          git add --force out
-          git commit -am "Build"
-          git subtree push --prefix out origin gh-pages
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: out # The folder the action should deploy.
