@@ -20,5 +20,5 @@ export function Chat(): JSX.Element {
 
   console.log(socketRef.current);
 
-  return "This is the chat area";
+  return <React.Fragment>chat is basically done though seriously</React.Fragment>;
 }

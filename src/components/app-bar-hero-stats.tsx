@@ -4,8 +4,13 @@ import Grid from "@mui/material/Grid";
 
 import type { Hero } from "src/generated/graphql";
 
-type AppBarHeroStatsProps = {
-  hero?: Hero;
+export type AppBarHero = Pick<
+  Hero,
+  "gold" | "level" | "experience" | "combat" | "location" | "stats"
+>;
+
+export type AppBarHeroStatsProps = {
+  hero: AppBarHero;
 };
 
 export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {

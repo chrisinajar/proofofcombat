@@ -5,8 +5,8 @@ import { useMeQuery } from "src/generated/graphql";
 import { AppBar } from "./app-bar";
 
 type LayoutProps = {
-  children: JSX.Element;
-  showHero: boolean;
+  children: React.ReactChild | React.ReactChild[];
+  showHero?: boolean;
 };
 
 export function Layout({
@@ -24,12 +24,14 @@ export function Layout({
       },
     } = data;
 
-    return (
-      <React.Fragment>
-        <AppBar hero={hero} />
-        <Container>{children}</Container>
-      </React.Fragment>
-    );
+    if (hero) {
+      return (
+        <React.Fragment>
+          <AppBar hero={hero} />
+          <Container>{children}</Container>
+        </React.Fragment>
+      );
+    }
   }
 
   return (

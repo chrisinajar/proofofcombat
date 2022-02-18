@@ -11,10 +11,10 @@ import Button from "@mui/material/Button";
 
 import type { Hero } from "src/generated/graphql";
 import { useToken } from "src/token";
-import { AppBarHeroStats } from "./app-bar-hero-stats";
+import { AppBarHeroStats, AppBarHero } from "./app-bar-hero-stats";
 
 type AppBarProps = {
-  hero?: Hero;
+  hero?: AppBarHero & Pick<Hero, "name">;
 };
 
 export function AppBar({ hero }: AppBarProps): JSX.Element {

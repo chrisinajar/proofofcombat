@@ -14,7 +14,7 @@ export function Signup(): JSX.Element {
   const [password, setPassword] = useState<string>("");
   const [signupMutation, { data, loading, error }] = useSignupMutation();
 
-  console.log(data, loading, error);
+  // console.log(data, loading, error);
 
   const hasUserError = error && error.message === "Username already exists";
 
@@ -33,10 +33,7 @@ export function Signup(): JSX.Element {
           password,
         },
       });
-      console.log(result.message);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   }
 
   return (
