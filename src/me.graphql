@@ -1,0 +1,32 @@
+query Me {
+  me {
+    account {
+      hero {
+        name
+
+        level
+        experience
+        gold
+        location {
+          x
+          y
+          map
+        }
+
+        combat {
+          health
+          maxHealth
+        }
+        stats {
+          dexterity
+          intelligence
+          charisma
+          constitution
+          wisdom
+          luck
+          strength
+        }
+      }
+    }
+  }
+}

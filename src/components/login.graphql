@@ -1,0 +1,26 @@
+mutation Login($name: String!, $password: String!) {
+  login(name: $name, password: $password) {
+    token
+    account {
+      name
+      hero {
+        name
+        level
+        experience
+        combat {
+          health
+          maxHealth
+        }
+        stats {
+          strength
+          dexterity
+          constitution
+          intelligence
+          wisdom
+          charisma
+          luck
+        }
+      }
+    }
+  }
+}

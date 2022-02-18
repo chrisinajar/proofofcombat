@@ -1,0 +1,8 @@
+mutation Signup($name: String!, $password: String!) {
+  createAccount(name: $name, password: $password) {
+    name
+    hero {
+      name
+    }
+  }
+}
