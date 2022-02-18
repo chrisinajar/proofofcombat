@@ -8,6 +8,8 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
@@ -27,13 +29,17 @@ jobs:
           node-version: "${{ steps.nvm.outputs.NVMRC }}"
 
       - name: install dependencies
-        env:
-          NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
         run: |
           npm install --global yarn
           yarn
+      - name: graphql codegen
+        run: |
           yarn generate
+      - name: build project
+        run: |
           yarn build
+      - name: push assets
+        run: |
           git add --force out
           git ci -am "Build"
           git subtree push --prefix out origin gh-pages
