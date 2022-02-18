@@ -12,9 +12,6 @@ jobs:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
 
-      - name: Export CHANGELOGS_GITHUB_TOKEN
-        run: echo "CHANGELOGS_GITHUB_TOKEN=${{ secrets.VERSION_TOKEN }}" >> $GITHUB_ENV
-
       - uses: actions/checkout@v2
         with:
           ref: main
@@ -30,6 +27,8 @@ jobs:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
 
       - name: install dependencies
+        env:
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
         run: |
           npm install --global yarn
           yarn
