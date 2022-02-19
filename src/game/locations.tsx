@@ -9,6 +9,8 @@ import { useDelay } from "src/hooks/use-delay";
 
 import { useMoveLocationMutation, MoveDirection } from "src/generated/graphql";
 
+import { Map } from "./map";
+
 export function Locations(): JSX.Element | null {
   const hero = useHero();
   const [currentDelay, setDelay] = useDelay();
@@ -34,7 +36,7 @@ export function Locations(): JSX.Element | null {
 
   return (
     <React.Fragment>
-      <Grid container columns={2}>
+      <Grid container columns={2} spacing={3}>
         <Grid item xs={2} sm={1}>
           <Grid container columns={6} spacing={3}>
             <Grid item style={{ textAlign: "center" }} xs={6}>
@@ -85,10 +87,10 @@ export function Locations(): JSX.Element | null {
               </Button>
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
-            <Grid item style={{ textAlign: "center" }} xs={6}>
-              <Typography>(Visual map coming very soon)</Typography>
-            </Grid>
           </Grid>
+        </Grid>
+        <Grid item style={{ textAlign: "center" }} xs={2} sm={1}>
+          <Map />
         </Grid>
       </Grid>
     </React.Fragment>
