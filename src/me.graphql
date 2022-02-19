@@ -1,6 +1,10 @@
 query Me {
   me {
+    now
     account {
+      id
+      nextAllowedAction
+
       hero {
         id
         name

@@ -19,6 +19,7 @@ import {
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
+import { useDelay } from "src/hooks/use-delay";
 
 import { CombatDisplay } from "./combat-display";
 
@@ -26,6 +27,7 @@ const challengeLabel = "Select a monster to challenge";
 const fightLabel = "Fight a monster!";
 
 export function Combat(): JSX.Element {
+  const [currentDelay, setDelay] = useDelay();
   const [challenge, setChallenge] = useState<string>("");
   const [monster, setMonster] = useState<string>("");
   const { data: monstersData, loading, error, refetch } = useMonstersQuery();
@@ -45,7 +47,11 @@ export function Combat(): JSX.Element {
   async function handleHeal() {
     try {
       await healMutation();
-    } catch (e) {}
+    } catch (e: any) {
+      if (e.graphQLErrors && e.graphQLErrors[0]?.extensions?.delay) {
+        setDelay(e.graphQLErrors[0].extensions.remaining);
+      }
+    }
   }
 
   async function handleFight() {
@@ -104,7 +110,7 @@ export function Combat(): JSX.Element {
                   ))}
                 </Select>
                 <Button
-                  disabled={!challenge}
+                  disabled={!challenge || currentDelay > 0}
                   onClick={handleChallenge}
                   variant="contained"
                 >
@@ -137,7 +143,7 @@ export function Combat(): JSX.Element {
                 </Select>
                 {loading && <CircularProgress />}
                 <Button
-                  disabled={!monster}
+                  disabled={!monster || currentDelay > 0}
                   onClick={handleFight}
                   variant="contained"
                 >
@@ -153,7 +159,12 @@ export function Combat(): JSX.Element {
           </Grid>
         )}
         <Grid item lg={3} xs={6}>
-          <Button fullWidth onClick={handleHeal} variant="contained">
+          <Button
+            fullWidth
+            onClick={handleHeal}
+            variant="contained"
+            disabled={currentDelay > 0}
+          >
             Heal
           </Button>
         </Grid>

@@ -1,9 +1,15 @@
 mutation Heal {
   heal {
-    id
-    combat {
-      maxHealth
-      health
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      combat {
+        maxHealth
+        health
+      }
     }
   }
 }

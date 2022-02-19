@@ -10,6 +10,10 @@ mutation Fight($monster: ID!) {
       from
       to
     }
+    account {
+      id
+      nextAllowedAction
+    }
     hero {
       id
       level
