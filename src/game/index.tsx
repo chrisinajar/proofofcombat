@@ -17,11 +17,13 @@ import { Combat } from "src/components/combat";
 import { useMeQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
 
+import { Locations } from "./locations";
+
 export default function Home(): JSX.Element {
   const router = useRouter();
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
-  const [selectedTab, setSelectedTab] = useState("1");
+  const [selectedTab, setSelectedTab] = useState("3");
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -49,6 +51,7 @@ export default function Home(): JSX.Element {
             <TabList onChange={handleChangeTab} aria-label="navigation tabs">
               <Tab label="Welcome / News" value="1" />
               <Tab label="Combat" value="2" />
+              <Tab label="Map" value="3" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -72,6 +75,9 @@ export default function Home(): JSX.Element {
             </Typography>
             <br />
             <Combat />
+          </TabPanel>
+          <TabPanel value="3">
+            <Locations />
           </TabPanel>
         </TabContext>
         <br />

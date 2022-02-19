@@ -34,7 +34,7 @@ export function Combat(): JSX.Element {
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
   const [challengeMutation] = useChallengeMutation();
-  const [healMutation] = useHealMutation();
+  const [healMutation, { loading: healLoading }] = useHealMutation();
   const { data: challengesData, refetch: refetchChallenges } =
     useChallengesQuery();
   const challenges: Pick<Monster, "id" | "name" | "level">[] =
@@ -46,8 +46,17 @@ export function Combat(): JSX.Element {
   }, [hero?.location.x, hero?.location.y, hero?.location.map]);
 
   useEffect(() => {
-    if (monster === "" && monstersData?.monsters?.length) {
-      setMonster(monstersData?.monsters[0].id);
+    if (monstersData?.monsters?.length) {
+      if (monster === "") {
+        setMonster(monstersData.monsters[0].id);
+      } else {
+        const existingMonster = monstersData.monsters.find(
+          (m) => m.id === monster
+        );
+        if (!existingMonster) {
+          setMonster(monstersData.monsters[0].id);
+        }
+      }
     }
   }, [monster, monstersData?.monsters?.length]);
 
@@ -128,7 +137,12 @@ export function Combat(): JSX.Element {
                   ))}
                 </Select>
                 <Button
-                  disabled={!challenge || currentDelay > 0}
+                  disabled={
+                    !challenge ||
+                    currentDelay > 0 ||
+                    fightLoading ||
+                    healLoading
+                  }
                   onClick={handleChallenge}
                   variant="contained"
                 >
@@ -161,7 +175,9 @@ export function Combat(): JSX.Element {
                 </Select>
                 {loading && <CircularProgress />}
                 <Button
-                  disabled={!monster || currentDelay > 0}
+                  disabled={
+                    !monster || currentDelay > 0 || fightLoading || healLoading
+                  }
                   onClick={handleFight}
                   variant="contained"
                 >
@@ -181,7 +197,7 @@ export function Combat(): JSX.Element {
             fullWidth
             onClick={handleHeal}
             variant="contained"
-            disabled={currentDelay > 0}
+            disabled={currentDelay > 0 || fightLoading || healLoading}
           >
             Heal
           </Button>
