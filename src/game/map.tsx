@@ -3,13 +3,14 @@ import React from "react";
 import { useHero } from "src/hooks/use-hero";
 
 const minimapSize = [16, 16];
-const gridSize = [132, 99];
-const cellSize = 12;
+const gridSize = [128, 96];
+const cellSize = 16;
+const indicatorSize = 5;
 
-export function Map(): JSX.Element {
+export function Map(): JSX.Element | null {
   const hero = useHero();
   if (!hero) {
-    return;
+    return null;
   }
 
   const { location } = hero;
@@ -46,12 +47,21 @@ export function Map(): JSX.Element {
       <div
         style={{
           position: "absolute",
-
-          left: `${(location.x - centerPoint[0]) * cellSize}px`,
-          top: `${(location.y - centerPoint[1]) * cellSize}px`,
-          width: "5px",
-          height: "5px",
+          borderRadius: `${indicatorSize / 2}px`,
+          opacity: 0.8,
           backgroundColor: "blue",
+          border: "1px solid black",
+
+          left: `${
+            (location.x - centerPoint[0]) * cellSize +
+            (cellSize - indicatorSize) / 2
+          }px`,
+          top: `${
+            (location.y - centerPoint[1]) * cellSize +
+            (cellSize - indicatorSize) / 2
+          }px`,
+          width: `${indicatorSize}px`,
+          height: `${indicatorSize}px`,
         }}
       />
     </div>
