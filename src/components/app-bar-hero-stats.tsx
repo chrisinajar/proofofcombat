@@ -14,8 +14,6 @@ export type AppBarHeroStatsProps = {
 };
 
 export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
-  console.log({ hero });
-
   return (
     <React.Fragment>
       <Grid container columns={6}>

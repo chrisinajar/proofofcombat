@@ -35,7 +35,13 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
 
   return (
     <React.Fragment>
-      <Grid item xs={6}>
+      <Grid
+        style={{
+          minHeight: "110px",
+        }}
+        item
+        xs={6}
+      >
         {fight.log.map((entry) => (
           <React.Fragment key={entry.from}>
             <Typography>

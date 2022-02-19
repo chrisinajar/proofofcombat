@@ -31,7 +31,8 @@ export function Combat(): JSX.Element {
   const [challenge, setChallenge] = useState<string>("");
   const [monster, setMonster] = useState<string>("");
   const { data: monstersData, loading, error, refetch } = useMonstersQuery();
-  const [fightMutation, { data: fightData }] = useFightMutation();
+  const [fightMutation, { data: fightData, loading: fightLoading }] =
+    useFightMutation();
   const [challengeMutation] = useChallengeMutation();
   const [healMutation] = useHealMutation();
   const { data: challengesData, refetch: refetchChallenges } =
@@ -43,6 +44,12 @@ export function Combat(): JSX.Element {
   useEffect(() => {
     refetchChallenges();
   }, [hero?.location.x, hero?.location.y, hero?.location.map]);
+
+  useEffect(() => {
+    if (monster === "" && monstersData?.monsters?.length) {
+      setMonster(monstersData?.monsters[0].id);
+    }
+  }, [monster, monstersData?.monsters?.length]);
 
   async function handleHeal() {
     try {
@@ -86,6 +93,17 @@ export function Combat(): JSX.Element {
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
+        {fightLoading && (
+          <Grid
+            item
+            xs={6}
+            style={{
+              minHeight: "110px",
+            }}
+          >
+            <Typography>Loading combat...</Typography>
+          </Grid>
+        )}
         {fightData && <CombatDisplay fight={fightData.fight} />}
         {hero && hero.combat.health > 0 && (
           <React.Fragment>
