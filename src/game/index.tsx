@@ -23,7 +23,7 @@ export default function Home(): JSX.Element {
   const router = useRouter();
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
-  const [selectedTab, setSelectedTab] = useState("3");
+  const [selectedTab, setSelectedTab] = useState("1");
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
