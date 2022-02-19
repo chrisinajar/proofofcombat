@@ -7,9 +7,9 @@ import { CombatEntry, AttackType } from "src/generated/graphql";
 
 type CombatDisplayProps = {
   fight: {
-    victory: boolean;
-    didLevel?: boolean;
-    experience?: number;
+    victory: boolean | null;
+    didLevel?: boolean | null;
+    experience?: number | null;
     log: CombatEntry[];
     monster: {
       monster: {
