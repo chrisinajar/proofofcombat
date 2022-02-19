@@ -1,0 +1,13 @@
+query Monsters {
+  monsters {
+    id
+    monster {
+      name
+      level
+      combat {
+        health
+        maxHealth
+      }
+    }
+  }
+}

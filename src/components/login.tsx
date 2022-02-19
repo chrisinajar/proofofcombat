@@ -45,8 +45,8 @@ export function Login(): JSX.Element {
     <React.Fragment>
       <FormGroup>
         <Typography>
-          This is a game about clicking numbers and watching numbers go up,
-          login if you have an account already.
+          This is a game about clicking things and watching numbers go up, login
+          if you have an account already.
         </Typography>
         <br />
         <TextField

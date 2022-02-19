@@ -6,7 +6,7 @@ import type { Hero } from "src/generated/graphql";
 
 export type AppBarHero = Pick<
   Hero,
-  "gold" | "level" | "experience" | "combat" | "location" | "stats"
+  "gold" | "level" | "experience" | "combat" | "location" | "stats" | "needed"
 >;
 
 export type AppBarHeroStatsProps = {
@@ -29,7 +29,7 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           Gold: {hero.gold}
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Experience: {hero.experience}
+          Experience: {hero.experience} / {hero.needed}
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
           Health: {hero.combat.health} / {hero.combat.maxHealth}

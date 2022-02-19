@@ -1,0 +1,41 @@
+mutation Fight($monster: ID!) {
+  fight(monster: $monster) {
+    victory
+    log {
+      damage
+      attackType
+      success
+      from
+      to
+    }
+    hero {
+      id
+      level
+      experience
+      combat {
+        health
+        maxHealth
+      }
+      needed
+      gold
+      stats {
+        luck
+        charisma
+        wisdom
+        intelligence
+        constitution
+        dexterity
+        strength
+      }
+    }
+    monster {
+      id
+      monster {
+        combat {
+          health
+          maxHealth
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 import { Layout } from "src/components/layout";
 import { Chat } from "src/components/chat";
+import { Combat } from "src/components/combat";
 import { useMeQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
 
@@ -35,6 +36,8 @@ export default function Home(): JSX.Element {
       <br />
       I am actively adding new features to this kind of constantly.
       <br />
+      <br />
+      <Combat />
       <br />
       <Chat />
     </Layout>

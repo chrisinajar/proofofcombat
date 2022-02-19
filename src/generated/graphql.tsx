@@ -15,6 +15,10 @@ export type Scalars = {
   Float: number;
 };
 
+export enum AttackType {
+  Melee = 'MELEE'
+}
+
 export type BaseAccount = BaseModel & {
   __typename?: 'BaseAccount';
   hero?: Maybe<Hero>;
@@ -37,9 +41,21 @@ export type ComatStats = {
   maxHealth: Scalars['Int'];
 };
 
+export type CombatEntry = {
+  __typename?: 'CombatEntry';
+  attackType: AttackType;
+  damage: Scalars['Int'];
+  from: Scalars['String'];
+  success: Scalars['Boolean'];
+  to: Scalars['String'];
+};
+
 export type FightResult = {
   __typename?: 'FightResult';
-  victory?: Maybe<Scalars['Boolean']>;
+  hero: Hero;
+  log?: Maybe<Array<CombatEntry>>;
+  monster: MonsterInstance;
+  victory: Scalars['Boolean'];
 };
 
 export type Hero = BaseModel & {
@@ -51,6 +67,7 @@ export type Hero = BaseModel & {
   level: Scalars['Int'];
   location: Location;
   name: Scalars['String'];
+  needed: Scalars['Int'];
   stats: HeroStats;
 };
 
@@ -88,6 +105,7 @@ export type Monster = {
   __typename?: 'Monster';
   combat: MonsterCombatStats;
   id: Scalars['ID'];
+  level: Scalars['Int'];
   name: Scalars['String'];
 };
 
@@ -97,11 +115,25 @@ export type MonsterCombatStats = ComatStats & {
   maxHealth: Scalars['Int'];
 };
 
+export type MonsterInstance = BaseModel & {
+  __typename?: 'MonsterInstance';
+  id: Scalars['ID'];
+  location: Location;
+  monster: Monster;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  challenge: MonsterInstance;
   createAccount: BaseAccount;
   fight: FightResult;
+  heal: Hero;
   login: LoginResponse;
+};
+
+
+export type MutationChallengeArgs = {
+  monster: Scalars['ID'];
 };
 
 
@@ -127,6 +159,7 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
   me: LoginResponse;
   monster: Monster;
+  monsters: Array<MonsterInstance>;
 };
 
 
@@ -138,6 +171,30 @@ export type GetChatTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetChatTokenQuery = { __typename?: 'Query', chat: { __typename?: 'ChatResponse', token: string } };
+
+export type ChallengeMutationVariables = Exact<{
+  monster: Scalars['ID'];
+}>;
+
+
+export type ChallengeMutation = { __typename?: 'Mutation', challenge: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', name: string } } };
+
+export type FightMutationVariables = Exact<{
+  monster: Scalars['ID'];
+}>;
+
+
+export type FightMutation = { __typename?: 'Mutation', fight: { __typename?: 'FightResult', victory: boolean, log?: Array<{ __typename?: 'CombatEntry', damage: number, attackType: AttackType, success: boolean, from: string, to: string }> | null, hero: { __typename?: 'Hero', id: string, level: number, experience: number, needed: number, gold: number, combat: { __typename?: 'HeroCombatStats', health: number, maxHealth: number }, stats: { __typename?: 'HeroStats', luck: number, charisma: number, wisdom: number, intelligence: number, constitution: number, dexterity: number, strength: number } }, monster: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } } } };
+
+export type HealMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HealMutation = { __typename?: 'Mutation', heal: { __typename?: 'Hero', id: string, combat: { __typename?: 'HeroCombatStats', maxHealth: number, health: number } } };
+
+export type MonstersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MonstersQuery = { __typename?: 'Query', monsters: Array<{ __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', name: string, level: number, combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } }> };
 
 export type LoginMutationVariables = Exact<{
   name: Scalars['String'];
@@ -158,7 +215,7 @@ export type SignupMutation = { __typename?: 'Mutation', createAccount: { __typen
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'LoginResponse', account: { __typename?: 'BaseAccount', hero?: { __typename?: 'Hero', name: string, level: number, experience: number, gold: number, location: { __typename?: 'Location', x: number, y: number, map: string }, combat: { __typename?: 'HeroCombatStats', health: number, maxHealth: number }, stats: { __typename?: 'HeroStats', dexterity: number, intelligence: number, charisma: number, constitution: number, wisdom: number, luck: number, strength: number } } | null } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'LoginResponse', account: { __typename?: 'BaseAccount', hero?: { __typename?: 'Hero', id: string, name: string, level: number, experience: number, needed: number, gold: number, location: { __typename?: 'Location', x: number, y: number, map: string }, combat: { __typename?: 'HeroCombatStats', health: number, maxHealth: number }, stats: { __typename?: 'HeroStats', dexterity: number, intelligence: number, charisma: number, constitution: number, wisdom: number, luck: number, strength: number } } | null } } };
 
 
 export const GetChatTokenDocument = gql`
@@ -195,6 +252,189 @@ export function useGetChatTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetChatTokenQueryHookResult = ReturnType<typeof useGetChatTokenQuery>;
 export type GetChatTokenLazyQueryHookResult = ReturnType<typeof useGetChatTokenLazyQuery>;
 export type GetChatTokenQueryResult = Apollo.QueryResult<GetChatTokenQuery, GetChatTokenQueryVariables>;
+export const ChallengeDocument = gql`
+    mutation Challenge($monster: ID!) {
+  challenge(monster: $monster) {
+    id
+    monster {
+      name
+    }
+  }
+}
+    `;
+export type ChallengeMutationFn = Apollo.MutationFunction<ChallengeMutation, ChallengeMutationVariables>;
+
+/**
+ * __useChallengeMutation__
+ *
+ * To run a mutation, you first call `useChallengeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChallengeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [challengeMutation, { data, loading, error }] = useChallengeMutation({
+ *   variables: {
+ *      monster: // value for 'monster'
+ *   },
+ * });
+ */
+export function useChallengeMutation(baseOptions?: Apollo.MutationHookOptions<ChallengeMutation, ChallengeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChallengeMutation, ChallengeMutationVariables>(ChallengeDocument, options);
+      }
+export type ChallengeMutationHookResult = ReturnType<typeof useChallengeMutation>;
+export type ChallengeMutationResult = Apollo.MutationResult<ChallengeMutation>;
+export type ChallengeMutationOptions = Apollo.BaseMutationOptions<ChallengeMutation, ChallengeMutationVariables>;
+export const FightDocument = gql`
+    mutation Fight($monster: ID!) {
+  fight(monster: $monster) {
+    victory
+    log {
+      damage
+      attackType
+      success
+      from
+      to
+    }
+    hero {
+      id
+      level
+      experience
+      combat {
+        health
+        maxHealth
+      }
+      needed
+      gold
+      stats {
+        luck
+        charisma
+        wisdom
+        intelligence
+        constitution
+        dexterity
+        strength
+      }
+    }
+    monster {
+      id
+      monster {
+        combat {
+          health
+          maxHealth
+        }
+      }
+    }
+  }
+}
+    `;
+export type FightMutationFn = Apollo.MutationFunction<FightMutation, FightMutationVariables>;
+
+/**
+ * __useFightMutation__
+ *
+ * To run a mutation, you first call `useFightMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFightMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fightMutation, { data, loading, error }] = useFightMutation({
+ *   variables: {
+ *      monster: // value for 'monster'
+ *   },
+ * });
+ */
+export function useFightMutation(baseOptions?: Apollo.MutationHookOptions<FightMutation, FightMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FightMutation, FightMutationVariables>(FightDocument, options);
+      }
+export type FightMutationHookResult = ReturnType<typeof useFightMutation>;
+export type FightMutationResult = Apollo.MutationResult<FightMutation>;
+export type FightMutationOptions = Apollo.BaseMutationOptions<FightMutation, FightMutationVariables>;
+export const HealDocument = gql`
+    mutation Heal {
+  heal {
+    id
+    combat {
+      maxHealth
+      health
+    }
+  }
+}
+    `;
+export type HealMutationFn = Apollo.MutationFunction<HealMutation, HealMutationVariables>;
+
+/**
+ * __useHealMutation__
+ *
+ * To run a mutation, you first call `useHealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [healMutation, { data, loading, error }] = useHealMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHealMutation(baseOptions?: Apollo.MutationHookOptions<HealMutation, HealMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<HealMutation, HealMutationVariables>(HealDocument, options);
+      }
+export type HealMutationHookResult = ReturnType<typeof useHealMutation>;
+export type HealMutationResult = Apollo.MutationResult<HealMutation>;
+export type HealMutationOptions = Apollo.BaseMutationOptions<HealMutation, HealMutationVariables>;
+export const MonstersDocument = gql`
+    query Monsters {
+  monsters {
+    id
+    monster {
+      name
+      level
+      combat {
+        health
+        maxHealth
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMonstersQuery__
+ *
+ * To run a query within a React component, call `useMonstersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMonstersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMonstersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMonstersQuery(baseOptions?: Apollo.QueryHookOptions<MonstersQuery, MonstersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MonstersQuery, MonstersQueryVariables>(MonstersDocument, options);
+      }
+export function useMonstersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MonstersQuery, MonstersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MonstersQuery, MonstersQueryVariables>(MonstersDocument, options);
+        }
+export type MonstersQueryHookResult = ReturnType<typeof useMonstersQuery>;
+export type MonstersLazyQueryHookResult = ReturnType<typeof useMonstersLazyQuery>;
+export type MonstersQueryResult = Apollo.QueryResult<MonstersQuery, MonstersQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($name: String!, $password: String!) {
   login(name: $name, password: $password) {
@@ -292,9 +532,11 @@ export const MeDocument = gql`
   me {
     account {
       hero {
+        id
         name
         level
         experience
+        needed
         gold
         location {
           x

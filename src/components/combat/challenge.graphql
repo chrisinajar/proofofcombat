@@ -1,0 +1,8 @@
+mutation Challenge($monster: ID!) {
+  challenge(monster: $monster) {
+    id
+    monster {
+      name
+    }
+  }
+}

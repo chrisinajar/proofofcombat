@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
+import { emojify } from "node-emoji";
 
 import Button from "@mui/material/Button";
 import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 
 import { useGetChatTokenQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
@@ -110,12 +112,20 @@ export function Chat(): JSX.Element {
         autoComplete="off"
         onKeyPress={checkForEnter}
       />
-      {chat.map((chatMessage) => (
-        <div key={chatMessage.id}>
-          {chatMessage.from}: {chatMessage.message}
-        </div>
-      ))}
-      {/* <Button variant="contained">Send</Button> */}
+      <Box
+        sx={{
+          backgroundColor: "primary.light",
+          padding: 1,
+          minHeight: "600px",
+        }}
+      >
+        {chat.map((chatMessage) => (
+          <div key={chatMessage.id}>
+            <b>{chatMessage.from}</b> {emojify(chatMessage.message)}
+          </div>
+        ))}
+        {/* <Button variant="contained">Send</Button> */}
+      </Box>
       <br />
     </React.Fragment>
   );

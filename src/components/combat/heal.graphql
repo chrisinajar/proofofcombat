@@ -1,0 +1,9 @@
+mutation Heal {
+  heal {
+    id
+    combat {
+      maxHealth
+      health
+    }
+  }
+}
