@@ -53,7 +53,7 @@ export type CombatEntry = {
 export type FightResult = {
   __typename?: 'FightResult';
   hero: Hero;
-  log?: Maybe<Array<CombatEntry>>;
+  log: Array<CombatEntry>;
   monster: MonsterInstance;
   victory: Scalars['Boolean'];
 };
@@ -155,6 +155,7 @@ export type MutationLoginArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  challenges: Array<Monster>;
   chat: ChatResponse;
   hello?: Maybe<Scalars['String']>;
   me: LoginResponse;
@@ -177,14 +178,19 @@ export type ChallengeMutationVariables = Exact<{
 }>;
 
 
-export type ChallengeMutation = { __typename?: 'Mutation', challenge: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', name: string } } };
+export type ChallengeMutation = { __typename?: 'Mutation', challenge: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', id: string, name: string } } };
+
+export type ChallengesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChallengesQuery = { __typename?: 'Query', challenges: Array<{ __typename?: 'Monster', id: string, name: string, level: number }> };
 
 export type FightMutationVariables = Exact<{
   monster: Scalars['ID'];
 }>;
 
 
-export type FightMutation = { __typename?: 'Mutation', fight: { __typename?: 'FightResult', victory: boolean, log?: Array<{ __typename?: 'CombatEntry', damage: number, attackType: AttackType, success: boolean, from: string, to: string }> | null, hero: { __typename?: 'Hero', id: string, level: number, experience: number, needed: number, gold: number, combat: { __typename?: 'HeroCombatStats', health: number, maxHealth: number }, stats: { __typename?: 'HeroStats', luck: number, charisma: number, wisdom: number, intelligence: number, constitution: number, dexterity: number, strength: number } }, monster: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } } } };
+export type FightMutation = { __typename?: 'Mutation', fight: { __typename?: 'FightResult', victory: boolean, log: Array<{ __typename?: 'CombatEntry', damage: number, attackType: AttackType, success: boolean, from: string, to: string }>, hero: { __typename?: 'Hero', id: string, level: number, experience: number, needed: number, gold: number, combat: { __typename?: 'HeroCombatStats', health: number, maxHealth: number }, stats: { __typename?: 'HeroStats', luck: number, charisma: number, wisdom: number, intelligence: number, constitution: number, dexterity: number, strength: number } }, monster: { __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', name: string, combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } } } };
 
 export type HealMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -194,7 +200,7 @@ export type HealMutation = { __typename?: 'Mutation', heal: { __typename?: 'Hero
 export type MonstersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MonstersQuery = { __typename?: 'Query', monsters: Array<{ __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', name: string, level: number, combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } }> };
+export type MonstersQuery = { __typename?: 'Query', monsters: Array<{ __typename?: 'MonsterInstance', id: string, monster: { __typename?: 'Monster', id: string, name: string, level: number, combat: { __typename?: 'MonsterCombatStats', health: number, maxHealth: number } } }> };
 
 export type LoginMutationVariables = Exact<{
   name: Scalars['String'];
@@ -257,6 +263,7 @@ export const ChallengeDocument = gql`
   challenge(monster: $monster) {
     id
     monster {
+      id
       name
     }
   }
@@ -288,6 +295,42 @@ export function useChallengeMutation(baseOptions?: Apollo.MutationHookOptions<Ch
 export type ChallengeMutationHookResult = ReturnType<typeof useChallengeMutation>;
 export type ChallengeMutationResult = Apollo.MutationResult<ChallengeMutation>;
 export type ChallengeMutationOptions = Apollo.BaseMutationOptions<ChallengeMutation, ChallengeMutationVariables>;
+export const ChallengesDocument = gql`
+    query Challenges {
+  challenges {
+    id
+    name
+    level
+  }
+}
+    `;
+
+/**
+ * __useChallengesQuery__
+ *
+ * To run a query within a React component, call `useChallengesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChallengesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChallengesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useChallengesQuery(baseOptions?: Apollo.QueryHookOptions<ChallengesQuery, ChallengesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ChallengesQuery, ChallengesQueryVariables>(ChallengesDocument, options);
+      }
+export function useChallengesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ChallengesQuery, ChallengesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ChallengesQuery, ChallengesQueryVariables>(ChallengesDocument, options);
+        }
+export type ChallengesQueryHookResult = ReturnType<typeof useChallengesQuery>;
+export type ChallengesLazyQueryHookResult = ReturnType<typeof useChallengesLazyQuery>;
+export type ChallengesQueryResult = Apollo.QueryResult<ChallengesQuery, ChallengesQueryVariables>;
 export const FightDocument = gql`
     mutation Fight($monster: ID!) {
   fight(monster: $monster) {
@@ -322,6 +365,7 @@ export const FightDocument = gql`
     monster {
       id
       monster {
+        name
         combat {
           health
           maxHealth
@@ -398,6 +442,7 @@ export const MonstersDocument = gql`
   monsters {
     id
     monster {
+      id
       name
       level
       combat {

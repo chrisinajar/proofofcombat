@@ -2,6 +2,7 @@ query Monsters {
   monsters {
     id
     monster {
+      id
       name
       level
       combat {

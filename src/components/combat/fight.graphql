@@ -31,6 +31,7 @@ mutation Fight($monster: ID!) {
     monster {
       id
       monster {
+        name
         combat {
           health
           maxHealth

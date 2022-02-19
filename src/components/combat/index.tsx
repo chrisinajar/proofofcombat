@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -11,12 +11,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import {
   useMonstersQuery,
+  useChallengesQuery,
   useFightMutation,
   useHealMutation,
   useChallengeMutation,
+  Monster,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
+
+import { CombatDisplay } from "./combat-display";
 
 const challengeLabel = "Select a monster to challenge";
 const fightLabel = "Fight a monster!";
@@ -25,10 +29,18 @@ export function Combat(): JSX.Element {
   const [challenge, setChallenge] = useState<string>("");
   const [monster, setMonster] = useState<string>("");
   const { data, loading, error, refetch } = useMonstersQuery();
-  const [fightMutation, fightData] = useFightMutation();
+  const [fightMutation, { data: fightData }] = useFightMutation();
   const [challengeMutation] = useChallengeMutation();
   const [healMutation] = useHealMutation();
+  const { data: challengesData, refetch: refetchChallenges } =
+    useChallengesQuery();
+  const challenges: Pick<Monster, "id" | "name" | "level">[] =
+    challengesData?.challenges || [];
   const hero = useHero();
+
+  useEffect(() => {
+    refetchChallenges();
+  }, [hero?.location.x, hero?.location.y, hero?.location.map]);
 
   async function handleHeal() {
     try {
@@ -68,6 +80,7 @@ export function Combat(): JSX.Element {
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
+        {fightData && <CombatDisplay fight={fightData.fight} />}
         {hero && hero.combat.health > 0 && (
           <React.Fragment>
             <Grid item md={3} xs={6}>
@@ -81,7 +94,14 @@ export function Combat(): JSX.Element {
                   label={challengeLabel}
                   onChange={(e) => setChallenge(e.target.value)}
                 >
-                  <MenuItem value={"rat"}>Rat</MenuItem>
+                  {challenges.map((challengeOption) => (
+                    <MenuItem
+                      key={challengeOption.id}
+                      value={challengeOption.id}
+                    >
+                      {challengeOption.name}
+                    </MenuItem>
+                  ))}
                 </Select>
                 <Button
                   disabled={!challenge}
@@ -104,9 +124,12 @@ export function Combat(): JSX.Element {
                   onChange={(e) => setMonster(e.target.value)}
                 >
                   {data?.monsters &&
-                    data?.monsters.map((monster) => (
-                      <MenuItem key={monster.id} value={monster.id}>
-                        {monster.monster.name}
+                    data?.monsters.map((monsterInstance) => (
+                      <MenuItem
+                        key={monsterInstance.id}
+                        value={monsterInstance.id}
+                      >
+                        {monsterInstance.monster.name}
                       </MenuItem>
                     ))}
                 </Select>

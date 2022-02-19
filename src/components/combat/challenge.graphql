@@ -2,6 +2,7 @@ mutation Challenge($monster: ID!) {
   challenge(monster: $monster) {
     id
     monster {
+      id
       name
     }
   }
