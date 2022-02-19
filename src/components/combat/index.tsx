@@ -28,7 +28,7 @@ const fightLabel = "Fight a monster!";
 export function Combat(): JSX.Element {
   const [challenge, setChallenge] = useState<string>("");
   const [monster, setMonster] = useState<string>("");
-  const { data, loading, error, refetch } = useMonstersQuery();
+  const { data: monstersData, loading, error, refetch } = useMonstersQuery();
   const [fightMutation, { data: fightData }] = useFightMutation();
   const [challengeMutation] = useChallengeMutation();
   const [healMutation] = useHealMutation();
@@ -123,15 +123,17 @@ export function Combat(): JSX.Element {
                   label={fightLabel}
                   onChange={(e) => setMonster(e.target.value)}
                 >
-                  {data?.monsters &&
-                    data?.monsters.map((monsterInstance) => (
-                      <MenuItem
-                        key={monsterInstance.id}
-                        value={monsterInstance.id}
-                      >
-                        {monsterInstance.monster.name}
-                      </MenuItem>
-                    ))}
+                  {monstersData?.monsters &&
+                    [...monstersData?.monsters]
+                      .sort((a, b) => a.monster.level - b.monster.level)
+                      .map((monsterInstance) => (
+                        <MenuItem
+                          key={monsterInstance.id}
+                          value={monsterInstance.id}
+                        >
+                          {monsterInstance.monster.name}
+                        </MenuItem>
+                      ))}
                 </Select>
                 {loading && <CircularProgress />}
                 <Button

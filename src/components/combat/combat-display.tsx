@@ -8,6 +8,8 @@ import { CombatEntry, AttackType } from "src/generated/graphql";
 type CombatDisplayProps = {
   fight: {
     victory: boolean;
+    didLevel?: boolean;
+    experience?: number;
     log: CombatEntry[];
     monster: {
       monster: {
@@ -46,7 +48,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         ))}
 
         {fight.victory && (
-          <Typography>{monster.name} has been killed!</Typography>
+          <Typography>
+            {monster.name} has been killed!
+            {fight.experience && ` You gain ${fight.experience} experience! `}
+            {fight.didLevel && <b>You leveled up!!</b>}
+          </Typography>
         )}
       </Grid>
     </React.Fragment>
