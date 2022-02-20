@@ -1,5 +1,5 @@
-mutation Fight($monster: ID!) {
-  fight(monster: $monster) {
+mutation Fight($monster: ID!, $attackType: AttackType) {
+  fight(monster: $monster, attackType: $attackType) {
     victory
     experience
     didLevel

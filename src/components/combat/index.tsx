@@ -16,6 +16,7 @@ import {
   useHealMutation,
   useChallengeMutation,
   Monster,
+  MonsterInstance,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
@@ -26,13 +27,15 @@ import { CombatDisplay } from "./combat-display";
 const challengeLabel = "Select a monster to challenge";
 const fightLabel = "Fight a monster!";
 
+type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
+
 export function Combat(): JSX.Element {
+  const [currentFight, setCurrentFight] =
+    useState<PartialMonsterInstance | null>(null);
   const [currentDelay, setDelay] = useDelay();
   const [challenge, setChallenge] = useState<string>("");
-  const [monster, setMonster] = useState<string>("");
+  let [monster, setMonster] = useState<string>("");
   const { data: monstersData, loading, error, refetch } = useMonstersQuery();
-  const [fightMutation, { data: fightData, loading: fightLoading }] =
-    useFightMutation();
   const [challengeMutation] = useChallengeMutation();
   const [healMutation, { loading: healLoading }] = useHealMutation();
   const { data: challengesData, refetch: refetchChallenges } =
@@ -71,19 +74,10 @@ export function Combat(): JSX.Element {
   }
 
   async function handleFight() {
-    try {
-      const fightResult = await fightMutation({
-        variables: {
-          monster,
-        },
-      });
-      if (fightResult.data?.fight.victory) {
-        setMonster("");
-        refetch();
-      }
-    } catch (e) {
-      refetch();
-    }
+    const existingMonster = monstersData?.monsters.find(
+      (m) => m.id === monster
+    );
+    setCurrentFight(existingMonster ?? null);
   }
 
   async function handleChallenge() {
@@ -99,21 +93,25 @@ export function Combat(): JSX.Element {
     }
   }
 
+  const existingMonster = monstersData?.monsters?.find((m) => m.id === monster);
+
+  if (!existingMonster) {
+    monster = "";
+  }
+
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
-        {fightLoading && (
-          <Grid
-            item
-            xs={6}
-            style={{
-              minHeight: "110px",
+        {currentFight && (
+          <CombatDisplay
+            fight={currentFight}
+            onVictory={() => refetch()}
+            onError={() => {
+              refetch();
+              setCurrentFight(null);
             }}
-          >
-            <Typography>Loading combat...</Typography>
-          </Grid>
+          />
         )}
-        {fightData && <CombatDisplay fight={fightData.fight} />}
         {hero && hero.combat.health > 0 && (
           <React.Fragment>
             <Grid item md={3} xs={6}>
@@ -137,12 +135,7 @@ export function Combat(): JSX.Element {
                   ))}
                 </Select>
                 <Button
-                  disabled={
-                    !challenge ||
-                    currentDelay > 0 ||
-                    fightLoading ||
-                    healLoading
-                  }
+                  disabled={!challenge || currentDelay > 0 || healLoading}
                   onClick={handleChallenge}
                   variant="contained"
                 >
@@ -175,9 +168,7 @@ export function Combat(): JSX.Element {
                 </Select>
                 {loading && <CircularProgress />}
                 <Button
-                  disabled={
-                    !monster || currentDelay > 0 || fightLoading || healLoading
-                  }
+                  disabled={!monster || currentDelay > 0 || healLoading}
                   onClick={handleFight}
                   variant="contained"
                 >
@@ -197,7 +188,7 @@ export function Combat(): JSX.Element {
             fullWidth
             onClick={handleHeal}
             variant="contained"
-            disabled={currentDelay > 0 || fightLoading || healLoading}
+            disabled={currentDelay > 0 || healLoading}
           >
             Heal
           </Button>
