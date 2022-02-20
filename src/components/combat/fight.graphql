@@ -9,6 +9,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       success
       from
       to
+      critical
     }
     account {
       id

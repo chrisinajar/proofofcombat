@@ -149,7 +149,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
             <React.Fragment key={entry.from}>
               <Typography>
                 <b>{entry.from}</b>
-                {` ${getCombatPhrase(entry.attackType, entry.success)} `}
+                {` ${getCombatPhrase(
+                  entry.attackType,
+                  entry.success,
+                  entry.critical
+                )} `}
                 <b>{entry.to}</b>
                 {entry.success ? ` for ${entry.damage} damage!` : "."}
               </Typography>
@@ -169,34 +173,54 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   );
 }
 
-function getCombatPhrase(attackType: AttackType, success: boolean): string {
+function getCombatPhrase(
+  attackType: AttackType,
+  success: boolean,
+  critical: boolean
+): string {
   switch (attackType) {
     case AttackType.Blood:
       return success
-        ? "lets blood and casts forth towards"
+        ? critical
+          ? "surges with blood magic against"
+          : "lets blood and casts forth towards"
         : "attempts to cast a spell against";
       break;
     case AttackType.Holy:
       return success
-        ? "summons powers beyond this world against"
-        : "attempts to cast a spell against";
+        ? critical
+          ? "summons powers beyond this world against"
+          : "smites"
+        : "attempts to smite";
       break;
     case AttackType.Elemental:
       return success
-        ? "creates an elemental storm around"
+        ? critical
+          ? "creates an elemental storm around"
+          : "casts an elemental spell at"
         : "attempts to cast a spell against";
       break;
     case AttackType.Wizard:
       return success
-        ? "carefully casts a spell at"
+        ? critical
+          ? "carefully casts a spell at"
+          : "blasts a beam of necrotic energy into"
         : "attempts to cast a spell against";
       break;
     case AttackType.Ranged:
-      return success ? "fires an arrow at" : "shoots an arrow but it misses";
+      return success
+        ? critical
+          ? "lands a sneak attack from the shadows, critically damaging"
+          : "fires an arrow at"
+        : "shoots an arrow but it misses";
       break;
     case AttackType.Melee:
     default:
-      return success ? "struck" : "missed";
+      return success
+        ? critical
+          ? "lands a crippling blow against"
+          : "struck"
+        : "missed";
       break;
   }
 }
