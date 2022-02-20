@@ -123,6 +123,7 @@ export function Combat(): JSX.Element {
                   {challengeLabel}
                 </InputLabel>
                 <Select
+                  id="challenge-select"
                   labelId="challenge-monster-select-label"
                   value={challenge}
                   label={challengeLabel}
@@ -138,6 +139,7 @@ export function Combat(): JSX.Element {
                   ))}
                 </Select>
                 <Button
+                  id="challenge-button"
                   disabled={!challenge || currentDelay > 0 || healLoading}
                   onClick={handleChallenge}
                   variant="contained"
@@ -152,6 +154,7 @@ export function Combat(): JSX.Element {
                   {fightLabel}
                 </InputLabel>
                 <Select
+                  id="fight-select"
                   labelId="fight-monster-select-label"
                   value={monster}
                   label={fightLabel}
@@ -171,6 +174,7 @@ export function Combat(): JSX.Element {
                 </Select>
                 {loading && <CircularProgress />}
                 <Button
+                  id="fight-button"
                   disabled={!monster || currentDelay > 0 || healLoading}
                   onClick={handleFight}
                   variant="contained"
@@ -183,11 +187,12 @@ export function Combat(): JSX.Element {
         )}
         {hero && hero.combat.health <= 0 && (
           <Grid item lg={3} xs={6}>
-            <Typography>You are dead.</Typography>
+            <Typography id="you-are-dead">You are dead.</Typography>
           </Grid>
         )}
         <Grid item lg={3} xs={6}>
           <Button
+            id="heal-button"
             fullWidth
             onClick={handleHeal}
             variant="contained"

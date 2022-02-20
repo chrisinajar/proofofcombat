@@ -60,11 +60,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     }
   }
 
-  console.log({ fightResult });
-
   return (
     <React.Fragment>
       <Grid
+        id="combat-display"
         style={{
           minHeight: "110px",
         }}
@@ -75,6 +74,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your strength">
               <Button
+                id="attack-with-melee"
                 onClick={() => handleFight(AttackType.Melee)}
                 aria-label="melee attack"
                 startIcon={<ShieldIcon />}
@@ -86,6 +86,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your dexterity">
               <Button
+                id="attack-with-ranged"
                 onClick={() => handleFight(AttackType.Ranged)}
                 aria-label="ranged attack"
                 startIcon={<DoubleArrowIcon />}
@@ -97,6 +98,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your intelligence">
               <Button
+                id="attack-with-wizard"
                 onClick={() => handleFight(AttackType.Wizard)}
                 aria-label="conjuration spell"
                 startIcon={<SchoolIcon />}
@@ -108,6 +110,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your wisdon">
               <Button
+                id="attack-with-elemental"
                 onClick={() => handleFight(AttackType.Elemental)}
                 aria-label="elemental spell"
                 startIcon={<LocalFireDepartmentIcon />}
@@ -119,6 +122,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your charisma">
               <Button
+                id="attack-with-holy"
                 onClick={() => handleFight(AttackType.Holy)}
                 aria-label="holy attack"
                 startIcon={<MenuBookIcon />}
@@ -130,6 +134,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your constitution">
               <Button
+                id="attack-with-blood"
                 onClick={() => handleFight(AttackType.Blood)}
                 aria-label="blood magic"
                 startIcon={<BloodtypeIcon />}

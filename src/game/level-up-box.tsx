@@ -39,6 +39,7 @@ export function LevelUpBox(): JSX.Element {
                 <Grid item key={name} xs={7} sm={3} md={2} lg={1}>
                   <Typography align="center">
                     <Button
+                      id={`level-up-${name.toLowerCase()}`}
                       disabled={loading || currentDelay > 0}
                       onClick={() =>
                         levelUp(
