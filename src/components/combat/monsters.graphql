@@ -5,6 +5,7 @@ query Monsters {
       id
       name
       level
+      attackType
       combat {
         health
         maxHealth
