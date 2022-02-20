@@ -18,6 +18,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       id
       level
       experience
+      attributePoints
       combat {
         health
         maxHealth

@@ -1,0 +1,25 @@
+mutation LevelUp($attribute: AttributeType!) {
+  increaseAttribute(attribute: $attribute) {
+    hero {
+      id
+      attributePoints
+      stats {
+        luck
+        charisma
+        wisdom
+        intelligence
+        constitution
+        dexterity
+        strength
+      }
+      combat {
+        maxHealth
+        health
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

@@ -14,10 +14,12 @@ import TabPanel from "@mui/lab/TabPanel";
 import { Layout } from "src/components/layout";
 import { Chat } from "src/components/chat";
 import { Combat } from "src/components/combat";
-import { useMeQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
 
+import { useMeQuery } from "src/generated/graphql";
+
 import { Locations } from "./locations";
+import { LevelUpBox } from "./level-up-box";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -28,6 +30,8 @@ export default function Home(): JSX.Element {
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
   };
+
+  const hero = data?.me?.account?.hero ?? null;
 
   if (error || !token) {
     router.push(`/?auth=${router.asPath}`);
@@ -45,6 +49,9 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout showHero>
+      <React.Fragment>
+        {hero && hero.attributePoints > 0 && <LevelUpBox />}
+      </React.Fragment>
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

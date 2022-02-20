@@ -6,6 +6,7 @@ query Me {
       nextAllowedAction
 
       hero {
+        version
         id
         name
 
@@ -13,6 +14,8 @@ query Me {
         experience
         needed
         gold
+        attributePoints
+
         location {
           x
           y
