@@ -20,8 +20,8 @@ const Home: NextPage = () => {
       <br />
       <Divider />
       <br />
-      <Grid container columns={2}>
-        <Grid item sm={1} xs={1}>
+      <Grid container columns={3}>
+        <Grid item sm={1} xs={3}>
           <Typography>
             <a
               href="https://github.com/chrisinajar/proofofcombat"
@@ -32,7 +32,18 @@ const Home: NextPage = () => {
             </a>
           </Typography>
         </Grid>
-        <Grid item sm={1} xs={1}>
+        <Grid item sm={1} xs={3}>
+          <Typography align="center">
+            <a
+              href="https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fchrisinajar.com%3A4333%2Fgraphql"
+              target="_blank"
+              rel="noreferrer"
+            >
+              API explorer
+            </a>
+          </Typography>
+        </Grid>
+        <Grid item sm={1} xs={3}>
           <Typography align="right">
             <a
               href="https://github.com/chrisinajar/proofofcombat-server"

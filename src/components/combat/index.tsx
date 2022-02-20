@@ -82,11 +82,14 @@ export function Combat(): JSX.Element {
 
   async function handleChallenge() {
     try {
-      await challengeMutation({
+      const { data } = await challengeMutation({
         variables: {
           monster: challenge,
         },
       });
+      if (data?.challenge?.id) {
+        setMonster(data?.challenge?.id);
+      }
       refetch();
     } catch (e) {
       refetch();

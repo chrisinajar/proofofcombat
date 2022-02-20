@@ -62,17 +62,14 @@ export default function Home(): JSX.Element {
             </Typography>
             <br />
             <Typography>
-              You may now use the locations tab to move to different locations
-              on the map. A visual map is coming soon, as well as locations
-              around the map with various features. Right now locations are
-              useful for getting away from other players who are killing the
-              monsters you're trying to level up off of.
+              There are now 6 different types of combat available, each uses a
+              different primary attribute to determine hit chance and damage.
+              Additionally, each type of attack has its own unique benefits!
             </Typography>
             <br />
             <Typography>
-              You can find chat below, it keeps the last 50 messages, or since
-              the server last restarted. Emoji's are fully supported and
-              encouraged.
+              The map is fully functional! Be sure to travel around before
+              travel gets harder...
             </Typography>
           </TabPanel>
           <TabPanel value="2">
