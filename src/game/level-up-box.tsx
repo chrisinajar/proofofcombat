@@ -39,9 +39,9 @@ export function LevelUpBox(): JSX.Element {
           </Typography>
         </Container>
         <br />
-        <Grid container columns={7} spacing={2}>
+        <Grid container columns={14} spacing={2}>
           <Tooltip title="Strength helps you with melee attacks">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-strength"
@@ -55,7 +55,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Dexterity helps you with ranged attacks and with defending against both ranged attacks and elemental spells">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-dexterity"
@@ -69,7 +69,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Constitution determines your max health, is used in both attack and defending blood magic, and also helps defend against melee attacks">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-constitution"
@@ -83,7 +83,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Intelligence is used to conjure wizard spells as well as to defend against holy sells">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-intelligence"
@@ -97,7 +97,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Wisdom helps you cast elemental spells, as well as defending against wizard spells">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-wisdom"
@@ -111,7 +111,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Charisma is used by holy warriors to attack">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-charisma"
@@ -125,7 +125,7 @@ export function LevelUpBox(): JSX.Element {
             </Grid>
           </Tooltip>
           <Tooltip title="Luck helps your odds in most random rolls the game makes">
-            <Grid item xs={7} sm={3} md={2} lg={1}>
+            <Grid item xs={14} md={12} lg={2}>
               <Typography align="center">
                 <Button
                   id="level-up-luck"
