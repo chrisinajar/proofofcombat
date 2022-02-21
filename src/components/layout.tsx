@@ -6,6 +6,7 @@ import { useMeQuery } from "src/generated/graphql";
 import { DelayContext } from "src/hooks/use-delay";
 import { AppBar } from "./app-bar";
 import { DelayBar } from "./delay-bar";
+import { Footer } from "./footer";
 
 type LayoutProps = {
   children: React.ReactChild | React.ReactChild[];
@@ -70,6 +71,7 @@ export function Layout({
           <AppBar hero={hero} />
           <DelayBar delay={currentDelay} />
           <Container>{children}</Container>
+          <Footer />
         </DelayContext.Provider>
       );
     }
@@ -79,6 +81,7 @@ export function Layout({
     <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
       <AppBar />
       <Container>{children}</Container>
+      <Footer />
     </DelayContext.Provider>
   );
 }
