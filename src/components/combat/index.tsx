@@ -50,14 +50,18 @@ export function Combat(): JSX.Element {
 
   useEffect(() => {
     if (monstersData?.monsters?.length) {
+      const monsterList = monstersData.monsters
+        .concat()
+        .sort((a, b) => a.monster.level - b.monster.level);
+
       if (monster === "") {
-        setMonster(monstersData.monsters[0].id);
+        setMonster(monsterList[0].id);
       } else {
         const existingMonster = monstersData.monsters.find(
           (m) => m.id === monster
         );
         if (!existingMonster) {
-          setMonster(monstersData.monsters[0].id);
+          setMonster(monsterList[0].id);
         }
       }
     }
@@ -87,10 +91,10 @@ export function Combat(): JSX.Element {
           monster: challenge,
         },
       });
+      await refetch();
       if (data?.challenge?.id) {
         setMonster(data?.challenge?.id);
       }
-      refetch();
     } catch (e) {
       refetch();
     }
@@ -107,6 +111,7 @@ export function Combat(): JSX.Element {
       <Grid container columns={6} spacing={4}>
         {currentFight && (
           <CombatDisplay
+            key={currentFight.id}
             fight={currentFight}
             onVictory={() => refetch()}
             onError={() => {

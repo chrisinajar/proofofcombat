@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import ShieldIcon from "@mui/icons-material/Shield";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
@@ -26,6 +27,10 @@ type CombatDisplayProps = {
     id: string;
     monster: {
       name: string;
+      combat: {
+        health: number;
+        maxHealth: number;
+      };
     };
   };
   onVictory?: () => void;
@@ -40,8 +45,30 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   } = props;
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
-
+  const [enemyHealth, setEnemyHealth] = useState<number>(100);
+  // fightResult
+  //   ? (fightResult.monster.monster.combat.health /
+  //       fightResult.monster.monster.combat.maxHealth) *
+  //     100
+  //   : 100
   const fightResult = fightData?.fight;
+
+  useEffect(() => {
+    if (fightLoading) {
+      return;
+    }
+    setEnemyHealth(
+      (100 *
+        (fightResult
+          ? fightResult.monster.monster.combat.health
+          : monster.combat.health)) /
+        monster.combat.maxHealth
+    );
+  }, [
+    fightResult?.monster.monster.combat.health,
+    fightResult?.monster.monster.combat.maxHealth,
+    monster.combat.maxHealth,
+  ]);
 
   async function handleFight(attackType: AttackType) {
     console.log("Trying to fight", attackType);
@@ -74,6 +101,14 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         xs={6}
       >
         <Grid container columns={6}>
+          <Grid item xs={6}>
+            <Typography variant="h4">Battling {monster.name}</Typography>
+            <LinearProgress
+              variant="determinate"
+              value={enemyHealth}
+              color="error"
+            />
+          </Grid>
           <Grid item xs={6} sm={3} md={2} lg={1}>
             <Tooltip title="Attack using your strength">
               <Button
