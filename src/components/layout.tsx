@@ -7,6 +7,7 @@ import { DelayContext } from "src/hooks/use-delay";
 import { AppBar } from "./app-bar";
 import { DelayBar } from "./delay-bar";
 import { Footer } from "./footer";
+import { HeroBars } from "./hero-bars";
 
 type LayoutProps = {
   children: React.ReactChild | React.ReactChild[];
@@ -69,6 +70,7 @@ export function Layout({
       return (
         <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
           <AppBar hero={hero} />
+          <HeroBars hero={hero} />
           <DelayBar delay={currentDelay} />
           <Container>{children}</Container>
           <Footer />

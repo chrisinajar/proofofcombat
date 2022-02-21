@@ -155,21 +155,40 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   entry.critical
                 )} `}
                 <b>{entry.to}</b>
-                {entry.success ? ` for ${entry.damage} damage!` : "."}
+                {entry.success
+                  ? ` for ${entry.damage.toLocaleString()} damage!`
+                  : "."}
               </Typography>
             </React.Fragment>
           ))}
 
         {fightResult && fightResult.victory && (
-          <Typography>
+          <Typography id="fight-did-win">
             {monster.name} has been killed!
             {(fightResult.experience || fightResult.gold) && " You gain "}
-            {fightResult.gold && ` ${fightResult.gold.toLocaleString()} gold`}
+            {fightResult.gold && (
+              <React.Fragment>
+                {" "}
+                <span id="fight-recap-gold">
+                  {fightResult.gold.toLocaleString()}
+                </span>{" "}
+                gold
+              </React.Fragment>
+            )}
             {fightResult.gold && fightResult.experience && ` and`}
-            {fightResult.experience &&
-              ` ${fightResult.experience.toLocaleString()} experience`}
+            {fightResult.experience && (
+              <React.Fragment>
+                {" "}
+                <span id="fight-recap-experience">
+                  {fightResult.experience.toLocaleString()}
+                </span>{" "}
+                experience
+              </React.Fragment>
+            )}
             {(fightResult.experience || fightResult.gold) && "!! "}
-            {fightResult.didLevel && <b>You leveled up!!</b>}
+            {fightResult.didLevel && (
+              <b id="fight-level-up">You leveled up!!</b>
+            )}
           </Typography>
         )}
       </Grid>

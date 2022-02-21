@@ -18,42 +18,74 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
     <React.Fragment>
       <Grid container columns={6}>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Level: {hero.level.toLocaleString()}
+          Level:{" "}
+          <span id="hero-stats-level">{hero.level.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Location: {hero.location.x}, {hero.location.y}
+          Location:{" "}
+          <span id="hero-stats-location">
+            {hero.location.x}, {hero.location.y}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Gold: {hero.gold.toLocaleString()}
+          Gold: <span id="hero-stats-gold">{hero.gold.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Experience: {hero.experience.toLocaleString()} /{" "}
-          {hero.needed.toLocaleString()}
+          Experience:{" "}
+          <span id="hero-stats-experience">
+            {hero.experience.toLocaleString()}
+          </span>{" "}
+          /{" "}
+          <span id="hero-stats-experience-needed">
+            {hero.needed.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Health: {hero.combat.health.toLocaleString()} /{" "}
-          {hero.combat.maxHealth.toLocaleString()}
+          Health:{" "}
+          <span id="hero-stats-health">
+            {hero.combat.health.toLocaleString()} /{" "}
+            {hero.combat.maxHealth.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Luck: {hero.stats.luck.toLocaleString()}
+          Luck:{" "}
+          <span id="hero-stats-luck">{hero.stats.luck.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Strength: {hero.stats.strength.toLocaleString()}
+          Strength:{" "}
+          <span id="hero-stats-strength">
+            {hero.stats.strength.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Dexterity: {hero.stats.dexterity.toLocaleString()}
+          Dexterity:{" "}
+          <span id="hero-stats-dexterity">
+            {hero.stats.dexterity.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Constitution: {hero.stats.constitution.toLocaleString()}
+          Constitution:{" "}
+          <span id="hero-stats-constitution">
+            {hero.stats.constitution.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Intelligence: {hero.stats.intelligence.toLocaleString()}
+          Intelligence:{" "}
+          <span id="hero-stats-intelligence">
+            {hero.stats.intelligence.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Wisdom: {hero.stats.wisdom.toLocaleString()}
+          Wisdom:{" "}
+          <span id="hero-stats-wisdom">
+            {hero.stats.wisdom.toLocaleString()}
+          </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Charisma: {hero.stats.charisma.toLocaleString()}
+          Charisma:{" "}
+          <span id="hero-stats-charisma">
+            {hero.stats.charisma.toLocaleString()}
+          </span>
         </Grid>
       </Grid>
     </React.Fragment>
