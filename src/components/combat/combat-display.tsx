@@ -198,7 +198,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
               <React.Fragment>
                 <br />
                 <Typography id="fight-got-drop" variant="h5">
-                  You find an enchanted item on the monster's corpse!
+                  You find an enchanted item on the monster&apos;s corpse!
                   <br />
                   {itemDisplayName(fightResult.drop)}
                 </Typography>
