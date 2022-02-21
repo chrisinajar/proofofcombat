@@ -163,8 +163,12 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         {fightResult && fightResult.victory && (
           <Typography>
             {monster.name} has been killed!
+            {(fightResult.experience || fightResult.gold) && " You gain "}
+            {fightResult.gold && ` ${fightResult.gold.toLocaleString()} gold`}
+            {fightResult.gold && fightResult.experience && ` and`}
             {fightResult.experience &&
-              ` You gain ${fightResult.experience} experience! `}
+              ` ${fightResult.experience.toLocaleString()} experience`}
+            {(fightResult.experience || fightResult.gold) && "!! "}
             {fightResult.didLevel && <b>You leveled up!!</b>}
           </Typography>
         )}

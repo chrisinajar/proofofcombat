@@ -2,6 +2,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
   fight(monster: $monster, attackType: $attackType) {
     victory
     experience
+    gold
     didLevel
     log {
       damage
