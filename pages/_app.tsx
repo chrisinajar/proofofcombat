@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <meta name="robots" content="index, follow" />
         <meta charSet="utf-8" />
-        <meta http-equiv="cache-control" content="no-cache" />
+        <meta httpEquiv="cache-control" content="no-cache" />
 
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
