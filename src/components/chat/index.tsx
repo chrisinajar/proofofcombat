@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import { useGetChatTokenQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
@@ -18,6 +19,26 @@ type ChatMessage = {
   id: number;
   message: string;
   from: string;
+  color?: string;
+  variant?:
+    | "button"
+    | "caption"
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "inherit"
+    | "subtitle1"
+    | "subtitle2"
+    | "body1"
+    | "body2"
+    | "overline";
+};
+type SystemMessage = {
+  color: string;
+  message: string;
 };
 type Hello = {
   chat: ChatMessage[];
@@ -53,6 +74,19 @@ export function Chat(): JSX.Element {
     socketRef.current.on("chat", (data: ChatMessage) => {
       console.log("Got chat event!", data);
       setChat((oldChat) => [data, ...oldChat]);
+    });
+
+    socketRef.current.on("system-message", (data: SystemMessage) => {
+      setChat((oldChat) => [
+        {
+          id: Math.random(),
+          message: data.message,
+          from: "",
+          color: data.color,
+          variant: "h6",
+        },
+        ...oldChat,
+      ]);
     });
 
     return () => {
@@ -114,15 +148,19 @@ export function Chat(): JSX.Element {
       />
       <Box
         sx={{
-          backgroundColor: "primary.light",
           padding: 1,
           minHeight: "600px",
+          bgcolor: "primary.light",
         }}
       >
         {chat.map((chatMessage) => (
-          <div key={chatMessage.id}>
+          <Typography
+            variant={chatMessage.variant || "body1"}
+            key={chatMessage.id}
+            sx={{ color: `${chatMessage.color || "text"}.dark` }}
+          >
             <b>{chatMessage.from}</b> {emojify(chatMessage.message)}
-          </div>
+          </Typography>
         ))}
         {/* <Button variant="contained">Send</Button> */}
       </Box>
