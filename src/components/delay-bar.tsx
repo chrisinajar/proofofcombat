@@ -30,6 +30,7 @@ export function DelayBar({ delay }: DelayBarProps): JSX.Element {
 
   return (
     <div
+      id="delay-bar-container"
       style={{
         width: "100%",
         height: "4px",
@@ -37,6 +38,7 @@ export function DelayBar({ delay }: DelayBarProps): JSX.Element {
       }}
     >
       <div
+        id="delay-bar"
         ref={barRef}
         style={{
           height: "100%",
