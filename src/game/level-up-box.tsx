@@ -124,7 +124,7 @@ export function LevelUpBox(): JSX.Element {
               </Typography>
             </Grid>
           </Tooltip>
-          <Tooltip title="Luck helps your odds in most random rolls the game makes">
+          <Tooltip title="Luck helps you critically strike foes, it also affects item drop rates and stat gains">
             <Grid item xs={14} md={12} lg={2}>
               <Typography align="center">
                 <Button
