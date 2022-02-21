@@ -22,6 +22,91 @@ query Me {
           map
         }
 
+        inventory {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        equipment {
+          id
+          accessories {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          footArmor {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          headArmor {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          legArmor {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          handArmor {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          bodyArmor {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          rightHand {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          leftHand {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+        }
+
         combat {
           health
           maxHealth

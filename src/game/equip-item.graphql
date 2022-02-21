@@ -1,0 +1,35 @@
+mutation EquipItem($item: ID!, $slot: String!) {
+  equip(item: $item, slot: $slot) {
+    account {
+      nextAllowedAction
+      id
+    }
+    hero {
+      id
+      equipment {
+        id
+        footArmor {
+          id
+        }
+        headArmor {
+          id
+        }
+        legArmor {
+          id
+        }
+        handArmor {
+          id
+        }
+        bodyArmor {
+          id
+        }
+        rightHand {
+          id
+        }
+        leftHand {
+          id
+        }
+      }
+    }
+  }
+}

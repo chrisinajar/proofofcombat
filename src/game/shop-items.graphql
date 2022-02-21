@@ -1,0 +1,8 @@
+query ShopItems {
+  shopItems {
+    id
+    name
+    cost
+    type
+  }
+}

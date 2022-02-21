@@ -20,6 +20,8 @@ import { useMeQuery } from "src/generated/graphql";
 
 import { Locations } from "./locations";
 import { LevelUpBox } from "./level-up-box";
+import { Shop } from "./shop";
+import { Inventory } from "./inventory";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -58,7 +60,9 @@ export default function Home(): JSX.Element {
             <TabList onChange={handleChangeTab} aria-label="navigation tabs">
               <Tab label="Welcome / News" value="1" />
               <Tab label="Combat" value="2" />
-              <Tab label="Map" value="3" />
+              <Tab label="Shop" value="3" />
+              <Tab label="Inventory" value="4" />
+              <Tab label="Map" value="5" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -89,6 +93,12 @@ export default function Home(): JSX.Element {
             <Combat />
           </TabPanel>
           <TabPanel value="3">
+            <Shop />
+          </TabPanel>
+          <TabPanel value="4">
+            <Inventory />
+          </TabPanel>
+          <TabPanel value="5">
             <Locations />
           </TabPanel>
         </TabContext>
