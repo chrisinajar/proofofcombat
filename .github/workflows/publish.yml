@@ -51,4 +51,4 @@ jobs:
 
       - name: Send deploy notification
         run: |
-          curl -k https://chrisinajar.com:4333/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
+          curl http://chrisinajar.com:4000/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
