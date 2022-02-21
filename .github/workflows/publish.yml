@@ -48,3 +48,7 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: out # The folder the action should deploy.
+
+      - name: Send deploy notification
+        run: |
+          curl https://chrisinajar.com:4333/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
