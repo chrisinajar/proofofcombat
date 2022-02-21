@@ -6,6 +6,7 @@ import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -16,7 +17,7 @@ import { Chat } from "src/components/chat";
 import { Combat } from "src/components/combat";
 import { useToken } from "src/token";
 
-import { useMeQuery } from "src/generated/graphql";
+import { useMeQuery, useLeaderboardQuery } from "src/generated/graphql";
 
 import { Locations } from "./locations";
 import { LevelUpBox } from "./level-up-box";
@@ -28,6 +29,7 @@ export default function Home(): JSX.Element {
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
   const [selectedTab, setSelectedTab] = useState("1");
+  const { data: leaderboardData } = useLeaderboardQuery();
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
@@ -66,22 +68,40 @@ export default function Home(): JSX.Element {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <Typography>
-              Welcome to the game! I'm updating things extremely regularly, so
-              check back often and refresh often. Use the tabs above to navigate
-              around.
-            </Typography>
-            <br />
-            <Typography>
-              There are now 6 different types of combat available, each uses a
-              different primary attribute to determine hit chance and damage.
-              Additionally, each type of attack has its own unique benefits!
-            </Typography>
-            <br />
-            <Typography>
-              The map is fully functional! Be sure to travel around before
-              travel gets harder...
-            </Typography>
+            <Grid container columns={6}>
+              <Grid item xs={6} sm={3}>
+                <Typography>
+                  Welcome to the game! I'm updating things extremely regularly,
+                  so check back often and refresh often. Use the tabs above to
+                  navigate around.
+                </Typography>
+                <br />
+                <Typography>
+                  There are now 6 different types of combat available, each uses
+                  a different primary attribute to determine hit chance and
+                  damage. Additionally, each type of attack has its own unique
+                  benefits!
+                </Typography>
+                <br />
+                <Typography>
+                  The map is fully functional! Be sure to travel around before
+                  travel gets harder...
+                </Typography>
+              </Grid>
+              {leaderboardData?.leaderboard && (
+                <Grid item xs={6} sm={3}>
+                  Top levels:
+                  <ul id="leaderboard-list">
+                    {leaderboardData.leaderboard.map((entry, i) => (
+                      <li id={`leaderboard-list-${i}`} key={entry.id}>
+                        <b id={`leaderboard-list-${i}-name`}>{entry.name}</b>{" "}
+                        {entry.level.toLocaleString()}
+                      </li>
+                    ))}
+                  </ul>
+                </Grid>
+              )}
+            </Grid>
           </TabPanel>
           <TabPanel value="2">
             <Typography>

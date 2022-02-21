@@ -1,0 +1,8 @@
+query Leaderboard {
+  leaderboard {
+    id
+    name
+    gold
+    level
+  }
+}
