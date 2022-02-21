@@ -1,12 +1,12 @@
-mutation BuyItem($baseItem: ID!) {
-  buy(baseItem: $baseItem) {
+mutation SellItem($item: ID!) {
+  sell(item: $item) {
     hero {
       id
       gold
       inventory {
         id
-        baseItem
         owner
+        baseItem
         name
         type
         level

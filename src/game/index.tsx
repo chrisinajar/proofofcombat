@@ -81,10 +81,14 @@ export default function Home(): JSX.Element {
                 </Typography>
                 <br />
                 <Typography>
-                  There are now 6 different types of combat available, each uses
-                  a different primary attribute to determine hit chance and
-                  damage. Additionally, each type of attack has its own unique
-                  benefits!
+                  Combat has been heavily overhauled in order to accomidate the
+                  new equipment!
+                </Typography>
+                <br />
+                <Typography>
+                  There are 6 different types of combat available, each uses a
+                  different primary attribute, as well as an item shop to buy
+                  and equip the new items.
                 </Typography>
                 <br />
                 <Typography>
