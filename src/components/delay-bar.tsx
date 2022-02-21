@@ -22,9 +22,9 @@ export function DelayBar({ delay }: DelayBarProps): JSX.Element {
       if (!barRef.current) {
         return;
       }
-      barRef.current.style.transition = `width ${delay}ms cubic-bezier(0.4, 0, 0.2, 1) 100ms`;
+      barRef.current.style.transition = `width ${delay}ms linear 100ms`;
       barRef.current.style.width = "0px";
-    }, 100);
+    }, 1);
     return () => clearTimeout(timer);
   }, [delay, barRef.current]);
 
@@ -33,7 +33,7 @@ export function DelayBar({ delay }: DelayBarProps): JSX.Element {
       id="delay-bar-container"
       style={{
         width: "100%",
-        height: "4px",
+        height: "6px",
         backgroundColor: "#ccc",
       }}
     >

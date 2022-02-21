@@ -59,7 +59,11 @@ export default function Home(): JSX.Element {
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChangeTab} aria-label="navigation tabs">
+            <TabList
+              onChange={handleChangeTab}
+              aria-label="navigation tabs"
+              variant="scrollable"
+            >
               <Tab label="Welcome / News" value="1" />
               <Tab label="Combat" value="2" />
               <Tab label="Shop" value="3" />
@@ -68,8 +72,8 @@ export default function Home(): JSX.Element {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <Grid container columns={6}>
-              <Grid item xs={6} sm={3}>
+            <Grid container columns={12} spacing={4}>
+              <Grid item xs={12} sm={7} md={8} lg={9}>
                 <Typography>
                   Welcome to the game! I'm updating things extremely regularly,
                   so check back often and refresh often. Use the tabs above to
@@ -89,8 +93,8 @@ export default function Home(): JSX.Element {
                 </Typography>
               </Grid>
               {leaderboardData?.leaderboard && (
-                <Grid item xs={6} sm={3}>
-                  Top levels:
+                <Grid item xs={12} sm={5} md={4} lg={3}>
+                  <Typography variant="h6">Top levels:</Typography>
                   <ul id="leaderboard-list">
                     {leaderboardData.leaderboard.map((entry, i) => (
                       <li id={`leaderboard-list-${i}`} key={entry.id}>
