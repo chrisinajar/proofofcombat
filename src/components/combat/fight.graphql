@@ -4,6 +4,15 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
     experience
     gold
     didLevel
+    drop {
+      id
+      baseItem
+      owner
+      name
+      type
+      level
+      enchantment
+    }
     log {
       damage
       attackType
@@ -36,6 +45,10 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
         constitution
         dexterity
         strength
+      }
+
+      inventory {
+        id
       }
     }
     monster {

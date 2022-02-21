@@ -21,6 +21,8 @@ import {
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
+import { itemDisplayName } from "src/helpers";
+
 const friendlyNames = {
   [InventoryItemType.MeleeWeapon]: "Melee Weapon",
   [InventoryItemType.RangedWeapon]: "Ranged Weapon",
@@ -115,7 +117,7 @@ export function SellItemShop({
             if (sellItem && sellItem.cost && onChange) {
               onChange({
                 id: itemId,
-                name: sellItem.name,
+                name: itemDisplayName(inventoryItem),
                 cost: sellItem.cost,
               });
             }
@@ -127,10 +129,16 @@ export function SellItemShop({
               <MenuItem
                 key={item.id}
                 value={item.id}
-                disabled={!sellItem || equippedItems.indexOf(item.id) >= 0}
+                disabled={
+                  !sellItem ||
+                  !!item.enchantment ||
+                  equippedItems.indexOf(item.id) >= 0
+                }
               >
                 {sellItem?.cost &&
-                  `${item.name}: ${sellItem.cost.toLocaleString()} Gold`}
+                  `${itemDisplayName(
+                    item
+                  )}: ${sellItem.cost.toLocaleString()} Gold`}
                 {!sellItem?.cost && item.name}
               </MenuItem>
             );

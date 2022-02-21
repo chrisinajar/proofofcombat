@@ -19,6 +19,8 @@ import {
   useEquipItemMutation,
 } from "src/generated/graphql";
 
+import { itemDisplayName } from "src/helpers";
+
 type Slots =
   | "leftHand"
   | "rightHand"
@@ -129,16 +131,16 @@ function EquipmentSlot({
               onEquip(slot, e.target.value);
             }}
           >
-            {items.map((shopItem) => (
+            {items.map((inventoryItem) => (
               <MenuItem
-                key={shopItem.id}
-                value={shopItem.id}
-                disabled={otherEquippedItems.indexOf(shopItem.id) >= 0}
+                key={inventoryItem.id}
+                value={inventoryItem.id}
+                disabled={otherEquippedItems.indexOf(inventoryItem.id) >= 0}
               >
-                {shopItem.id === equipped ? (
-                  <b>{shopItem.name}</b>
+                {inventoryItem.id === equipped ? (
+                  <b>{itemDisplayName(inventoryItem)}</b>
                 ) : (
-                  shopItem.name
+                  itemDisplayName(inventoryItem)
                 )}
               </MenuItem>
             ))}

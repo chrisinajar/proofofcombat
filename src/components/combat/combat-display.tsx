@@ -16,7 +16,10 @@ import {
   CombatEntry,
   AttackType,
   useFightMutation,
+  EnchantmentType,
 } from "src/generated/graphql";
+
+import { itemDisplayName } from "src/helpers";
 
 type CombatDisplayProps = {
   fight: {
@@ -163,33 +166,45 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           ))}
 
         {fightResult && fightResult.victory && (
-          <Typography id="fight-did-win">
-            {monster.name} has been killed!
-            {(fightResult.experience || fightResult.gold) && " You gain "}
-            {fightResult.gold && (
+          <React.Fragment>
+            <Typography id="fight-did-win">
+              {monster.name} has been killed!
+              {(fightResult.experience || fightResult.gold) && " You gain "}
+              {fightResult.gold && (
+                <React.Fragment>
+                  {" "}
+                  <span id="fight-recap-gold">
+                    {fightResult.gold.toLocaleString()}
+                  </span>{" "}
+                  gold
+                </React.Fragment>
+              )}
+              {fightResult.gold && fightResult.experience && ` and`}
+              {fightResult.experience && (
+                <React.Fragment>
+                  {" "}
+                  <span id="fight-recap-experience">
+                    {fightResult.experience.toLocaleString()}
+                  </span>{" "}
+                  experience
+                </React.Fragment>
+              )}
+              {(fightResult.experience || fightResult.gold) && "!! "}
+              {fightResult.didLevel && (
+                <b id="fight-level-up">You leveled up!!</b>
+              )}
+            </Typography>
+            {fightResult.drop && (
               <React.Fragment>
-                {" "}
-                <span id="fight-recap-gold">
-                  {fightResult.gold.toLocaleString()}
-                </span>{" "}
-                gold
+                <br />
+                <Typography id="fight-got-drop" variant="h5">
+                  You find an enchanted item on the monster's corpse!
+                  <br />
+                  {itemDisplayName(fightResult.drop)}
+                </Typography>
               </React.Fragment>
             )}
-            {fightResult.gold && fightResult.experience && ` and`}
-            {fightResult.experience && (
-              <React.Fragment>
-                {" "}
-                <span id="fight-recap-experience">
-                  {fightResult.experience.toLocaleString()}
-                </span>{" "}
-                experience
-              </React.Fragment>
-            )}
-            {(fightResult.experience || fightResult.gold) && "!! "}
-            {fightResult.didLevel && (
-              <b id="fight-level-up">You leveled up!!</b>
-            )}
-          </Typography>
+          </React.Fragment>
         )}
       </Grid>
     </React.Fragment>
