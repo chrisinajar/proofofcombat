@@ -22,6 +22,7 @@ import { useDelay } from "src/hooks/use-delay";
 const friendlyNames = {
   [InventoryItemType.MeleeWeapon]: "Melee Weapon",
   [InventoryItemType.RangedWeapon]: "Ranged Weapon",
+  [InventoryItemType.SpellFocus]: "Spell Focus",
   [InventoryItemType.Shield]: "Shield",
   [InventoryItemType.BodyArmor]: "Body Armor",
   [InventoryItemType.HandArmor]: "Gauntlets",
@@ -147,6 +148,9 @@ export function Shop(): JSX.Element {
               </MenuItem>
               <MenuItem value={InventoryItemType.RangedWeapon}>
                 {inventoryTypeDisplayName(InventoryItemType.RangedWeapon)} Shop
+              </MenuItem>
+              <MenuItem value={InventoryItemType.SpellFocus}>
+                {inventoryTypeDisplayName(InventoryItemType.SpellFocus)} Shop
               </MenuItem>
               <MenuItem value={InventoryItemType.Shield}>
                 {inventoryTypeDisplayName(InventoryItemType.Shield)} Shop
