@@ -24,7 +24,7 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           Location: {hero.location.x}, {hero.location.y}
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Gold: {hero.gold}
+          Gold: {hero.gold.toLocaleString()}
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
           Experience: {hero.experience} / {hero.needed}
