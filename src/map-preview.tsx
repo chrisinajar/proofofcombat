@@ -1,30 +1,41 @@
 import React, { useState } from "react";
 
 import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
+import NoSsr from "@mui/material/NoSsr";
 
 import { Layout } from "src/components/layout";
 import RawLocationData from "./location-data.json";
 
-type IndividualLocation = {
+type TerrainType = "land" | "water" | "forbidden";
+type MapNames = "default";
+type SpecialLocationType = "dock" | "quest" | "city" | "bridge";
+
+type LocationData = {
   terrain: TerrainType;
 };
 
-type MapNames = "default";
-
 type LocationDataType = {
   [x in MapNames]: {
-    locations: IndividualLocation[][];
+    locations: LocationData[][];
+    specialLocations: {
+      x: number;
+      y: number;
+      name: string;
+      type: SpecialLocationType;
+    }[];
   };
 };
+
 const LocationData: LocationDataType = RawLocationData as LocationDataType;
 
 const gridSize = 16;
 
-type TerrainType = "land" | "water";
-const terrainTypes: TerrainType[] = ["land", "water"];
+const terrainTypes: TerrainType[] = ["land", "forbidden", "water"];
 
 const terrainColors: { [x in TerrainType]: string } = {
-  land: "brown",
+  land: "green",
+  forbidden: "red",
   water: "blue",
 };
 
@@ -56,19 +67,51 @@ function SpecialLocationEditor({
   y: number;
   rerender: () => void;
 }): JSX.Element {
+  const location = LocationData.default.locations[x][y];
+  const specialLocation = LocationData.default.specialLocations.find(
+    (sloc) => sloc.x === x && sloc.y === y
+  );
+
+  // if (specialLocation) {
+  //   console.log({ x, y, specialLocation });
+  // }
+
+  if (!specialLocation) {
+    return (
+      <Tooltip title={`${x}, ${y}`}>
+        <div
+          style={{
+            position: "absolute",
+            left: `${x * gridSize}px`,
+            top: `${y * gridSize}px`,
+            width: `${gridSize}px`,
+            height: `${gridSize}px`,
+            backgroundColor: terrainColors[location.terrain],
+            opacity: 0.5,
+            border: "1px solid black",
+          }}
+        />
+      </Tooltip>
+    );
+  }
+
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: `${x * gridSize}px`,
-        top: `${y * gridSize}px`,
-        width: `${gridSize}px`,
-        height: `${gridSize}px`,
-        backgroundColor: "white",
-        opacity: 0.1,
-        border: "1px solid black",
-      }}
-    />
+    <Tooltip
+      title={`${specialLocation.type} - ${specialLocation.name} (${x}, ${y})`}
+    >
+      <div
+        style={{
+          position: "absolute",
+          left: `${x * gridSize}px`,
+          top: `${y * gridSize}px`,
+          width: `${gridSize}px`,
+          height: `${gridSize}px`,
+          backgroundColor: terrainColors[location.terrain],
+          opacity: 0.8,
+          border: "3px solid purple",
+        }}
+      />
+    </Tooltip>
   );
 }
 
@@ -103,12 +146,17 @@ function TerrainEditor({
   function toggleTerrain(terrainX: number, terrainY: number) {
     setTerrain(terrainX, terrainY, getNextTerrain(terrainX, terrainY));
   }
-  function floodFill(terrainX: number, terrainY: number, terrain: TerrainType) {
+  function floodFill(
+    terrainX: number,
+    terrainY: number,
+    terrain: TerrainType,
+    fillTerrain: TerrainType
+  ) {
     if (terrainX >= 128 || terrainY >= 96 || terrainX < 0 || terrainY < 0) {
       return;
     }
     if (
-      LocationData.default.locations[terrainX][terrainY].terrain === terrain
+      LocationData.default.locations[terrainX][terrainY].terrain !== fillTerrain
     ) {
       return;
     }
@@ -116,16 +164,21 @@ function TerrainEditor({
 
     setTerrain(terrainX, terrainY, terrain);
 
-    floodFill(terrainX + 1, terrainY, terrain);
-    floodFill(terrainX - 1, terrainY, terrain);
-    floodFill(terrainX, terrainY + 1, terrain);
-    floodFill(terrainX, terrainY - 1, terrain);
+    floodFill(terrainX + 1, terrainY, terrain, fillTerrain);
+    floodFill(terrainX - 1, terrainY, terrain, fillTerrain);
+    floodFill(terrainX, terrainY + 1, terrain, fillTerrain);
+    floodFill(terrainX, terrainY - 1, terrain, fillTerrain);
   }
   function handleClick(e: React.MouseEvent) {
     if (e.shiftKey) {
       console.log("FLOOD");
       const nextTerrain = getNextTerrain(x, y);
-      floodFill(x, y, nextTerrain);
+      floodFill(
+        x,
+        y,
+        nextTerrain,
+        LocationData.default.locations[x][y].terrain
+      );
       rerender();
     } else {
       toggleTerrain(x, y);
@@ -168,13 +221,20 @@ export default function MapPreview(): JSX.Element {
         backgroundSize: "100% 100%",
       }}
     >
-      {LocationData.default.locations.map((worldColumn, x) =>
-        worldColumn.map((location, y) => {
-          return (
-            <TerrainEditor key={`${x}, ${y}`} x={x} y={y} rerender={rerender} />
-          );
-        })
-      )}
+      <NoSsr>
+        {LocationData.default.locations.map((worldColumn, x) =>
+          worldColumn.map((location, y) => {
+            return (
+              <SpecialLocationEditor
+                key={`${x}, ${y}`}
+                x={x}
+                y={y}
+                rerender={rerender}
+              />
+            );
+          })
+        )}
+      </NoSsr>
     </div>
   );
 }
