@@ -72,6 +72,50 @@ function SpecialLocationEditor({
     (sloc) => sloc.x === x && sloc.y === y
   );
 
+  function findTerrainType(
+    x: number,
+    y: number,
+    terrain: TerrainType,
+    direction: number,
+    maxMagnitude: number,
+    magnitude: number
+  ) {
+    const checkLocation = LocationData.default.locations[x][y];
+    console.log(x, y, checkLocation.terrain, terrain);
+    if (checkLocation.terrain === terrain) {
+      return;
+    }
+    switch (direction) {
+      case 0:
+        x = x + 1;
+        break;
+      case 1:
+        y = y - 1;
+        break;
+      case 2:
+        x = x - 1;
+        break;
+      case 3:
+        y = y + 1;
+        break;
+    }
+
+    magnitude = magnitude - 1;
+    if (magnitude === 0) {
+      direction = (direction + 1) % 4;
+      magnitude = maxMagnitude;
+    }
+    if (direction === 0) {
+      magnitude++;
+    }
+    findTerrainType(x, y, terrain, direction, maxMagnitude, magnitude);
+  }
+
+  function handleClick() {
+    console.log("Clicked on", x, y, location.terrain);
+    findTerrainType(x, y, "land", 0, 1, 1);
+  }
+
   // if (specialLocation) {
   //   console.log({ x, y, specialLocation });
   // }
@@ -80,6 +124,7 @@ function SpecialLocationEditor({
     return (
       <Tooltip title={`${x}, ${y}`}>
         <div
+          onClick={handleClick}
           style={{
             position: "absolute",
             left: `${x * gridSize}px`,
@@ -100,6 +145,7 @@ function SpecialLocationEditor({
       title={`${specialLocation.type} - ${specialLocation.name} (${x}, ${y})`}
     >
       <div
+        onClick={handleClick}
         style={{
           position: "absolute",
           left: `${x * gridSize}px`,

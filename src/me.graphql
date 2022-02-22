@@ -22,6 +22,21 @@ query Me {
           map
         }
 
+        questLog {
+          washedUp {
+            id
+            progress
+            finished
+            started
+          }
+          id
+        }
+        currentQuest {
+          quest
+          message
+          id
+        }
+
         inventory {
           id
           baseItem

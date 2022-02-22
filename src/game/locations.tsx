@@ -20,6 +20,8 @@ export function Locations(): JSX.Element | null {
     return null;
   }
 
+  const shouldDisable = loading || hero.combat.health === 0 || currentDelay > 0;
+
   async function handleMove(direction: MoveDirection) {
     try {
       await moveMutation({
@@ -40,12 +42,19 @@ export function Locations(): JSX.Element | null {
         <Grid item xs={2} sm={1}>
           <Grid container columns={6} spacing={3}>
             <Grid item style={{ textAlign: "center" }} xs={6}>
-              <Typography>Use buttons to move around the map.</Typography>
+              {hero.combat.health > 0 && (
+                <Typography>Use buttons to move around the map.</Typography>
+              )}
+              {hero.combat.health === 0 && (
+                <Typography variant="h6">
+                  You cannot move while dead. Heal yourself in the Combat tab.
+                </Typography>
+              )}
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
-                disabled={loading || currentDelay > 0}
+                disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.North)}
               >
@@ -55,7 +64,7 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
-                disabled={loading || currentDelay > 0}
+                disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.West)}
               >
@@ -69,7 +78,7 @@ export function Locations(): JSX.Element | null {
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
-                disabled={loading || currentDelay > 0}
+                disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.East)}
               >
@@ -79,7 +88,7 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
-                disabled={loading || currentDelay > 0}
+                disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.South)}
               >

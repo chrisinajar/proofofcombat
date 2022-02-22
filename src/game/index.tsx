@@ -23,6 +23,7 @@ import { Locations } from "./locations";
 import { LevelUpBox } from "./level-up-box";
 import { Shop } from "./shop";
 import { Inventory } from "./inventory";
+import { QuestEventDisplay } from "./quest-event-display";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -51,10 +52,15 @@ export default function Home(): JSX.Element {
     return <Layout>{loading && <LinearProgress />}</Layout>;
   }
 
+  console.log(hero?.currentQuest);
+
   return (
     <Layout showHero>
       <React.Fragment>
         {hero && hero.attributePoints > 0 && <LevelUpBox />}
+        {hero && hero.currentQuest && (
+          <QuestEventDisplay event={hero.currentQuest} />
+        )}
       </React.Fragment>
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={selectedTab}>

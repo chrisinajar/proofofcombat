@@ -1,0 +1,14 @@
+mutation DismissQuest {
+  dismissQuest {
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      currentQuest {
+        id
+      }
+    }
+  }
+}
