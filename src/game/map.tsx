@@ -30,7 +30,6 @@ export function Map(): JSX.Element | null {
     ),
   ];
 
-  console.log({ location, centerPoint });
   return (
     <div
       style={{

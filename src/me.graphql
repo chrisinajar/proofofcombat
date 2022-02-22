@@ -28,6 +28,11 @@ query Me {
             progress
             finished
             started
+            lastEvent {
+              quest
+              message
+              id
+            }
           }
           id
         }

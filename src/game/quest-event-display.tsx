@@ -23,6 +23,8 @@ export function QuestEventDisplay({
     <Box
       sx={{
         bgcolor: "success.light",
+        color: "success.contract",
+        fontStyle: "italic",
         padding: 2,
       }}
     >

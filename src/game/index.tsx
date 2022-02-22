@@ -24,6 +24,7 @@ import { LevelUpBox } from "./level-up-box";
 import { Shop } from "./shop";
 import { Inventory } from "./inventory";
 import { QuestEventDisplay } from "./quest-event-display";
+import { QuestLog } from "./quest-log";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -75,6 +76,7 @@ export default function Home(): JSX.Element {
               <Tab label="Shop" value="3" />
               <Tab label="Inventory" value="4" />
               <Tab label="Map" value="5" />
+              <Tab label="Quest Log" value="6" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -134,6 +136,9 @@ export default function Home(): JSX.Element {
           </TabPanel>
           <TabPanel value="5">
             <Locations />
+          </TabPanel>
+          <TabPanel value="6">
+            <QuestLog />
           </TabPanel>
         </TabContext>
         <br />
