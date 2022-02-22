@@ -15,10 +15,15 @@ export function QuestLog(): JSX.Element | null {
   }
 
   const { questLog, currentQuest } = hero;
-  const hasNoQuests = Object.keys(questLog).length === 2;
+  const hasNoQuests = Object.values(questLog).filter((v) => !!v).length === 2;
 
   if (hasNoQuests) {
-    return <Box>You have not yet started any quests.</Box>;
+    return (
+      <Box>
+        You have not yet started any quests. Explore the world and grow
+        stronger.
+      </Box>
+    );
   }
 
   return (
