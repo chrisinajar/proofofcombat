@@ -102,7 +102,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
       >
         <Grid container columns={6}>
           <Grid item xs={6}>
-            <Typography variant="h4">Battling {monster.name}</Typography>
+            <Typography variant="h4">
+              {enemyHealth > 0 && "Battling"}
+              {enemyHealth <= 0 && "Dead"} {monster.name}
+            </Typography>
             <LinearProgress
               variant="determinate"
               value={enemyHealth}

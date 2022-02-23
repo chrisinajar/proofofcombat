@@ -169,7 +169,10 @@ export function Combat(): JSX.Element {
                         <MenuItem
                           key={monsterInstance.id}
                           value={monsterInstance.id}
+                          disabled={monsterInstance.monster.combat.health === 0}
                         >
+                          {monsterInstance.monster.combat.health === 0 &&
+                            "Dead "}
                           {monsterInstance.monster.name}
                         </MenuItem>
                       ))}
@@ -177,7 +180,13 @@ export function Combat(): JSX.Element {
                 {loading && <CircularProgress />}
                 <Button
                   id="fight-button"
-                  disabled={!monster || currentDelay > 0 || healLoading}
+                  disabled={
+                    !monster ||
+                    currentDelay > 0 ||
+                    healLoading ||
+                    (existingMonster &&
+                      existingMonster.monster.combat.health === 0)
+                  }
                   onClick={handleFight}
                   variant="contained"
                 >
