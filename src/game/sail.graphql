@@ -1,10 +1,12 @@
-mutation MoveLocation($direction: MoveDirection!) {
-  move(direction: $direction) {
+mutation Sail($x: Int!, $y: Int!) {
+  sail(x: $x, y: $y) {
     hero {
       id
+      gold
       location {
-        y
         x
+        y
+        map
       }
       inventory {
         baseItem
@@ -19,17 +21,22 @@ mutation MoveLocation($direction: MoveDirection!) {
         message
       }
     }
+    account {
+      id
+      nextAllowedAction
+    }
     monsters {
       id
       monster {
         id
         name
         level
+        combat {
+          health
+          maxHealth
+        }
+        attackType
       }
-    }
-    account {
-      id
-      nextAllowedAction
     }
   }
 }

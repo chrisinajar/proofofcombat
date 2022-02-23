@@ -6,8 +6,17 @@ mutation DismissQuest {
     }
     hero {
       id
+      inventory {
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
+      }
       currentQuest {
         id
+        message
       }
     }
   }

@@ -1,0 +1,15 @@
+query LocationDetails($location: LocationInput!) {
+  locationDetails(location: $location) {
+    specialLocations {
+      type
+      name
+      location {
+        x
+        y
+      }
+    }
+    terrain {
+      terrain
+    }
+  }
+}

@@ -53,8 +53,6 @@ export default function Home(): JSX.Element {
     return <Layout>{loading && <LinearProgress />}</Layout>;
   }
 
-  console.log(hero?.currentQuest);
-
   return (
     <Layout showHero>
       <React.Fragment>

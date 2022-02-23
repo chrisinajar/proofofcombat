@@ -1,0 +1,10 @@
+query DockList {
+  docks {
+    name
+    type
+    location {
+      x
+      y
+    }
+  }
+}

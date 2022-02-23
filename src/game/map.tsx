@@ -5,7 +5,7 @@ import { useHero } from "src/hooks/use-hero";
 const minimapSize = [16, 16];
 const gridSize = [128, 96];
 const cellSize = 16;
-const indicatorSize = 5;
+const indicatorSize = 8;
 
 export function Map(): JSX.Element | null {
   const hero = useHero();
@@ -47,9 +47,8 @@ export function Map(): JSX.Element | null {
         style={{
           position: "absolute",
           borderRadius: `${indicatorSize / 2}px`,
-          opacity: 0.8,
-          backgroundColor: "blue",
-          border: "1px solid black",
+          backgroundColor: "red",
+          border: "2px solid rgba(255,255,255,0.3)",
 
           left: `${
             (location.x - centerPoint[0]) * cellSize +

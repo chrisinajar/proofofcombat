@@ -151,6 +151,47 @@ function EquipmentSlot({
   );
 }
 
+function QuestItems({
+  hero,
+  disabled,
+}: {
+  hero: Hero;
+  disabled: boolean;
+}): JSX.Element {
+  const [value, setValue] = useState<string>("");
+  const items = hero.inventory.filter(
+    (item) => item.type === InventoryItemType.Quest
+  );
+
+  const label = "Quest items";
+
+  return (
+    <React.Fragment>
+      <div>
+        <FormControl fullWidth>
+          <InputLabel id={`quest-item-label`}>{label}</InputLabel>
+          <Select
+            id={`quest-item`}
+            labelId={`quest-item-label`}
+            value={value}
+            label={label}
+            disabled={disabled}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+          >
+            {items.map((inventoryItem) => (
+              <MenuItem key={inventoryItem.id} value={inventoryItem.id}>
+                {itemDisplayName(inventoryItem)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+    </React.Fragment>
+  );
+}
+
 export function Inventory(): JSX.Element | null {
   const [currentDelay] = useDelay();
   const [equipItemMutation, { loading }] = useEquipItemMutation();
@@ -241,6 +282,9 @@ export function Inventory(): JSX.Element | null {
             onEquip={handleEquip}
             disabled={shouldDisable}
           />
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <QuestItems hero={hero} disabled={shouldDisable} />
         </Grid>
       </Grid>
     </React.Fragment>

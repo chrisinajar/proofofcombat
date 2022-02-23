@@ -26,3 +26,12 @@ export function itemDisplayName(item: InventoryItem) {
   }
   return item.name;
 }
+
+type DistanceableLocation = {
+  x: number;
+  y: number;
+};
+
+export function distance2d(a: DistanceableLocation, b: DistanceableLocation) {
+  return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+}
