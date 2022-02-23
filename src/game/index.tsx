@@ -29,9 +29,13 @@ import { QuestLog } from "./quest-log";
 export default function Home(): JSX.Element {
   const router = useRouter();
   const [token, setToken] = useToken();
-  const { data, loading, error } = useMeQuery();
+  const { data, loading, error } = useMeQuery({
+    pollInterval: 10000,
+  });
   const [selectedTab, setSelectedTab] = useState("1");
-  const { data: leaderboardData } = useLeaderboardQuery();
+  const { data: leaderboardData } = useLeaderboardQuery({
+    pollInterval: 10000,
+  });
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue);
