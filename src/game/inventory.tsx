@@ -113,7 +113,9 @@ function EquipmentSlot({
     .map((otherSlot: Slots) => hero.equipment[otherSlot]?.id);
 
   const [value, setValue] = useState<string>(equipped || "");
-  const items = hero.inventory.filter((item) => canEquipTo(slot, item));
+  const items = hero.inventory
+    .filter((item) => canEquipTo(slot, item))
+    .sort((a, b) => a.level - b.level);
 
   return (
     <React.Fragment>
@@ -159,9 +161,10 @@ function QuestItems({
   disabled: boolean;
 }): JSX.Element {
   const [value, setValue] = useState<string>("");
-  const items = hero.inventory.filter(
-    (item) => item.type === InventoryItemType.Quest
-  );
+  const items = hero.inventory
+    .filter((item) => item.type === InventoryItemType.Quest)
+    // higher level quest items first!
+    .sort((a, b) => b.level - a.level);
 
   const label = "Quest items";
 

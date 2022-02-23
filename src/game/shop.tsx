@@ -92,7 +92,10 @@ export function SellItemShop({
     return { ...sellItem, cost: Math.round(sellItem.cost / 3) };
   }
 
-  const items = hero.inventory; //.filter((item) => item.)
+  const items = hero.inventory
+    .filter((item) => !item.enchantment)
+    .filter((item) => item.type !== InventoryItemType.Quest)
+    .sort((a, b) => a.level - b.level);
 
   const shopLabel = "Sell non-enchanted gear";
 
@@ -139,7 +142,8 @@ export function SellItemShop({
                   `${itemDisplayName(
                     item
                   )}: ${sellItem.cost.toLocaleString()} Gold`}
-                {!sellItem?.cost && item.name}
+                {!sellItem?.cost && item.name}{" "}
+                {equippedItems.indexOf(item.id) >= 0 && "*EQUIPPED*"}
               </MenuItem>
             );
           })}

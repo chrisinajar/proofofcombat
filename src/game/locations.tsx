@@ -136,6 +136,12 @@ export function Locations(): JSX.Element | null {
               </Typography>
             </React.Fragment>
           )}
+          {!specialLocation && !locationDetails && (
+            <React.Fragment>
+              <Typography variant="h6">&nbsp;</Typography>
+              <Typography variant="subtitle2">loading...</Typography>
+            </React.Fragment>
+          )}
           <Map />
         </Grid>
         {specialLocation?.type === "dock" && (
