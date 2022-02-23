@@ -4,6 +4,11 @@ mutation Challenge($monster: ID!) {
     monster {
       id
       name
+      level
+      combat {
+        health
+        maxHealth
+      }
     }
   }
 }

@@ -54,6 +54,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
     monster {
       id
       monster {
+        id
         name
         combat {
           health

@@ -30,8 +30,8 @@ const fightLabel = "Fight a monster!";
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
 export function Combat(): JSX.Element {
-  const [currentFight, setCurrentFight] =
-    useState<PartialMonsterInstance | null>(null);
+  const [currentFightId, setCurrentFightId] = useState<number>(0);
+  const [currentFight, setCurrentFight] = useState<string | null>(null);
   const [currentDelay, setDelay] = useDelay();
   const [challenge, setChallenge] = useState<string>("");
   let [monster, setMonster] = useState<string>("");
@@ -81,7 +81,7 @@ export function Combat(): JSX.Element {
     const existingMonster = monstersData?.monsters.find(
       (m) => m.id === monster
     );
-    setCurrentFight(existingMonster ?? null);
+    setCurrentFight(monster);
   }
 
   async function handleChallenge() {
@@ -92,9 +92,13 @@ export function Combat(): JSX.Element {
         },
       });
       await refetch();
+      if (data?.challenge) {
+        setCurrentFight(data.challenge.id);
+      }
       if (data?.challenge?.id) {
         setMonster(data?.challenge?.id);
       }
+      setCurrentFightId(currentFightId + 1);
     } catch (e) {
       refetch();
     }
@@ -106,14 +110,17 @@ export function Combat(): JSX.Element {
     monster = "";
   }
 
+  const fightingMonster = monstersData?.monsters?.find(
+    (m) => m.id === currentFight
+  );
+
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
-        {currentFight && (
+        {fightingMonster && (
           <CombatDisplay
-            key={currentFight.id}
-            fight={currentFight}
-            onVictory={() => refetch()}
+            key={`${fightingMonster.id}-${currentFightId}`}
+            fight={fightingMonster}
             onError={() => {
               refetch();
               setCurrentFight(null);
