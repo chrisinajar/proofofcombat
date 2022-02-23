@@ -117,16 +117,6 @@ export function Combat(): JSX.Element {
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
-        {fightingMonster && (
-          <CombatDisplay
-            key={`${fightingMonster.id}-${currentFightId}`}
-            fight={fightingMonster}
-            onError={() => {
-              refetch();
-              setCurrentFight(null);
-            }}
-          />
-        )}
         {hero && hero.combat.health > 0 && (
           <React.Fragment>
             <Grid item md={3} xs={6}>
@@ -201,6 +191,16 @@ export function Combat(): JSX.Element {
           <Grid item lg={3} xs={6}>
             <Typography id="you-are-dead">You are dead.</Typography>
           </Grid>
+        )}
+        {fightingMonster && (
+          <CombatDisplay
+            key={`${fightingMonster.id}-${currentFightId}`}
+            fight={fightingMonster}
+            onError={() => {
+              refetch();
+              setCurrentFight(null);
+            }}
+          />
         )}
         <Grid item lg={3} xs={6}>
           <Button
