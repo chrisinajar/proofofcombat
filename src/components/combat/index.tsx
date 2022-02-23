@@ -24,8 +24,8 @@ import { useDelay } from "src/hooks/use-delay";
 
 import { CombatDisplay } from "./combat-display";
 
-const challengeLabel = "Select a monster to challenge";
-const fightLabel = "Fight a monster!";
+const challengeLabel = "Select a new monster to challenge";
+const fightLabel = "Fight an existing monster!";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
