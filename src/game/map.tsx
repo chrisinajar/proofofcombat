@@ -2,7 +2,7 @@ import React from "react";
 
 import { useHero } from "src/hooks/use-hero";
 
-const minimapSize = [16, 16];
+const minimapSize = [24, 24];
 const gridSize = [128, 96];
 const cellSize = 16;
 const indicatorSize = 8;

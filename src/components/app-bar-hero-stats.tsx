@@ -6,7 +6,14 @@ import type { Hero } from "src/generated/graphql";
 
 export type AppBarHero = Pick<
   Hero,
-  "gold" | "level" | "experience" | "combat" | "location" | "stats" | "needed"
+  | "gold"
+  | "level"
+  | "experience"
+  | "combat"
+  | "location"
+  | "stats"
+  | "needed"
+  | "class"
 >;
 
 export type AppBarHeroStatsProps = {
@@ -85,6 +92,12 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           Charisma:{" "}
           <span id="hero-stats-charisma">
             {hero.stats.charisma.toLocaleString()}
+          </span>
+        </Grid>
+        <Grid item lg={1} md={2} sm={3} xs={6}>
+          Class:{" "}
+          <span id="hero-stats-class">
+            {hero.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")}
           </span>
         </Grid>
       </Grid>

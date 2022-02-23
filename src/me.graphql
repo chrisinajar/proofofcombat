@@ -9,6 +9,7 @@ query Me {
         version
         id
         name
+        class
 
         level
         experience
