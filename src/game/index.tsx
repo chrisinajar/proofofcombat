@@ -29,9 +29,7 @@ import { QuestLog } from "./quest-log";
 export default function Home(): JSX.Element {
   const router = useRouter();
   const [token, setToken] = useToken();
-  const { data, loading, error } = useMeQuery({
-    pollInterval: 10000,
-  });
+  const { data, loading, error } = useMeQuery();
   const [selectedTab, setSelectedTab] = useState("1");
   const { data: leaderboardData } = useLeaderboardQuery({
     pollInterval: 10000,

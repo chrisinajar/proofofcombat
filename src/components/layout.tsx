@@ -20,10 +20,16 @@ export function Layout({
 }: LayoutProps): JSX.Element {
   const [timeDifference, setTimeDifference] = useState<number>(0);
   const { data } = useMeQuery({
+    fetchPolicy: "network-only",
+    pollInterval: 10000,
     skip: !showHero,
     onCompleted: (data) => {
-      if (data?.me?.now && !timeDifference) {
-        setTimeDifference(now - Number(data?.me?.now));
+      if (data?.me?.now) {
+        // console.log(
+        //   "Adjusting time drift to",
+        //   Date.now() - Number(data?.me?.now)
+        // );
+        setTimeDifference(Date.now() - Number(data?.me?.now));
       }
     },
   });
