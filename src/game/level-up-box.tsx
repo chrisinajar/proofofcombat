@@ -33,9 +33,8 @@ export function LevelUpBox(): JSX.Element {
         </Typography>
         <Container>
           <Typography align="center">
-            Each of your attributes has a chance to increase by 1 when you level
-            up, this chance is increased by Luck. You may also choose one
-            attribute to increase.
+            Each of your attributes increases by 1 when you level up. You may
+            also choose an attribute to further increase.
           </Typography>
         </Container>
         <br />
@@ -124,7 +123,7 @@ export function LevelUpBox(): JSX.Element {
               </Typography>
             </Grid>
           </Tooltip>
-          <Tooltip title="Luck helps you critically strike foes, it also affects item drop rates and stat gains">
+          <Tooltip title="Luck helps you critically strike foes and also affects item drop rates">
             <Grid item xs={14} md={12} lg={2}>
               <Typography align="center">
                 <Button
@@ -134,6 +133,20 @@ export function LevelUpBox(): JSX.Element {
                   variant="contained"
                 >
                   Luck
+                </Button>
+              </Typography>
+            </Grid>
+          </Tooltip>
+          <Tooltip title="Places 1 in every stat for a more well rounded character">
+            <Grid item xs={14} md={12} lg={2}>
+              <Typography align="center">
+                <Button
+                  id="level-up-all"
+                  disabled={loading || currentDelay > 0}
+                  onClick={() => levelUp("All")}
+                  variant="contained"
+                >
+                  All
                 </Button>
               </Typography>
             </Grid>
