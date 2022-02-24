@@ -395,13 +395,13 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "-20% Enemy Charisma";
       break;
     case EnchantmentType.MinusEnemyPhysical:
-      return "-10% Strength, Dexterity, Constitution";
+      return "-10% Enemy Strength, Dexterity, Constitution";
       break;
     case EnchantmentType.MinusEnemyMental:
-      return "-10% Intelligence, Wisdom, Charisma";
+      return "-10% Enemy Intelligence, Wisdom, Charisma";
       break;
     case EnchantmentType.MinusEnemyAllStats:
-      return "-10% All Stats";
+      return "-10% All Enemy Stats";
       break;
     default:
       return "???";
