@@ -113,7 +113,8 @@ export default function Home(): JSX.Element {
                     {leaderboardData.leaderboard.map((entry, i) => (
                       <li id={`leaderboard-list-${i}`} key={entry.id}>
                         <b id={`leaderboard-list-${i}-name`}>{entry.name}</b>{" "}
-                        {entry.level.toLocaleString()}
+                        {entry.level.toLocaleString()} (
+                        {entry.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")})
                       </li>
                     ))}
                   </ul>

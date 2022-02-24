@@ -4,5 +4,6 @@ query Leaderboard {
     name
     gold
     level
+    class
   }
 }
