@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { emojify } from "node-emoji";
+import { timeAgo } from "short-time-ago";
 
 import Button from "@mui/material/Button";
 import FormGroup from "@mui/material/FormGroup";
@@ -19,6 +20,7 @@ type ChatMessage = {
   id: number;
   message: string;
   from: string;
+  time?: number;
   color?: string;
   variant?:
     | "button"
@@ -159,6 +161,11 @@ export function Chat(): JSX.Element {
             key={chatMessage.id}
             sx={{ color: `${chatMessage.color || "text"}.dark` }}
           >
+            {chatMessage.time && (
+              <Typography variant="caption">
+                ({timeAgo(new Date(chatMessage.time * 1000))})&nbsp;
+              </Typography>
+            )}
             <b>{chatMessage.from}</b> {emojify(chatMessage.message)}
           </Typography>
         ))}
