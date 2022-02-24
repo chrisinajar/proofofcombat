@@ -25,6 +25,7 @@ import { Shop } from "./shop";
 import { Inventory } from "./inventory";
 import { QuestEventDisplay } from "./quest-event-display";
 import { QuestLog } from "./quest-log";
+import { CombatStats } from "./combat-stats";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -77,6 +78,7 @@ export default function Home(): JSX.Element {
               <Tab label="Inventory" value="4" />
               <Tab label="Map" value="5" />
               <Tab label="Quest Log" value="6" />
+              <Tab label="Character Stats" value="7" />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -139,6 +141,9 @@ export default function Home(): JSX.Element {
           </TabPanel>
           <TabPanel value="6">
             <QuestLog />
+          </TabPanel>
+          <TabPanel value="7">
+            {hero?.combatStats && <CombatStats stats={hero.combatStats} />}
           </TabPanel>
         </TabContext>
         <br />

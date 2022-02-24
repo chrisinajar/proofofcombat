@@ -141,6 +141,30 @@ query Me {
           luck
           strength
         }
+
+        combatStats {
+          damageAmplification
+          damageReduction
+          armorReduction
+          enemyStats {
+            luck
+            charisma
+            wisdom
+            intelligence
+            constitution
+            strength
+            dexterity
+          }
+          stats {
+            charisma
+            constitution
+            dexterity
+            intelligence
+            luck
+            strength
+            wisdom
+          }
+        }
       }
     }
   }
