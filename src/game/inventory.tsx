@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
@@ -17,6 +18,7 @@ import {
   InventoryItem,
   InventoryItemType,
   useEquipItemMutation,
+  EnchantmentType,
 } from "src/generated/graphql";
 
 import { itemDisplayName } from "src/helpers";
@@ -144,6 +146,14 @@ function EquipmentSlot({
                 ) : (
                   itemDisplayName(inventoryItem)
                 )}
+                {inventoryItem.enchantment && (
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "primary.main" }}
+                  >
+                    &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}
+                  </Typography>
+                )}
               </MenuItem>
             ))}
           </Select>
@@ -186,6 +196,14 @@ function QuestItems({
             {items.map((inventoryItem) => (
               <MenuItem key={inventoryItem.id} value={inventoryItem.id}>
                 {itemDisplayName(inventoryItem)}
+                {getEnchantmentDisplay(inventoryItem.baseItem) !== "???" && (
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "primary.main" }}
+                  >
+                    &nbsp;{getEnchantmentDisplay(inventoryItem.baseItem)}
+                  </Typography>
+                )}
               </MenuItem>
             ))}
           </Select>
@@ -292,4 +310,92 @@ export function Inventory(): JSX.Element | null {
       </Grid>
     </React.Fragment>
   );
+}
+
+function getEnchantmentDisplay(enchantment: string): string {
+  switch (enchantment) {
+    // quest items
+    case "fishermans-strength":
+      return "+50% Strength";
+      break;
+    case "fishermans-dexterity":
+      return "+50% Dexterity";
+      break;
+    case "fishermans-constitution":
+      return "+50% Constitution";
+      break;
+    case "fishermans-intelligence":
+      return "+50% Intelligence";
+      break;
+    case "fishermans-wisdom":
+      return "+50% Wisdom";
+      break;
+    case "fishermans-charisma":
+      return "+50% Charisma";
+      break;
+    case "fishermans-luck":
+      return "+50% Luck";
+      break;
+
+    case EnchantmentType.BonusStrength:
+      return "+20% Strength";
+      break;
+    case EnchantmentType.BonusDexterity:
+      return "+20% Dexterity";
+      break;
+    case EnchantmentType.BonusConstitution:
+      return "+20% Constitution";
+      break;
+    case EnchantmentType.BonusIntelligence:
+      return "+20% Intelligence";
+      break;
+    case EnchantmentType.BonusWisdom:
+      return "+20% Wisdom";
+      break;
+    case EnchantmentType.BonusCharisma:
+      return "+20% Charisma";
+      break;
+    case EnchantmentType.BonusLuck:
+      return "+20% Luck";
+      break;
+    case EnchantmentType.BonusPhysical:
+      return "+20% Strength, Dexterity, Constitution";
+      break;
+    case EnchantmentType.BonusMental:
+      return "+20% Intelligence, Wisdom, Charisma";
+      break;
+    case EnchantmentType.BonusAllStats:
+      return "+20% All Stats";
+      break;
+    case EnchantmentType.Vampire:
+      return "Leach HP";
+      break;
+    case EnchantmentType.MinusEnemyArmor:
+      return "-20% Enemy Armor";
+      break;
+    case EnchantmentType.BonusArmor:
+      return "+20% Armor";
+      break;
+    case EnchantmentType.MinusEnemyStrength:
+      return "-20% Enemy Strength";
+      break;
+    case EnchantmentType.MinusEnemyDexterity:
+      return "-20% Enemy Dexterity";
+      break;
+    case EnchantmentType.MinusEnemyConstitution:
+      return "-20% Enemy Constitution";
+      break;
+    case EnchantmentType.MinusEnemyIntelligence:
+      return "-20% Enemy Intelligence";
+      break;
+    case EnchantmentType.MinusEnemyWisdom:
+      return "-20% Enemy Wisdom";
+      break;
+    case EnchantmentType.MinusEnemyCharisma:
+      return "-20% Enemy Charisma";
+      break;
+    default:
+      return "???";
+      break;
+  }
 }
