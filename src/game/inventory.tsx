@@ -359,13 +359,13 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "+20% Luck";
       break;
     case EnchantmentType.BonusPhysical:
-      return "+20% Strength, Dexterity, Constitution";
+      return "+10% Strength, Dexterity, Constitution";
       break;
     case EnchantmentType.BonusMental:
-      return "+20% Intelligence, Wisdom, Charisma";
+      return "+10% Intelligence, Wisdom, Charisma";
       break;
     case EnchantmentType.BonusAllStats:
-      return "+20% All Stats";
+      return "+10% All Stats";
       break;
     case EnchantmentType.Vampire:
       return "Leach HP";
@@ -393,6 +393,15 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
     case EnchantmentType.MinusEnemyCharisma:
       return "-20% Enemy Charisma";
+      break;
+    case EnchantmentType.MinusEnemyPhysical:
+      return "-10% Strength, Dexterity, Constitution";
+      break;
+    case EnchantmentType.MinusEnemyMental:
+      return "-10% Intelligence, Wisdom, Charisma";
+      break;
+    case EnchantmentType.MinusEnemyAllStats:
+      return "-10% All Stats";
       break;
     default:
       return "???";
