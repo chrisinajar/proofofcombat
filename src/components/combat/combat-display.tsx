@@ -114,9 +114,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           </Grid>
           {enemyHealth > 0 && (
             <React.Fragment>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your strength">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-melee"
                     onClick={() => handleFight(AttackType.Melee)}
                     aria-label="melee attack"
@@ -126,9 +128,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your dexterity">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-ranged"
                     onClick={() => handleFight(AttackType.Ranged)}
                     aria-label="ranged attack"
@@ -138,9 +142,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your intelligence">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-wizard"
                     onClick={() => handleFight(AttackType.Wizard)}
                     aria-label="conjuration spell"
@@ -150,9 +156,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your wisdon">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-elemental"
                     onClick={() => handleFight(AttackType.Elemental)}
                     aria-label="elemental spell"
@@ -162,9 +170,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your charisma">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-holy"
                     onClick={() => handleFight(AttackType.Holy)}
                     aria-label="holy attack"
@@ -174,9 +184,11 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} lg={1}>
+              <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip title="Attack using your constitution">
                   <Button
+                    sx={{ fontSize: "1rem", padding: 2 }}
+                    size="large"
                     id="attack-with-blood"
                     onClick={() => handleFight(AttackType.Blood)}
                     aria-label="blood magic"
