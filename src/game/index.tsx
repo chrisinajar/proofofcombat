@@ -83,7 +83,7 @@ export default function Home(): JSX.Element {
           </Box>
           <TabPanel value="1">
             <Grid container columns={12} spacing={4}>
-              <Grid item xs={12} sm={7} md={8} lg={9}>
+              <Grid item xs={12} sm={7} md={8}>
                 <Typography>
                   Welcome to the game! I'm updating things extremely regularly,
                   so check back often and refresh often. Use the tabs above to
@@ -107,7 +107,7 @@ export default function Home(): JSX.Element {
                 </Typography>
               </Grid>
               {leaderboardData?.leaderboard && (
-                <Grid item xs={12} sm={5} md={4} lg={3}>
+                <Grid item xs={12} sm={5} md={4}>
                   <Typography variant="h6">Top levels:</Typography>
                   <ul id="leaderboard-list">
                     {leaderboardData.leaderboard.map((entry, i) => (

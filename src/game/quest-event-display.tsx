@@ -41,7 +41,7 @@ export function QuestEventDisplay({
           onClick={handleClick}
           disabled={loading}
         >
-          Dismiss Message
+          Continue
         </Button>
         <br />
       </Box>
