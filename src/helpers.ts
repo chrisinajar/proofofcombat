@@ -23,6 +23,9 @@ export const EnchantmentNames = {
   [EnchantmentType.MinusEnemyPhysical]: "Physical Destruction",
   [EnchantmentType.MinusEnemyMental]: "Mental Destruction",
   [EnchantmentType.MinusEnemyAllStats]: "Complete Oppression",
+  [EnchantmentType.LifeHeal]: "Healing",
+  [EnchantmentType.LifeDamage]: "Harming",
+  [EnchantmentType.LifeSteal]: "Vampirism",
 
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere

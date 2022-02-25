@@ -371,10 +371,10 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "Leach HP";
       break;
     case EnchantmentType.MinusEnemyArmor:
-      return "-20% Enemy Armor";
+      return "-50% Enemy Armor";
       break;
     case EnchantmentType.BonusArmor:
-      return "+20% Armor";
+      return "+100% Armor";
       break;
     case EnchantmentType.MinusEnemyStrength:
       return "-20% Enemy Strength";
@@ -402,6 +402,15 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
     case EnchantmentType.MinusEnemyAllStats:
       return "-10% All Enemy Stats";
+      break;
+    case EnchantmentType.LifeHeal:
+      return "Heal for 20% Constitution";
+      break;
+    case EnchantmentType.LifeDamage:
+      return "Damage for 20% Constitution";
+      break;
+    case EnchantmentType.LifeSteal:
+      return "Leach for 10% Constitution";
       break;
     default:
       return "???";
