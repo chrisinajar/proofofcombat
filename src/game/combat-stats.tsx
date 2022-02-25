@@ -41,7 +41,7 @@ export function CombatStats({
           <b>Luck</b>: {stats.stats.luck.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Bonus Armor</b>: {formatPercentage(1 - stats.damageReduction, 1)}
+          <b>Bonus Armor</b>: {formatPercentage(stats.damageReduction - 1, 1)}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Bonus Damage</b>:{" "}
