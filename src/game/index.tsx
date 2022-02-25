@@ -110,13 +110,15 @@ export default function Home(): JSX.Element {
                 <Grid item xs={12} sm={5} md={4}>
                   <Typography variant="h6">Top levels:</Typography>
                   <ul id="leaderboard-list">
-                    {leaderboardData.leaderboard.map((entry, i) => (
-                      <li id={`leaderboard-list-${i}`} key={entry.id}>
-                        <b id={`leaderboard-list-${i}-name`}>{entry.name}</b>{" "}
-                        {entry.level.toLocaleString()} (
-                        {entry.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")})
-                      </li>
-                    ))}
+                    {leaderboardData.leaderboard
+                      .slice(0, 20)
+                      .map((entry, i) => (
+                        <li id={`leaderboard-list-${i}`} key={entry.id}>
+                          <b id={`leaderboard-list-${i}-name`}>{entry.name}</b>{" "}
+                          {entry.level.toLocaleString()} (
+                          {entry.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")})
+                        </li>
+                      ))}
                   </ul>
                 </Grid>
               )}
