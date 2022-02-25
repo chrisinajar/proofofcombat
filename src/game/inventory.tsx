@@ -367,9 +367,6 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.BonusAllStats:
       return "+10% All Stats";
       break;
-    case EnchantmentType.Vampire:
-      return "Leach HP";
-      break;
     case EnchantmentType.MinusEnemyArmor:
       return "-50% Enemy Armor";
       break;
