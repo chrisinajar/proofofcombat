@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
@@ -21,7 +21,7 @@ import {
   EnchantmentType,
 } from "src/generated/graphql";
 
-import { itemDisplayName } from "src/helpers";
+import { itemDisplayName, itemAllowsRebirth } from "src/helpers";
 import { RebirthMenu } from "./rebirth";
 
 type Slots =
@@ -181,6 +181,14 @@ function QuestItems({
 
   const label = "Quest items (passive, always active)";
 
+  const existingItem = hero.inventory.find((item) => item.id === value);
+
+  useEffect(() => {
+    if (value.length && !existingItem) {
+      setValue("");
+    }
+  }, [existingItem, value]);
+
   return (
     <React.Fragment>
       <div>
@@ -207,7 +215,7 @@ function QuestItems({
                 {itemDisplayName(inventoryItem)}
                 {getEnchantmentDisplay(inventoryItem.baseItem) !== "???" && (
                   <Typography
-                    variant="subtitle1"
+                    variant="subtitle2"
                     sx={{ color: "primary.main" }}
                   >
                     &nbsp;{getEnchantmentDisplay(inventoryItem.baseItem)}
@@ -321,7 +329,7 @@ export function Inventory(): JSX.Element | null {
             onChange={setSelectedQuestItem}
           />
         </Grid>
-        {selectedQuestItem === "totem-of-rebirth" && (
+        {itemAllowsRebirth(selectedQuestItem) && (
           <Grid item xs={6}>
             <RebirthMenu hero={hero} disabled={shouldDisable} />
           </Grid>
@@ -355,8 +363,20 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "fishermans-luck":
       return "+50% Luck";
       break;
+    case "totem-of-champion":
+      return "+Level cap, auto-battler, +100% XP";
+      break;
+    case "totem-of-hero":
+      return "2x Leveling rate, +Level cap, auto-battler, +100% XP";
+      break;
+    // menus
+    case "totem-of-champion-rebirth":
+    case "totem-of-hero-rebirth":
     case "totem-of-rebirth":
       return "Select to show rebirth menu";
+      break;
+    case "crafting-hammer":
+      return "Select to show crafting menu";
       break;
 
     case EnchantmentType.BonusStrength:

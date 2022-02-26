@@ -24,7 +24,18 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.MinusEnemyAllStats]: "Complete Oppression",
   [EnchantmentType.LifeHeal]: "Healing",
   [EnchantmentType.LifeDamage]: "Harming",
-  [EnchantmentType.LifeSteal]: "Vampirism",
+  [EnchantmentType.LifeSteal]: "The Leach",
+
+  [EnchantmentType.StrengthSteal]: "Stolen Strength",
+  [EnchantmentType.DexteritySteal]: "Thieves Hands",
+  [EnchantmentType.ConstitutionSteal]: "Siphoning",
+  [EnchantmentType.IntelligenceSteal]: "Revealed Thoughts",
+  [EnchantmentType.WisdomSteal]: "Swindling",
+  [EnchantmentType.WillpowerSteal]: "Persuasion",
+  [EnchantmentType.LuckSteal]: "The Trickster",
+
+  [EnchantmentType.AllStatsSteal]: "Soul Absorption",
+  [EnchantmentType.Vampirism]: "Vampirism",
 
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere
@@ -45,7 +56,7 @@ export function enchantmentDisplayName(
   return `${itemName} of ${EnchantmentNames[enchantment] ?? "The Unknown"}`;
 }
 
-export function itemDisplayName(item: InventoryItem) {
+export function itemDisplayName(item: InventoryItem): string {
   if (item.enchantment) {
     return enchantmentDisplayName(item.name, item.enchantment);
   }
@@ -57,7 +68,10 @@ type DistanceableLocation = {
   y: number;
 };
 
-export function distance2d(a: DistanceableLocation, b: DistanceableLocation) {
+export function distance2d(
+  a: DistanceableLocation,
+  b: DistanceableLocation
+): number {
   return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 }
 
@@ -66,4 +80,34 @@ export function addSpaces(str: string): string {
     .split(/(?=[A-Z])/g)
     .filter((i) => i.length)
     .join(" ");
+}
+
+export function itemAllowsRebirth(item: string): boolean {
+  if (item === "totem-of-rebirth") {
+    return true;
+  }
+  if (item === "totem-of-hero-rebirth") {
+    return true;
+  }
+  if (item === "totem-of-champion-rebirth") {
+    return true;
+  }
+  return false;
+}
+
+export function itemAllowsCrafting(item: string): boolean {
+  if (item === "totem-of-champion") {
+    return true;
+  }
+  return false;
+}
+
+export function itemAllowsAutoBattle(item: string): boolean {
+  if (item === "totem-of-hero") {
+    return true;
+  }
+  if (item === "totem-of-hero-rebirth") {
+    return true;
+  }
+  return false;
 }

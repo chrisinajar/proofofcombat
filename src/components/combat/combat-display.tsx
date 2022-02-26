@@ -23,6 +23,8 @@ import {
 import { itemDisplayName } from "src/helpers";
 
 type CombatDisplayProps = {
+  autoBattle: boolean;
+  canAutoBattle: boolean;
   fight: {
     id: string;
     monster: {
@@ -35,18 +37,27 @@ type CombatDisplayProps = {
   };
   onVictory?: () => void;
   onError?: (e: any) => void;
+  onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
+  fightMutationRef: React.RefObject<() => void>;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   const {
+    autoBattle,
+    canAutoBattle,
     fight: { id: monsterId, monster },
     onVictory,
     onError,
+    onAutoBattle,
+    fightMutationRef,
   } = props;
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
+  const [lastAttack, setLastAttack] = useState<AttackType>(AttackType.Melee);
   const fightResult = fightData?.fight;
+
+  const showAutoBattle = !autoBattle && canAutoBattle;
 
   useEffect(() => {
     if (fightLoading) {
@@ -66,7 +77,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   ]);
 
   async function handleFight(attackType: AttackType) {
-    console.log("Trying to fight", attackType);
+    setLastAttack(attackType);
     try {
       const data = await fightMutation({
         variables: {
@@ -74,8 +85,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           attackType,
         },
       });
-      if (onVictory) {
-        onVictory();
+      if (data.data?.fight.victory) {
+        if (onVictory) {
+          onVictory();
+        }
       }
     } catch (e) {
       console.log(e);
@@ -84,6 +97,18 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
       }
     }
   }
+
+  if (fightMutationRef) {
+    fightMutationRef.current = handleFight;
+  }
+
+  useEffect(() => {
+    return () => {
+      if (fightMutationRef) {
+        fightMutationRef.current = () => {};
+      }
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -98,7 +123,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         <Grid container sx={{ textAlign: "center" }} columns={6}>
           <Grid item xs={6}>
             <Typography variant="h4">
-              {enemyHealth > 0 && "Battling"}
+              {enemyHealth > 0 && (autoBattle ? "Auto-Battling" : "Battling")}
               {enemyHealth <= 0 && "Dead"} {monster.name}
             </Typography>
             <LinearProgress
@@ -183,8 +208,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           )}
         </Grid>
         {fightResult &&
-          fightResult.log.map((entry) => (
-            <React.Fragment key={entry.from}>
+          fightResult.log.map((entry, i) => (
+            <React.Fragment key={`${entry.from}-${i}`}>
               <Typography>
                 <b>{entry.from}</b>
                 {` ${getCombatPhrase(
@@ -238,6 +263,21 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                   {itemDisplayName(fightResult.drop)}
                 </Typography>
               </React.Fragment>
+            )}
+            <br />
+            {showAutoBattle && (
+              <Button
+                fullWidth
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  if (onAutoBattle) {
+                    onAutoBattle(monster.id, lastAttack);
+                  }
+                }}
+              >
+                Auto-Battle this enemy
+              </Button>
             )}
           </React.Fragment>
         )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import {
   useMonstersQuery,
@@ -17,19 +18,32 @@ import {
   useChallengeMutation,
   Monster,
   MonsterInstance,
+  AttackType,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
 import { CombatDisplay } from "./combat-display";
+import { itemAllowsAutoBattle } from "src/helpers";
 
 const challengeLabel = "Select a new monster to challenge";
 const fightLabel = "Fight an existing monster!";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
+const autoBattleSkipCount = 4;
+
 export function Combat(): JSX.Element {
+  const [autoBattleAttackType, setAutoBattleAttackType] = useState<AttackType>(
+    AttackType.Melee
+  );
+  const [mobKillCount, setMobKillCount] = useState<number>(0);
+  const [autoBattleCount, setAutoBattleCount] = useState<number>(0);
+  const [autoBattleBars, setAutoBattleBars] = useState([0, 50, 100]);
+  const autoBattleRef = useRef<() => void>(() => {});
+  const [autoBattle, setAutoBattle] = useState<boolean>(false);
+  const [autoBattleTarget, setAutoBattleTarget] = useState<string>("");
   const [currentFightId, setCurrentFightId] = useState<number>(0);
   const [currentFight, setCurrentFight] = useState<string | null>(null);
   const [currentDelay, setDelay] = useDelay();
@@ -43,10 +57,68 @@ export function Combat(): JSX.Element {
   const challenges: Pick<Monster, "id" | "name" | "level">[] =
     challengesData?.challenges || [];
   const hero = useHero();
+  const [fightMutation, { data: fightData, loading: fightLoading }] =
+    useFightMutation();
+  const fightMutationRef = useRef<() => void>(() => {});
+
+  const fightingMonster = monstersData?.monsters?.find(
+    (m) => m.id === currentFight
+  );
+  let canAutoBattle = false;
+
+  if (hero) {
+    canAutoBattle = !!hero.inventory.find((item) =>
+      itemAllowsAutoBattle(item.baseItem)
+    );
+  }
 
   useEffect(() => {
     refetchChallenges();
   }, [hero?.location.x, hero?.location.y, hero?.location.map]);
+
+  autoBattleRef.current = async () => {
+    setAutoBattleCount((autoBattleCount + 1) % autoBattleSkipCount);
+    setAutoBattleBars([
+      Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[0],
+      Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[1],
+      Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[2],
+    ]);
+    if (autoBattleCount !== 0) {
+      return;
+    }
+    if (hero.combat.health === 0) {
+      console.log("[AutoBattler] Healing!");
+      return handleHeal();
+    }
+    if (
+      !fightingMonster ||
+      fightingMonster.monster.combat.health === 0 ||
+      fightingMonster.monster.id !== autoBattleTarget
+    ) {
+      console.log("[AutoBattler] Challenging new mob!");
+      challengeTarget(autoBattleTarget);
+      return;
+    }
+    if (fightingMonster && fightMutationRef.current) {
+      console.log(`[AutoBattler] Fighting ${autoBattleAttackType}!`);
+      fightMutationRef.current(autoBattleAttackType);
+      return;
+    }
+    console.log("[AutoBattler] Doing nothing...");
+  };
+
+  useEffect(() => {
+    if (!autoBattle || !autoBattleTarget.length) {
+      return;
+    }
+    const timerId = setInterval(() => {
+      autoBattleRef.current();
+    }, 2000 / autoBattleSkipCount);
+
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [autoBattle]);
 
   useEffect(() => {
     if (monstersData?.monsters?.length) {
@@ -85,10 +157,14 @@ export function Combat(): JSX.Element {
   }
 
   async function handleChallenge() {
+    return challengeTarget(challenge);
+  }
+
+  async function challengeTarget(mob) {
     try {
       const { data } = await challengeMutation({
         variables: {
-          monster: challenge,
+          monster: mob,
         },
       });
       await refetch();
@@ -104,20 +180,24 @@ export function Combat(): JSX.Element {
     }
   }
 
+  async function handleAutoBattle(mob: string, attackType: AttackType) {
+    console.log("Enabling auto battler! weee!");
+    setAutoBattle(true);
+    setAutoBattleAttackType(attackType);
+    setMobKillCount(0);
+    setAutoBattleTarget(mob);
+  }
+
   const existingMonster = monstersData?.monsters?.find((m) => m.id === monster);
 
   if (!existingMonster) {
     monster = "";
   }
 
-  const fightingMonster = monstersData?.monsters?.find(
-    (m) => m.id === currentFight
-  );
-
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
-        {hero && hero.combat.health > 0 && (
+        {!autoBattle && hero && hero.combat.health > 0 && (
           <React.Fragment>
             <Grid item md={3} xs={6}>
               <FormControl fullWidth>
@@ -129,6 +209,7 @@ export function Combat(): JSX.Element {
                   labelId="challenge-monster-select-label"
                   value={challenge}
                   label={challengeLabel}
+                  disabled={autoBattle}
                   onChange={(e) => setChallenge(e.target.value)}
                 >
                   {challenges.map((challengeOption) => (
@@ -142,7 +223,9 @@ export function Combat(): JSX.Element {
                 </Select>
                 <Button
                   id="challenge-button"
-                  disabled={!challenge || currentDelay > 0 || healLoading}
+                  disabled={
+                    !challenge || currentDelay > 0 || healLoading || autoBattle
+                  }
                   onClick={handleChallenge}
                   variant="contained"
                 >
@@ -160,6 +243,7 @@ export function Combat(): JSX.Element {
                   labelId="fight-monster-select-label"
                   value={monster}
                   label={fightLabel}
+                  disabled={autoBattle}
                   onChange={(e) => setMonster(e.target.value)}
                 >
                   {monstersData?.monsters &&
@@ -177,7 +261,6 @@ export function Combat(): JSX.Element {
                         </MenuItem>
                       ))}
                 </Select>
-                {loading && <CircularProgress />}
                 <Button
                   id="fight-button"
                   disabled={
@@ -185,7 +268,8 @@ export function Combat(): JSX.Element {
                     currentDelay > 0 ||
                     healLoading ||
                     (existingMonster &&
-                      existingMonster.monster.combat.health === 0)
+                      existingMonster.monster.combat.health === 0) ||
+                    autoBattle
                   }
                   onClick={handleFight}
                   variant="contained"
@@ -196,12 +280,43 @@ export function Combat(): JSX.Element {
             </Grid>
           </React.Fragment>
         )}
+        {autoBattle && (
+          <Grid item xs={6}>
+            <LinearProgress
+              sx={{ margin: 1, color: "#f00" }}
+              variant="determinate"
+              value={autoBattleBars[0]}
+              color="inherit"
+            />
+            <LinearProgress
+              color="inherit"
+              sx={{ margin: 1, color: "#0f0" }}
+              variant="determinate"
+              value={autoBattleBars[1]}
+            />
+            <LinearProgress
+              color="inherit"
+              sx={{ margin: 1, color: "#00f" }}
+              variant="determinate"
+              value={autoBattleBars[2]}
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              color="error"
+              size="large"
+              onClick={() => setAutoBattle(false)}
+            >
+              Disable Auto-Battle
+            </Button>
+          </Grid>
+        )}
         {hero && hero.combat.health <= 0 && (
           <Grid item lg={3} xs={6}>
             <Typography id="you-are-dead">You are dead.</Typography>
           </Grid>
         )}
-        {fightingMonster && (
+        {hero && hero.combat.health > 0 && fightingMonster && (
           <CombatDisplay
             key={`${fightingMonster.id}-${currentFightId}`}
             fight={fightingMonster}
@@ -209,6 +324,11 @@ export function Combat(): JSX.Element {
               refetch();
               setCurrentFight(null);
             }}
+            autoBattle={autoBattle}
+            canAutoBattle={canAutoBattle}
+            onAutoBattle={handleAutoBattle}
+            fightMutationRef={fightMutationRef}
+            onVictory={() => setMobKillCount(mobKillCount + 1)}
           />
         )}
         <Grid item lg={3} xs={6}>
@@ -217,7 +337,11 @@ export function Combat(): JSX.Element {
             fullWidth
             onClick={handleHeal}
             variant="contained"
-            disabled={currentDelay > 0 || healLoading}
+            disabled={
+              currentDelay > 0 ||
+              healLoading ||
+              (hero && hero.combat.health === hero.combat.maxHealth)
+            }
           >
             Heal
           </Button>
