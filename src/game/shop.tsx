@@ -21,7 +21,7 @@ import {
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
-import { itemDisplayName } from "src/helpers";
+import { itemDisplayName, addSpaces } from "src/helpers";
 
 const friendlyNames = {
   [InventoryItemType.MeleeWeapon]: "Melee Weapon",
@@ -36,10 +36,7 @@ const friendlyNames = {
 };
 
 function inventoryTypeDisplayName(name: InventoryItemType): string {
-  return (
-    friendlyNames[name as keyof typeof friendlyNames] ??
-    name.replace(/(?=[A-Z])(?<=[a-z])/g, " ")
-  );
+  return friendlyNames[name as keyof typeof friendlyNames] ?? addSpaces(name);
 }
 
 export function SellItemShop({

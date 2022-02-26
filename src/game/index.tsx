@@ -16,6 +16,7 @@ import { Layout } from "src/components/layout";
 import { Chat } from "src/components/chat";
 import { Combat } from "src/components/combat";
 import { useToken } from "src/token";
+import { addSpaces } from "src/helpers";
 
 import { useMeQuery, useLeaderboardQuery } from "src/generated/graphql";
 
@@ -116,7 +117,7 @@ export default function Home(): JSX.Element {
                         <li id={`leaderboard-list-${i}`} key={entry.id}>
                           <b id={`leaderboard-list-${i}-name`}>{entry.name}</b>{" "}
                           {entry.level.toLocaleString()} (
-                          {entry.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")})
+                          {addSpaces(entry.class)})
                         </li>
                       ))}
                   </ul>

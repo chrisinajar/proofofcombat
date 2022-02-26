@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 import type { Hero } from "src/generated/graphql";
+import { addSpaces } from "src/helpers";
 
 export type AppBarHero = Pick<
   Hero,
@@ -95,10 +96,7 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Class:{" "}
-          <span id="hero-stats-class">
-            {hero.class.replace(/(?<=[a-z])(?=[A-Z])/g, " ")}
-          </span>
+          Class: <span id="hero-stats-class">{addSpaces(hero.class)}</span>
         </Grid>
       </Grid>
     </React.Fragment>

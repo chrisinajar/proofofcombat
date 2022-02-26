@@ -11,7 +11,6 @@ export const EnchantmentNames = {
   [EnchantmentType.BonusPhysical]: "Physical Superiority",
   [EnchantmentType.BonusMental]: "Mental Superiority",
   [EnchantmentType.BonusAllStats]: "Absolute Power",
-  [EnchantmentType.Vampire]: "The Vampire",
   [EnchantmentType.MinusEnemyArmor]: "Armor Piercing",
   [EnchantmentType.BonusArmor]: "Deflection",
   [EnchantmentType.MinusEnemyStrength]: "Crippling Strength",
@@ -59,4 +58,11 @@ type DistanceableLocation = {
 
 export function distance2d(a: DistanceableLocation, b: DistanceableLocation) {
   return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+}
+
+export function addSpaces(str: string): string {
+  return str
+    .split(/(?=[A-Z])/g)
+    .filter((i) => i.length)
+    .join(" ");
 }
