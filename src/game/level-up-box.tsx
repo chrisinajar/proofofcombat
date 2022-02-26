@@ -109,16 +109,16 @@ export function LevelUpBox(): JSX.Element {
               </Typography>
             </Grid>
           </Tooltip>
-          <Tooltip title="Charisma is used by holy warriors to attack">
+          <Tooltip title="Willpower is used by holy warriors to attack">
             <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
-                  id="level-up-charisma"
+                  id="level-up-willpower"
                   disabled={loading || currentDelay > 0}
-                  onClick={() => levelUp("Charisma")}
+                  onClick={() => levelUp("Willpower")}
                   variant="contained"
                 >
-                  Charisma
+                  Willpower
                 </Button>
               </Typography>
             </Grid>

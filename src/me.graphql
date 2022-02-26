@@ -12,6 +12,7 @@ query Me {
         class
 
         level
+        levelCap
         experience
         needed
         gold
@@ -135,7 +136,7 @@ query Me {
         stats {
           dexterity
           intelligence
-          charisma
+          willpower
           constitution
           wisdom
           luck
@@ -148,7 +149,7 @@ query Me {
           armorReduction
           enemyStats {
             luck
-            charisma
+            willpower
             wisdom
             intelligence
             constitution
@@ -156,7 +157,7 @@ query Me {
             dexterity
           }
           stats {
-            charisma
+            willpower
             constitution
             dexterity
             intelligence

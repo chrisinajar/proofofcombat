@@ -1,12 +1,12 @@
 import { EnchantmentType, InventoryItem } from "src/generated/graphql";
 
-export const EnchantmentNames = {
+export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.BonusStrength]: "Giant's Strength",
   [EnchantmentType.BonusDexterity]: "Incredible Speed",
   [EnchantmentType.BonusConstitution]: "Sturdiness",
   [EnchantmentType.BonusIntelligence]: "Intellect",
   [EnchantmentType.BonusWisdom]: "Incredible Will",
-  [EnchantmentType.BonusCharisma]: "The Bard",
+  [EnchantmentType.BonusWillpower]: "The Bard",
   [EnchantmentType.BonusLuck]: "The Gambler",
   [EnchantmentType.BonusPhysical]: "Physical Superiority",
   [EnchantmentType.BonusMental]: "Mental Superiority",
@@ -18,7 +18,7 @@ export const EnchantmentNames = {
   [EnchantmentType.MinusEnemyConstitution]: "Mortality",
   [EnchantmentType.MinusEnemyIntelligence]: "Stupification",
   [EnchantmentType.MinusEnemyWisdom]: "The Feeble Minded",
-  [EnchantmentType.MinusEnemyCharisma]: "Truth",
+  [EnchantmentType.MinusEnemyWillpower]: "Truth",
   [EnchantmentType.MinusEnemyPhysical]: "Physical Destruction",
   [EnchantmentType.MinusEnemyMental]: "Mental Destruction",
   [EnchantmentType.MinusEnemyAllStats]: "Complete Oppression",
@@ -28,20 +28,21 @@ export const EnchantmentNames = {
 
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere
-  [EnchantmentType.FishermansStrength]: "Quest Reward",
-  [EnchantmentType.FishermansDexterity]: "Quest Reward",
-  [EnchantmentType.FishermansConstitution]: "Quest Reward",
-  [EnchantmentType.FishermansIntelligence]: "Quest Reward",
-  [EnchantmentType.FishermansWisdom]: "Quest Reward",
-  [EnchantmentType.FishermansCharisma]: "Quest Reward",
-  [EnchantmentType.FishermansLuck]: "Quest Reward",
+  // [EnchantmentType.FishermansStrength]: "Quest Reward",
+  // [EnchantmentType.FishermansDexterity]: "Quest Reward",
+  // [EnchantmentType.FishermansConstitution]: "Quest Reward",
+  // [EnchantmentType.FishermansIntelligence]: "Quest Reward",
+  // [EnchantmentType.FishermansWisdom]: "Quest Reward",
+  // [EnchantmentType.FishermansWillpower]: "Quest Reward",
+  // [EnchantmentType.FishermansLuck]: "Quest Reward",
+  // [EnchantmentType.CanRebirth]: "Quest Reward",
 };
 
 export function enchantmentDisplayName(
   itemName: string,
   enchantment: EnchantmentType
 ): string {
-  return `${itemName} of ${EnchantmentNames[enchantment]}`;
+  return `${itemName} of ${EnchantmentNames[enchantment] ?? "The Unknown"}`;
 }
 
 export function itemDisplayName(item: InventoryItem) {

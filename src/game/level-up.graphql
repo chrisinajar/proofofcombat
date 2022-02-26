@@ -5,7 +5,7 @@ mutation LevelUp($attribute: AttributeType!) {
       attributePoints
       stats {
         luck
-        charisma
+        willpower
         wisdom
         intelligence
         constitution

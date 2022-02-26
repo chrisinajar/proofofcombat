@@ -39,7 +39,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       gold
       stats {
         luck
-        charisma
+        willpower
         wisdom
         intelligence
         constitution

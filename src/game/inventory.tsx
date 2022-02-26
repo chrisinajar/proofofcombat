@@ -22,6 +22,7 @@ import {
 } from "src/generated/graphql";
 
 import { itemDisplayName } from "src/helpers";
+import { RebirthMenu } from "./rebirth";
 
 type Slots =
   | "leftHand"
@@ -166,9 +167,11 @@ function EquipmentSlot({
 function QuestItems({
   hero,
   disabled,
+  onChange,
 }: {
   hero: Hero;
   disabled: boolean;
+  onChange?: (val: string) => void;
 }): JSX.Element {
   const [value, setValue] = useState<string>("");
   const items = hero.inventory
@@ -176,7 +179,7 @@ function QuestItems({
     // higher level quest items first!
     .sort((a, b) => b.level - a.level);
 
-  const label = "Quest items";
+  const label = "Quest items (passive, always active)";
 
   return (
     <React.Fragment>
@@ -191,6 +194,12 @@ function QuestItems({
             disabled={disabled}
             onChange={(e) => {
               setValue(e.target.value);
+              if (onChange) {
+                const actualItem = items.find((i) => i.id === e.target.value);
+                if (actualItem) {
+                  onChange(actualItem.baseItem);
+                }
+              }
             }}
           >
             {items.map((inventoryItem) => (
@@ -216,6 +225,7 @@ function QuestItems({
 export function Inventory(): JSX.Element | null {
   const [currentDelay] = useDelay();
   const [equipItemMutation, { loading }] = useEquipItemMutation();
+  const [selectedQuestItem, setSelectedQuestItem] = useState<string>("");
   const hero = useHero();
 
   const shouldDisable = loading || currentDelay > 0;
@@ -305,8 +315,17 @@ export function Inventory(): JSX.Element | null {
           />
         </Grid>
         <Grid item xs={6} sm={3}>
-          <QuestItems hero={hero} disabled={shouldDisable} />
+          <QuestItems
+            hero={hero}
+            disabled={shouldDisable}
+            onChange={setSelectedQuestItem}
+          />
         </Grid>
+        {selectedQuestItem === "totem-of-rebirth" && (
+          <Grid item xs={6}>
+            <RebirthMenu hero={hero} disabled={shouldDisable} />
+          </Grid>
+        )}
       </Grid>
     </React.Fragment>
   );
@@ -330,11 +349,14 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "fishermans-wisdom":
       return "+50% Wisdom";
       break;
-    case "fishermans-charisma":
-      return "+50% Charisma";
+    case "fishermans-willpower":
+      return "+50% Willpower";
       break;
     case "fishermans-luck":
       return "+50% Luck";
+      break;
+    case "totem-of-rebirth":
+      return "Select to show rebirth menu";
       break;
 
     case EnchantmentType.BonusStrength:
@@ -352,8 +374,8 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.BonusWisdom:
       return "+20% Wisdom";
       break;
-    case EnchantmentType.BonusCharisma:
-      return "+20% Charisma";
+    case EnchantmentType.BonusWillpower:
+      return "+20% Willpower";
       break;
     case EnchantmentType.BonusLuck:
       return "+20% Luck";
@@ -362,7 +384,7 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "+10% Strength, Dexterity, Constitution";
       break;
     case EnchantmentType.BonusMental:
-      return "+10% Intelligence, Wisdom, Charisma";
+      return "+10% Intelligence, Wisdom, Willpower";
       break;
     case EnchantmentType.BonusAllStats:
       return "+10% All Stats";
@@ -388,14 +410,14 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.MinusEnemyWisdom:
       return "-20% Enemy Wisdom";
       break;
-    case EnchantmentType.MinusEnemyCharisma:
-      return "-20% Enemy Charisma";
+    case EnchantmentType.MinusEnemyWillpower:
+      return "-20% Enemy Willpower";
       break;
     case EnchantmentType.MinusEnemyPhysical:
       return "-10% Enemy Strength, Dexterity, Constitution";
       break;
     case EnchantmentType.MinusEnemyMental:
-      return "-10% Enemy Intelligence, Wisdom, Charisma";
+      return "-10% Enemy Intelligence, Wisdom, Willpower";
       break;
     case EnchantmentType.MinusEnemyAllStats:
       return "-10% All Enemy Stats";
