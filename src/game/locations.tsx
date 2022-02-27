@@ -59,7 +59,8 @@ export function Locations(): JSX.Element | null {
   // for now we're only supporting 1 special location
   const specialLocation = specialLocations.length ? specialLocations[0] : null;
 
-  const shouldDisable = loading || hero.combat.health === 0 || currentDelay > 0;
+  const shouldDisable =
+    loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading;
 
   async function handleMove(direction: MoveDirection) {
     try {
@@ -204,13 +205,20 @@ export function Locations(): JSX.Element | null {
                     margin: 1,
                   }}
                 />
+                <br />
                 <Button
                   color="secondary"
                   variant="outlined"
                   onClick={handlTeleport}
-                  disabled={teleportCost > hero.stats.intelligence}
+                  disabled={
+                    teleportCost === 0 ||
+                    teleportCost > hero.stats.intelligence ||
+                    shouldDisable
+                  }
                 >
-                  Teleport for {teleportCost.toLocaleString()} intelligence
+                  {teleportCost > 0 &&
+                    `Teleport for ${teleportCost.toLocaleString()} intelligence`}
+                  {teleportCost <= 0 && "Teleport"}
                 </Button>
               </Grid>
             )}
