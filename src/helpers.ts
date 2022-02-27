@@ -118,6 +118,12 @@ export function itemAllowsAutoBattle(item: string): boolean {
   if (item === "totem-of-hero-rebirth") {
     return true;
   }
+  if (item === "totem-of-champion") {
+    return true;
+  }
+  if (item === "totem-of-champion-rebirth") {
+    return true;
+  }
   return false;
 }
 
