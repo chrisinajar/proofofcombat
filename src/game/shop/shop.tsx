@@ -173,7 +173,7 @@ export function ItemTypeShop({
     </FormControl>
   );
 }
-export function Shop(): JSX.Element {
+export function ItemShop(): JSX.Element {
   const [currentDelay] = useDelay();
   const [selectedItem, setSelectedItem] = useState<{
     name: string;

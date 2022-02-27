@@ -453,13 +453,19 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "-10% All Enemy Stats";
       break;
     case EnchantmentType.LifeHeal:
-      return "Heal for 20% Constitution";
+      return "Heal 20% Constitution";
       break;
     case EnchantmentType.LifeDamage:
-      return "Damage for 20% Constitution";
+      return "Damage 20% Constitution";
       break;
     case EnchantmentType.LifeSteal:
-      return "Leach for 10% Constitution";
+      return "Leach 10% Constitution";
+      break;
+    case EnchantmentType.BigMelee:
+      return "+100% Strength, Leach 20% Dexterity";
+      break;
+    case EnchantmentType.BigCaster:
+      return "+100% Intelligence, Leach 20% Wisdom";
       break;
     default:
       return "???";

@@ -1,0 +1,16 @@
+mutation Teleport($x: Int!, $y: Int!) {
+  teleport(x: $x, y: $y) {
+    hero {
+      location {
+        y
+        x
+        map
+      }
+      id
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

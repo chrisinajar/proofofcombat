@@ -28,6 +28,7 @@ type CombatDisplayProps = {
   fight: {
     id: string;
     monster: {
+      id: string;
       name: string;
       combat: {
         health: number;
@@ -38,7 +39,7 @@ type CombatDisplayProps = {
   onVictory?: () => void;
   onError?: (e: any) => void;
   onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
-  fightMutationRef: React.RefObject<() => void>;
+  fightMutationRef: React.MutableRefObject<(attackType: AttackType) => void>;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {

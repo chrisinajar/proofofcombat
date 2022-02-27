@@ -59,7 +59,7 @@ export function Combat(): JSX.Element {
   const hero = useHero();
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
-  const fightMutationRef = useRef<() => void>(() => {});
+  const fightMutationRef = useRef<(attackType: AttackType) => void>((a) => {});
 
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight
@@ -86,7 +86,7 @@ export function Combat(): JSX.Element {
     if (autoBattleCount !== 0) {
       return;
     }
-    if (hero.combat.health === 0) {
+    if (hero?.combat.health === 0) {
       console.log("[AutoBattler] Healing!");
       return handleHeal();
     }
@@ -160,7 +160,7 @@ export function Combat(): JSX.Element {
     return challengeTarget(challenge);
   }
 
-  async function challengeTarget(mob) {
+  async function challengeTarget(mob: string) {
     try {
       const { data } = await challengeMutation({
         variables: {
