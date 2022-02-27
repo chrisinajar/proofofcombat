@@ -21,7 +21,7 @@ import {
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
-import { itemDisplayName, addSpaces } from "src/helpers";
+import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
 
 const friendlyNames = {
   [InventoryItemType.MeleeWeapon]: "Melee Weapon",
@@ -52,30 +52,6 @@ export function SellItemShop({
 
   if (!hero) {
     return null;
-  }
-
-  const equippedItems: string[] = [];
-
-  if (hero.equipment.leftHand?.id) {
-    equippedItems.push(hero.equipment.leftHand.id);
-  }
-  if (hero.equipment.rightHand?.id) {
-    equippedItems.push(hero.equipment.rightHand.id);
-  }
-  if (hero.equipment.bodyArmor?.id) {
-    equippedItems.push(hero.equipment.bodyArmor.id);
-  }
-  if (hero.equipment.handArmor?.id) {
-    equippedItems.push(hero.equipment.handArmor.id);
-  }
-  if (hero.equipment.legArmor?.id) {
-    equippedItems.push(hero.equipment.legArmor.id);
-  }
-  if (hero.equipment.headArmor?.id) {
-    equippedItems.push(hero.equipment.headArmor.id);
-  }
-  if (hero.equipment.footArmor?.id) {
-    equippedItems.push(hero.equipment.footArmor.id);
   }
 
   function sellItemForItem(item: InventoryItem | string): ShopItem | null {
@@ -130,9 +106,7 @@ export function SellItemShop({
                 key={item.id}
                 value={item.id}
                 disabled={
-                  !sellItem ||
-                  !!item.enchantment ||
-                  equippedItems.indexOf(item.id) >= 0
+                  !sellItem || !!item.enchantment || isItemEquipped(hero, item)
                 }
               >
                 {sellItem?.cost &&
@@ -140,7 +114,7 @@ export function SellItemShop({
                     item
                   )}: ${sellItem.cost.toLocaleString()} Gold`}
                 {!sellItem?.cost && item.name}{" "}
-                {equippedItems.indexOf(item.id) >= 0 && "*EQUIPPED*"}
+                {isItemEquipped(hero, item) && "*EQUIPPED*"}
               </MenuItem>
             );
           })}

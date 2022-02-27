@@ -1,4 +1,4 @@
-import { EnchantmentType, InventoryItem } from "src/generated/graphql";
+import { EnchantmentType, InventoryItem, Hero } from "src/generated/graphql";
 
 export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.BonusStrength]: "Giant's Strength",
@@ -96,7 +96,7 @@ export function itemAllowsRebirth(item: string): boolean {
 }
 
 export function itemAllowsCrafting(item: string): boolean {
-  if (item === "totem-of-champion") {
+  if (item === "crafting-hammer") {
     return true;
   }
   return false;
@@ -109,5 +109,31 @@ export function itemAllowsAutoBattle(item: string): boolean {
   if (item === "totem-of-hero-rebirth") {
     return true;
   }
+  return false;
+}
+
+export function isItemEquipped(hero: Hero, item: InventoryItem): boolean {
+  if (hero.equipment.leftHand?.id && hero.equipment.leftHand.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.rightHand?.id && hero.equipment.rightHand.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.bodyArmor?.id && hero.equipment.bodyArmor.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.handArmor?.id && hero.equipment.handArmor.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.legArmor?.id && hero.equipment.legArmor.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.headArmor?.id && hero.equipment.headArmor.id === item.id) {
+    return true;
+  }
+  if (hero.equipment.footArmor?.id && hero.equipment.footArmor.id === item.id) {
+    return true;
+  }
+
   return false;
 }

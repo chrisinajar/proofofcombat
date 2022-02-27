@@ -21,8 +21,13 @@ import {
   EnchantmentType,
 } from "src/generated/graphql";
 
-import { itemDisplayName, itemAllowsRebirth } from "src/helpers";
+import {
+  itemDisplayName,
+  itemAllowsRebirth,
+  itemAllowsCrafting,
+} from "src/helpers";
 import { RebirthMenu } from "./rebirth";
+import { CreaftingMenu } from "./crafting";
 
 type Slots =
   | "leftHand"
@@ -332,6 +337,11 @@ export function Inventory(): JSX.Element | null {
         {itemAllowsRebirth(selectedQuestItem) && (
           <Grid item xs={6}>
             <RebirthMenu hero={hero} disabled={shouldDisable} />
+          </Grid>
+        )}
+        {itemAllowsCrafting(selectedQuestItem) && (
+          <Grid item xs={6}>
+            <CreaftingMenu hero={hero} disabled={shouldDisable} />
           </Grid>
         )}
       </Grid>
