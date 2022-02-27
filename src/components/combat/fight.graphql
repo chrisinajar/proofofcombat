@@ -49,6 +49,12 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
 
       inventory {
         id
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
       }
     }
     monster {

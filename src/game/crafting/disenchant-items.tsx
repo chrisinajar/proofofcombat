@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -6,14 +6,26 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
-import { Hero, InventoryItemType } from "src/generated/graphql";
+import {
+  Hero,
+  InventoryItemType,
+  useDisenchantItemMutation,
+} from "src/generated/graphql";
 
 import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
 
-export function DisenchantItems({ hero }: { hero: Hero }): JSX.Element {
-  const [value, setValue] = useState<string>("");
-  const destroyableItems = hero.inventory
+export function DisenchantItems({
+  hero,
+  disabled,
+}: {
+  hero: Hero;
+  disabled: boolean;
+}): JSX.Element {
+  let [value, setValue] = useState<string>("");
+  const [disenchantItemMutation, { loading }] = useDisenchantItemMutation();
+  const disenchantableItems = hero.inventory
     .filter((item) => {
       if (item.type === InventoryItemType.Quest) {
         return false;
@@ -25,17 +37,43 @@ export function DisenchantItems({ hero }: { hero: Hero }): JSX.Element {
       return !!item.enchantment;
     })
     .sort((a, b) => a.level - b.level);
-  const label = "Select item to destroy";
+
+  let selectedItem = disenchantableItems.find((item) => item.id === value);
+
+  if (!selectedItem && value.length) {
+    if (disenchantableItems.length) {
+      selectedItem = disenchantableItems[0];
+      value = selectedItem.id;
+    } else {
+      value = "";
+    }
+  }
+
+  async function handleDisenchantItem() {
+    try {
+      await disenchantItemMutation({
+        variables: {
+          item: value,
+        },
+      });
+    } catch (e) {}
+  }
+
+  const label = "Select item to disenchant";
+  const enchantmentDustCost = selectedItem ? selectedItem.level : 0;
 
   return (
     <React.Fragment>
-      Select an enchanted item you would like to destroy, smashing it with the
-      crafting hammer into fine Enchanting Dust.
+      <Typography variant="body1">
+        Select an item to split from its enchantment. You will keep both the
+        base item and the enchantment itself for use in further crafting.
+      </Typography>
+      <br />
       <FormControl fullWidth>
-        <InputLabel id="destroy-select-label">{label}</InputLabel>
+        <InputLabel id="disenchant-select-label">{label}</InputLabel>
         <Select
-          id="destroy-select"
-          labelId="destroy-select-label"
+          id="disenchant-select"
+          labelId="disenchant-select-label"
           value={value || ""}
           label={label}
           onChange={(e) => {
@@ -49,7 +87,7 @@ export function DisenchantItems({ hero }: { hero: Hero }): JSX.Element {
             setValue(itemId);
           }}
         >
-          {destroyableItems.map((item) => {
+          {disenchantableItems.map((item) => {
             return (
               <MenuItem
                 key={item.id}
@@ -62,6 +100,29 @@ export function DisenchantItems({ hero }: { hero: Hero }): JSX.Element {
             );
           })}
         </Select>
+        <Button
+          variant="contained"
+          disabled={
+            !selectedItem ||
+            disabled ||
+            loading ||
+            enchantmentDustCost > hero.enchantingDust
+          }
+          color="error"
+          onClick={handleDisenchantItem}
+        >
+          {selectedItem && (
+            <Box>
+              <Typography>
+                Disenchant <b>{itemDisplayName(selectedItem)}</b>
+              </Typography>
+              <Typography variant="subtitle2">
+                Costs {enchantmentDustCost.toLocaleString()} Enchantment Dust
+              </Typography>
+            </Box>
+          )}
+          {!selectedItem && "Select Item"}
+        </Button>
       </FormControl>
     </React.Fragment>
   );

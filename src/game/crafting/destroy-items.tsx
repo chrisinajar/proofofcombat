@@ -7,12 +7,23 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import { Hero, InventoryItemType } from "src/generated/graphql";
+import {
+  Hero,
+  InventoryItemType,
+  useDestroyItemMutation,
+} from "src/generated/graphql";
 
 import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
 
-export function DestroyItems({ hero }: { hero: Hero }): JSX.Element {
+export function DestroyItems({
+  hero,
+  disabled,
+}: {
+  hero: Hero;
+  disabled: boolean;
+}): JSX.Element {
   let [value, setValue] = useState<string>("");
+  const [destroyItemMutation, { loading }] = useDestroyItemMutation();
   const destroyableItems = hero.inventory
     .filter((item) => {
       if (item.type === InventoryItemType.Quest) {
@@ -27,14 +38,25 @@ export function DestroyItems({ hero }: { hero: Hero }): JSX.Element {
     .sort((a, b) => a.level - b.level);
   const label = "Select item to destroy";
 
-  const selectedItem = destroyableItems.find((item) => item.id === value);
+  let selectedItem = destroyableItems.find((item) => item.id === value);
 
   if (!selectedItem && value.length) {
     if (destroyableItems.length) {
-      value = destroyableItems[0].id;
+      selectedItem = destroyableItems[0];
+      value = selectedItem.id;
     } else {
       value = "";
     }
+  }
+
+  async function handleDestroyItem() {
+    try {
+      await destroyItemMutation({
+        variables: {
+          item: value,
+        },
+      });
+    } catch (e) {}
   }
 
   return (
@@ -75,7 +97,12 @@ export function DestroyItems({ hero }: { hero: Hero }): JSX.Element {
             );
           })}
         </Select>
-        <Button variant="contained" disabled={!selectedItem} color="error">
+        <Button
+          variant="contained"
+          disabled={!selectedItem || disabled || loading}
+          color="error"
+          onClick={handleDestroyItem}
+        >
           {selectedItem && (
             <React.Fragment>
               Destroy {itemDisplayName(selectedItem)}

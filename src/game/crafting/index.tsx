@@ -15,19 +15,21 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
-import { useHero } from "src/hooks/use-hero";
+import { Hero } from "src/generated/graphql";
 
 import { DestroyItems } from "./destroy-items";
 import { EnchantItems } from "./enchant-items";
 import { DisenchantItems } from "./disenchant-items";
 
-export function CreaftingMenu(): JSX.Element {
+export function CreaftingMenu({
+  hero,
+  disabled,
+}: {
+  hero: Hero;
+  disabled: boolean;
+}): JSX.Element {
   const [selectedTab, setSelectedTab] = useState("1");
-  const hero = useHero();
 
-  if (!hero) {
-    return <CircularProgress />;
-  }
   return (
     <React.Fragment>
       <Divider sx={{ margin: 2 }} />
@@ -38,6 +40,12 @@ export function CreaftingMenu(): JSX.Element {
         Enchanting Dust:{" "}
         <span id="hero-stats-enchanting-dust">
           {hero.enchantingDust.toLocaleString()}
+        </span>
+      </Typography>
+      <Typography variant="subtitle1" color="secondary">
+        Enchantments:{" "}
+        <span id="hero-stats-enchantments">
+          {hero.enchantments.length.toLocaleString()}
         </span>
       </Typography>
       <br />
@@ -64,17 +72,17 @@ export function CreaftingMenu(): JSX.Element {
             }}
           >
             <Tab icon={<DeleteIcon />} label="Destroy" value="1" />
-            <Tab icon={<MergeTypeIcon />} label="Enchant" value="2" />
-            <Tab icon={<CallSplitIcon />} label="Disenchant" value="3" />
+            <Tab icon={<CallSplitIcon />} label="Disenchant" value="2" />
+            <Tab icon={<MergeTypeIcon />} label="Enchant" value="3" />
           </TabList>
           <TabPanel value="1">
-            <DestroyItems hero={hero} />
+            <DestroyItems hero={hero} disabled={disabled} />
           </TabPanel>
           <TabPanel value="2">
-            <EnchantItems hero={hero} />
+            <DisenchantItems hero={hero} disabled={disabled} />
           </TabPanel>
           <TabPanel value="3">
-            <DisenchantItems hero={hero} />
+            <EnchantItems hero={hero} disabled={disabled} />
           </TabPanel>
         </Box>
       </TabContext>

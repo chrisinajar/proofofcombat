@@ -18,6 +18,7 @@ query Me {
         gold
         enchantingDust
         attributePoints
+        enchantments
 
         location {
           x

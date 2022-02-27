@@ -73,38 +73,37 @@ export default function Home(): JSX.Element {
               aria-label="navigation tabs"
               variant="scrollable"
             >
-              <Tab label="Welcome / News" value="1" />
+              <Tab label="Welcome" value="1" />
               <Tab label="Combat" value="2" />
               <Tab label="Shop" value="3" />
               <Tab label="Inventory" value="4" />
               <Tab label="Map" value="5" />
-              <Tab label="Quest Log" value="6" />
-              <Tab label="Character Stats" value="7" />
+              <Tab label="Quests" value="6" />
+              <Tab label="Stats" value="7" />
             </TabList>
           </Box>
           <TabPanel value="1">
             <Grid container columns={12} spacing={4}>
               <Grid item xs={12} sm={7} md={8}>
-                <Typography>
-                  Welcome to the game! I'm updating things extremely regularly,
-                  so check back often and refresh often. Use the tabs above to
-                  navigate around.
+                <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                  Welcome to <b>Proof of Combat</b>!
                 </Typography>
-                <br />
-                <Typography>
-                  Combat has been heavily overhauled in order to accomidate the
-                  new equipment!
+                <Typography sx={{ marginBottom: 2 }}>
+                  This game is under very active development, so except things
+                  to change often and for new features and content to appear on
+                  a near daily basis.
                 </Typography>
-                <br />
-                <Typography>
-                  There are 6 different types of combat available, each uses a
-                  different primary attribute, as well as an item shop to buy
-                  and equip the new items.
-                </Typography>
-                <br />
-                <Typography>
-                  The map is fully functional! Be sure to travel around before
-                  travel gets harder...
+
+                <Typography sx={{ marginBottom: 2 }}>
+                  If you'd like to discuss upcoming features, join the{" "}
+                  <a
+                    href="https://discord.gg/t7AZSxvfJG"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    discord
+                  </a>
+                  !
                 </Typography>
               </Grid>
               {leaderboardData?.leaderboard && (

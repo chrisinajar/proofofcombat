@@ -49,6 +49,12 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   // [EnchantmentType.CanRebirth]: "Quest Reward",
 };
 
+export function pureEnchantmentDisplayName(
+  enchantment: EnchantmentType
+): string {
+  return EnchantmentNames[enchantment] ?? addSpaces(enchantment);
+}
+
 export function enchantmentDisplayName(
   itemName: string,
   enchantment: EnchantmentType

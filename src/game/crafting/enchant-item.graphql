@@ -1,0 +1,18 @@
+mutation EnchantItem($item: ID!, $enchantment: EnchantmentType!) {
+  enchantItem(item: $item, enchantment: $enchantment) {
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      enchantingDust
+      enchantments
+
+      inventory {
+        id
+        enchantment
+      }
+    }
+  }
+}

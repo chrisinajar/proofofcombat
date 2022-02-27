@@ -9,6 +9,7 @@ mutation Sail($x: Int!, $y: Int!) {
         map
       }
       inventory {
+        id
         baseItem
         owner
         name
