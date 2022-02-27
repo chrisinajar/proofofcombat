@@ -35,7 +35,7 @@ export function CombatStats({
           <b>Wisdom</b>: {stats.stats.wisdom.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Charisma</b>: {stats.stats.charisma.toLocaleString()}
+          <b>Willpower</b>: {stats.stats.willpower.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Luck</b>: {stats.stats.luck.toLocaleString()}
@@ -71,8 +71,8 @@ export function CombatStats({
           {formatPercentage(stats.enemyStats.wisdom - 1000000, 1000000)}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Enemy Charisma</b>:{" "}
-          {formatPercentage(stats.enemyStats.charisma - 1000000, 1000000)}
+          <b>Enemy Willpower</b>:{" "}
+          {formatPercentage(stats.enemyStats.willpower - 1000000, 1000000)}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Enemy Luck</b>:{" "}

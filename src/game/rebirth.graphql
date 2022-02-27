@@ -1,0 +1,87 @@
+mutation Rebirth {
+  rebirth {
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      class
+      level
+      levelCap
+      experience
+      needed
+      gold
+      location {
+        x
+        y
+        map
+      }
+      attributePoints
+      combat {
+        health
+        maxHealth
+      }
+      stats {
+        luck
+        willpower
+        wisdom
+        intelligence
+        constitution
+        dexterity
+        strength
+      }
+      inventory {
+        id
+        enchantment
+        level
+        type
+        name
+        baseItem
+        owner
+      }
+      questLog {
+        rebirth {
+          lastEvent {
+            quest
+            message
+            id
+          }
+          progress
+          finished
+          started
+          id
+        }
+        id
+      }
+      currentQuest {
+        quest
+        message
+        id
+      }
+      combatStats {
+        stats {
+          luck
+          willpower
+          wisdom
+          intelligence
+          constitution
+          dexterity
+          strength
+        }
+        enemyStats {
+          luck
+          willpower
+          wisdom
+          intelligence
+          constitution
+          dexterity
+          strength
+        }
+        armorReduction
+        damageReduction
+        damageAmplification
+      }
+    }
+  }
+}

@@ -90,9 +90,9 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Charisma:{" "}
-          <span id="hero-stats-charisma">
-            {hero.stats.charisma.toLocaleString()}
+          Willpower:{" "}
+          <span id="hero-stats-willpower">
+            {hero.stats.willpower.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>

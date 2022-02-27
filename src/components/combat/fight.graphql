@@ -39,7 +39,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       gold
       stats {
         luck
-        charisma
+        willpower
         wisdom
         intelligence
         constitution
@@ -49,6 +49,12 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
 
       inventory {
         id
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
       }
     }
     monster {

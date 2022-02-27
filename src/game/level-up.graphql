@@ -1,11 +1,11 @@
-mutation LevelUp($attribute: AttributeType!) {
-  increaseAttribute(attribute: $attribute) {
+mutation LevelUp($attribute: AttributeType!, $spendAll: Boolean) {
+  increaseAttribute(attribute: $attribute, spendAll: $spendAll) {
     hero {
       id
       attributePoints
       stats {
         luck
-        charisma
+        willpower
         wisdom
         intelligence
         constitution

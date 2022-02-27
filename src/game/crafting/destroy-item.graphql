@@ -1,11 +1,13 @@
-mutation DismissQuest {
-  dismissQuest {
+mutation DestroyItem($item: ID!) {
+  destroyItem(item: $item) {
     account {
       id
       nextAllowedAction
     }
     hero {
       id
+      enchantingDust
+
       inventory {
         id
         baseItem
@@ -14,10 +16,6 @@ mutation DismissQuest {
         type
         level
         enchantment
-      }
-      currentQuest {
-        id
-        message
       }
     }
   }

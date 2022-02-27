@@ -9,8 +9,9 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { useGetChatTokenQuery } from "src/generated/graphql";
+import { InventoryItem, useGetChatTokenQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
+import { itemDisplayName } from "src/helpers";
 
 const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
 
@@ -39,8 +40,13 @@ type ChatMessage = {
     | "overline";
 };
 type SystemMessage = {
-  color: string;
+  color: "success" | "primary" | "secondary" | "error";
   message: string;
+};
+type Notification = {
+  type: "drop" | "quest";
+  message: string;
+  item?: InventoryItem;
 };
 type Hello = {
   chat: ChatMessage[];
@@ -78,10 +84,32 @@ export function Chat(): JSX.Element {
       setChat((oldChat) => [data, ...oldChat]);
     });
 
+    socketRef.current.on("notification", (data: Notification) => {
+      if (data.item) {
+        data.message = data.message.replace(
+          "{{item}}",
+          itemDisplayName(data.item)
+        );
+      }
+
+      console.log(data.message);
+      setChat((oldChat) => [
+        {
+          id: Math.random(),
+          time: Date.now() / 1000,
+          message: "",
+          from: data.message,
+          color: data.type === "drop" ? "error" : "secondary",
+          variant: "body1",
+        },
+        ...oldChat,
+      ]);
+    });
     socketRef.current.on("system-message", (data: SystemMessage) => {
       setChat((oldChat) => [
         {
           id: Math.random(),
+          time: Date.now() / 1000,
           message: data.message,
           from: "",
           color: data.color,

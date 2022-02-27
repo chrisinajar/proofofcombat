@@ -23,9 +23,12 @@ import {
 import { itemDisplayName } from "src/helpers";
 
 type CombatDisplayProps = {
+  autoBattle: boolean;
+  canAutoBattle: boolean;
   fight: {
     id: string;
     monster: {
+      id: string;
       name: string;
       combat: {
         health: number;
@@ -35,23 +38,27 @@ type CombatDisplayProps = {
   };
   onVictory?: () => void;
   onError?: (e: any) => void;
+  onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
+  fightMutationRef: React.MutableRefObject<(attackType: AttackType) => void>;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   const {
+    autoBattle,
+    canAutoBattle,
     fight: { id: monsterId, monster },
     onVictory,
     onError,
+    onAutoBattle,
+    fightMutationRef,
   } = props;
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
-  // fightResult
-  //   ? (fightResult.monster.monster.combat.health /
-  //       fightResult.monster.monster.combat.maxHealth) *
-  //     100
-  //   : 100
+  const [lastAttack, setLastAttack] = useState<AttackType>(AttackType.Melee);
   const fightResult = fightData?.fight;
+
+  const showAutoBattle = !autoBattle && canAutoBattle;
 
   useEffect(() => {
     if (fightLoading) {
@@ -71,7 +78,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   ]);
 
   async function handleFight(attackType: AttackType) {
-    console.log("Trying to fight", attackType);
+    setLastAttack(attackType);
     try {
       const data = await fightMutation({
         variables: {
@@ -79,8 +86,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           attackType,
         },
       });
-      if (onVictory) {
-        onVictory();
+      if (data.data?.fight.victory) {
+        if (onVictory) {
+          onVictory();
+        }
       }
     } catch (e) {
       console.log(e);
@@ -89,6 +98,18 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
       }
     }
   }
+
+  if (fightMutationRef) {
+    fightMutationRef.current = handleFight;
+  }
+
+  useEffect(() => {
+    return () => {
+      if (fightMutationRef) {
+        fightMutationRef.current = () => {};
+      }
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -100,10 +121,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         item
         xs={6}
       >
-        <Grid container columns={6}>
+        <Grid container sx={{ textAlign: "center" }} columns={6}>
           <Grid item xs={6}>
             <Typography variant="h4">
-              {enemyHealth > 0 && "Battling"}
+              {enemyHealth > 0 && (autoBattle ? "Auto-Battling" : "Battling")}
               {enemyHealth <= 0 && "Dead"} {monster.name}
             </Typography>
             <LinearProgress
@@ -115,7 +136,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           {enemyHealth > 0 && (
             <React.Fragment>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your strength">
+                <Tooltip title="Attack using your melee weapons, uses strength and dexterity">
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -129,7 +150,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your dexterity">
+                <Tooltip title="Attack using your ranged weapons, uses dexterity">
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -143,49 +164,35 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your intelligence">
+                <Tooltip title="Cast spells using your wisdom and intelligence">
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
-                    id="attack-with-wizard"
-                    onClick={() => handleFight(AttackType.Wizard)}
-                    aria-label="conjuration spell"
+                    id="attack-with-cast"
+                    onClick={() => handleFight(AttackType.Cast)}
+                    aria-label="cast spell"
                     startIcon={<SchoolIcon />}
                   >
-                    Conjuration Spell
+                    Cast Spell
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your wisdon">
-                  <Button
-                    sx={{ fontSize: "1rem", padding: 2 }}
-                    size="large"
-                    id="attack-with-elemental"
-                    onClick={() => handleFight(AttackType.Elemental)}
-                    aria-label="elemental spell"
-                    startIcon={<LocalFireDepartmentIcon />}
-                  >
-                    Elemental Spell
-                  </Button>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your charisma">
+              <Grid item xs={6} sm={3} md={3} xl={3}>
+                <Tooltip title="Smite your foe using wisdom and willpower">
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
                     id="attack-with-holy"
-                    onClick={() => handleFight(AttackType.Holy)}
+                    onClick={() => handleFight(AttackType.Smite)}
                     aria-label="holy attack"
                     startIcon={<MenuBookIcon />}
                   >
-                    Holy attack
+                    Smite
                   </Button>
                 </Tooltip>
               </Grid>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your constitution">
+              <Grid item xs={6} sm={6} md={3} xl={3}>
+                <Tooltip title="Damage yourself to damage the enemy, uses constitution">
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -202,8 +209,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           )}
         </Grid>
         {fightResult &&
-          fightResult.log.map((entry) => (
-            <React.Fragment key={entry.from}>
+          fightResult.log.map((entry, i) => (
+            <React.Fragment key={`${entry.from}-${i}`}>
               <Typography>
                 <b>{entry.from}</b>
                 {` ${getCombatPhrase(
@@ -258,6 +265,21 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Typography>
               </React.Fragment>
             )}
+            <br />
+            {showAutoBattle && (
+              <Button
+                fullWidth
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  if (onAutoBattle) {
+                    onAutoBattle(monster.id, lastAttack);
+                  }
+                }}
+              >
+                Auto-Battle this enemy
+              </Button>
+            )}
           </React.Fragment>
         )}
       </Grid>
@@ -278,21 +300,21 @@ function getCombatPhrase(
           : "lets blood and casts forth towards"
         : "attempts to cast a spell against";
       break;
-    case AttackType.Holy:
+    case AttackType.Smite:
       return success
         ? critical
           ? "summons powers beyond this world against"
           : "smites"
         : "attempts to smite";
       break;
-    case AttackType.Elemental:
-      return success
-        ? critical
-          ? "creates an elemental storm around"
-          : "casts an elemental spell at"
-        : "attempts to cast a spell against";
-      break;
-    case AttackType.Wizard:
+    // case AttackType.Elemental:
+    //   return success
+    //     ? critical
+    //       ? "creates an elemental storm around"
+    //       : "casts an elemental spell at"
+    //     : "attempts to cast a spell against";
+    //   break;
+    case AttackType.Cast:
       return success
         ? critical
           ? "carefully casts a spell at"

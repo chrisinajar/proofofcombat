@@ -17,7 +17,7 @@ mutation Login($name: String!, $password: String!) {
           constitution
           intelligence
           wisdom
-          charisma
+          willpower
           luck
         }
       }

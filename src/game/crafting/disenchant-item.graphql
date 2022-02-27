@@ -1,0 +1,18 @@
+mutation DisenchantItem($item: ID!) {
+  disenchantItem(item: $item) {
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      enchantingDust
+      enchantments
+
+      inventory {
+        id
+        enchantment
+      }
+    }
+  }
+}
