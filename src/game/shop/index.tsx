@@ -23,7 +23,8 @@ export function Shop(): JSX.Element {
   });
 
   const specialLocation = locationData?.locationDetails.specialLocations[0];
-  console.log({ specialLocation });
+
+  // console.log({ specialLocation });
 
   return (
     <React.Fragment>

@@ -461,12 +461,38 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.LifeSteal:
       return "Leach 10% Constitution";
       break;
+    case EnchantmentType.Vampirism:
+      return "Leach 30% Constitution, Steal 20% Constitution";
+      break;
     case EnchantmentType.BigMelee:
-      return "+100% Strength, Leach 20% Dexterity";
+      return "+100% Strength, Steal 20% Dexterity";
       break;
     case EnchantmentType.BigCaster:
-      return "+100% Intelligence, Leach 20% Wisdom";
+      return "+100% Intelligence, Steal 20% Wisdom";
       break;
+    case EnchantmentType.StrengthSteal:
+      return "Steal 20% Strength";
+      break;
+    case EnchantmentType.DexteritySteal:
+      return "Steal 20% Dexterity";
+      break;
+    case EnchantmentType.ConstitutionSteal:
+      return "Steal 20% Constitution";
+      break;
+    case EnchantmentType.IntelligenceSteal:
+      return "Steal 20% Intelligence";
+      break;
+    case EnchantmentType.WisdomSteal:
+      return "Steal 20% Wisdom";
+      break;
+    case EnchantmentType.WillpowerSteal:
+      return "Steal 20% Willpower";
+      break;
+    case EnchantmentType.LuckSteal:
+      return "Steal 20% Luck";
+      break;
+    case EnchantmentType.AllStatsSteal:
+      return "Steal 10% All Stats";
     default:
       return "???";
       break;
