@@ -66,7 +66,7 @@ export function EnchantItems({
 
   let selectedEnchantment = enchantments.find((ench) => ench === enchantment);
 
-  if (!selectedEnchantment && value.length) {
+  if (!selectedEnchantment && enchantment.length) {
     if (enchantments.length) {
       selectedEnchantment = enchantments[0];
       enchantment = selectedEnchantment;
@@ -144,7 +144,7 @@ export function EnchantItems({
           onChange={(e) => {
             const ench = e.target.value;
             const existingEnchantment = enchantments.find(
-              (ench) => ench === enchantment
+              (existing) => ench === existing
             );
             if (existingEnchantment) {
               setEnchantment(existingEnchantment);
