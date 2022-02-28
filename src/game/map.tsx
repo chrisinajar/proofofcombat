@@ -18,13 +18,13 @@ export function Map(): JSX.Element | null {
   const centerPoint = [
     Math.round(
       Math.min(
-        gridSize[0] - minimapSize[0] / 2,
+        gridSize[0] - minimapSize[0],
         Math.max(0, location.x - minimapSize[0] / 2)
       )
     ),
     Math.round(
       Math.min(
-        gridSize[1] - minimapSize[1] / 2,
+        gridSize[1] - minimapSize[1],
         Math.max(0, location.y - minimapSize[1] / 2)
       )
     ),
