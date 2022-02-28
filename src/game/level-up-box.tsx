@@ -15,7 +15,7 @@ import { useDelay } from "src/hooks/use-delay";
 import { useHero } from "src/hooks/use-hero";
 
 export function LevelUpBox(): JSX.Element {
-  const [currentDelay] = useDelay();
+  const [currentDelay, setDelay] = useDelay();
   const [spendAll, setSpendAll] = useState<boolean>(false);
   const [levelUpMutation, { loading }] = useLevelUpMutation();
   const hero = useHero();
@@ -26,9 +26,15 @@ export function LevelUpBox(): JSX.Element {
 
   async function levelUp(attribute: keyof typeof AttributeType) {
     console.log("Leveling up...", attribute);
-    await levelUpMutation({
-      variables: { attribute: AttributeType[attribute], spendAll },
-    });
+    try {
+      await levelUpMutation({
+        variables: { attribute: AttributeType[attribute], spendAll },
+      });
+    } catch (e: any) {
+      if (e.graphQLErrors && e.graphQLErrors[0]?.extensions?.delay) {
+        setDelay(e.graphQLErrors[0].extensions.remaining);
+      }
+    }
   }
   return (
     <React.Fragment>
