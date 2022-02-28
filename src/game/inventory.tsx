@@ -492,7 +492,7 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "Steal 20% Luck";
       break;
     case EnchantmentType.AllStatsSteal:
-      return "Steal 10% All Stats";
+      return "Steal 20% All Stats";
     default:
       return "???";
       break;
