@@ -217,15 +217,19 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     {entry.damage < 0 && (
                       <React.Fragment>
                         <b>{entry.from}</b> heals{" "}
-                        {(0 - entry.damage).toLocaleString()} health from their
-                        enchantments
+                        <span id={`fight-${entry.from}-enchantment-heal`}>
+                          {(0 - entry.damage).toLocaleString()}
+                        </span>{" "}
+                        health from their enchantments
                       </React.Fragment>
                     )}
                     {entry.damage > 0 && (
                       <React.Fragment>
                         <b>{entry.from}</b> dealt{" "}
-                        {entry.damage.toLocaleString()} enchantment damage to{" "}
-                        <b>{entry.to}</b>
+                        <span id={`fight-${entry.from}-enchantment-damage`}>
+                          {entry.damage.toLocaleString()}
+                        </span>{" "}
+                        enchantment damage to <b>{entry.to}</b>
                       </React.Fragment>
                     )}
                   </React.Fragment>
