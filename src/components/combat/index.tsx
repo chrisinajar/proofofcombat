@@ -316,7 +316,7 @@ export function Combat(): JSX.Element {
             <Typography id="you-are-dead">You are dead.</Typography>
           </Grid>
         )}
-        {hero && hero.combat.health > 0 && fightingMonster && (
+        {fightingMonster && (
           <CombatDisplay
             key={`${fightingMonster.id}-${currentFightId}`}
             fight={fightingMonster}
