@@ -17,6 +17,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       damage
       attackType
       success
+      isEnchantment
       from
       to
       critical

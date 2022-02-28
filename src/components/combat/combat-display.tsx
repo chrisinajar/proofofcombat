@@ -212,16 +212,38 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           fightResult.log.map((entry, i) => (
             <React.Fragment key={`${entry.from}-${i}`}>
               <Typography>
-                <b>{entry.from}</b>
-                {` ${getCombatPhrase(
-                  entry.attackType,
-                  entry.success,
-                  entry.critical
-                )} `}
-                <b>{entry.to}</b>
-                {entry.success
-                  ? ` for ${entry.damage.toLocaleString()} damage!`
-                  : "."}
+                {entry.isEnchantment && (
+                  <React.Fragment>
+                    {entry.damage < 0 && (
+                      <React.Fragment>
+                        <b>{entry.from}</b> heals{" "}
+                        {(0 - entry.damage).toLocaleString()} health from their
+                        enchantments
+                      </React.Fragment>
+                    )}
+                    {entry.damage > 0 && (
+                      <React.Fragment>
+                        <b>{entry.from}</b> dealt{" "}
+                        {entry.damage.toLocaleString()} enchantment damage to{" "}
+                        <b>{entry.to}</b>
+                      </React.Fragment>
+                    )}
+                  </React.Fragment>
+                )}
+                {!entry.isEnchantment && (
+                  <React.Fragment>
+                    <b>{entry.from}</b>
+                    {` ${getCombatPhrase(
+                      entry.attackType,
+                      entry.success,
+                      entry.critical
+                    )} `}
+                    <b>{entry.to}</b>
+                    {entry.success
+                      ? ` for ${entry.damage.toLocaleString()} damage!`
+                      : "."}
+                  </React.Fragment>
+                )}
               </Typography>
             </React.Fragment>
           ))}
