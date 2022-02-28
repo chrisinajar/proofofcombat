@@ -102,8 +102,8 @@ export function Locations(): JSX.Element | null {
     }
     console.log({ x, y });
 
-    y = Math.min(127, Math.max(0, Math.round(y)));
-    x = Math.min(95, Math.max(0, Math.round(x)));
+    y = Math.min(95, Math.max(0, Math.round(y)));
+    x = Math.min(127, Math.max(0, Math.round(x)));
 
     if (x !== teleportX) {
       setTeleportX(x);
