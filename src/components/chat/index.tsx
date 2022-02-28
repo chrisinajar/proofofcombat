@@ -8,6 +8,10 @@ import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Tab from "@mui/material/Tab";
+
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
 
 import { InventoryItem, useGetChatTokenQuery } from "src/generated/graphql";
 import { useToken } from "src/token";
@@ -21,8 +25,11 @@ type ChatMessage = {
   id: number;
   message: string;
   from: string;
+  to?: string;
   time?: number;
   color?: string;
+  type: "chat" | "private" | "notification" | "system" | "drop" | "quest";
+  heroId?: string;
   variant?:
     | "button"
     | "caption"
@@ -52,11 +59,28 @@ type Hello = {
   chat: ChatMessage[];
 };
 
+type MessageTabsType = {
+  [x in string]:
+    | {
+        type: "private";
+        heroId: string;
+      }
+    | {
+        type: "built-in";
+      };
+};
+
 export function Chat(): JSX.Element {
   const { data } = useGetChatTokenQuery();
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [isChatFocused, setChatFocus] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [currentTab, setCurrentTab] = useState<string>("chat");
+  const [messageTabs, setMessageTabs] = useState<MessageTabsType>({
+    all: { type: "built-in" },
+    chat: { type: "built-in" },
+    notifications: { type: "built-in" },
+  });
 
   const socketRef = useRef<Socket>();
 
@@ -92,9 +116,9 @@ export function Chat(): JSX.Element {
         );
       }
 
-      console.log(data.message);
       setChat((oldChat) => [
         {
+          type: data.type ?? "notification",
           id: Math.random(),
           time: Date.now() / 1000,
           message: "",
@@ -108,6 +132,7 @@ export function Chat(): JSX.Element {
     socketRef.current.on("system-message", (data: SystemMessage) => {
       setChat((oldChat) => [
         {
+          type: "system",
           id: Math.random(),
           time: Date.now() / 1000,
           message: data.message,
@@ -144,6 +169,24 @@ export function Chat(): JSX.Element {
       return;
     }
 
+    const tabData = messageTabs[currentTab];
+
+    if (tabData.type === "private") {
+      socketRef.current.emit(
+        "private-chat",
+        {
+          to: tabData.heroId,
+          message,
+        },
+        (data: ChatMessage) => {
+          console.log("Got a confirmation!", data);
+          setChat((oldChat) => [data, ...oldChat]);
+        }
+      );
+      setMessage("");
+      return;
+    }
+
     socketRef.current.emit(
       "chat",
       {
@@ -157,25 +200,88 @@ export function Chat(): JSX.Element {
     setMessage("");
   }
 
+  function handleWhisper(heroName: string, heroId: string) {
+    console.log("Trying to whisper", heroName, heroId.substr(0, 4));
+    setMessageTabs((tabs) => ({
+      ...tabs,
+      [heroName]: {
+        type: "private",
+        heroId,
+      },
+    }));
+    setCurrentTab(heroName);
+  }
+
+  function handleChangeTab(event: React.SyntheticEvent, newTab: string) {
+    setCurrentTab(newTab);
+  }
+
+  const filteredChat = chat.filter((entry) => {
+    if (currentTab === "all") {
+      return true;
+    }
+    if (currentTab === "chat") {
+      return (
+        entry.type === "chat" ||
+        entry.type === "private" ||
+        entry.type === "system"
+      );
+    }
+    if (currentTab === "notifications") {
+      return (
+        entry.type === "notification" ||
+        entry.type === "drop" ||
+        entry.type === "quest" ||
+        entry.type === "system"
+      );
+    }
+    const tabData = messageTabs[currentTab];
+    // bad tab, just show all
+    if (!tabData) {
+      return true;
+    }
+    if (tabData.type === "private") {
+      return (
+        entry.type === "private" &&
+        (entry.heroId === tabData.heroId || entry.to === tabData.heroId)
+      );
+    }
+    return false;
+  });
+
   return (
     <React.Fragment>
-      <TextField
-        fullWidth
-        disabled={!socketRef.current?.connected}
-        value={message}
-        name="Chat input"
-        label={
-          isChatFocused
-            ? `Max message: ${cleanMessage.length}/${chatLimit}`
-            : "Type here..."
-        }
-        placeholder="Type here..."
-        onChange={handleChange}
-        onFocus={() => setChatFocus(true)}
-        onBlur={() => setChatFocus(false)}
-        autoComplete="off"
-        onKeyPress={checkForEnter}
-      />
+      <TabContext value={currentTab}>
+        <TabList
+          onChange={handleChangeTab}
+          aria-label="navigation tabs"
+          variant="scrollable"
+        >
+          {Object.keys(messageTabs).map((name) => (
+            <Tab label={name} value={name} key={name} />
+          ))}
+        </TabList>
+      </TabContext>
+      {currentTab !== "notifications" && (
+        <TextField
+          sx={{ marginTop: 1 }}
+          fullWidth
+          disabled={!socketRef.current?.connected}
+          value={message}
+          name="Chat input"
+          label={
+            isChatFocused
+              ? `Max message: ${chatLimit - cleanMessage.length}/${chatLimit}`
+              : "Type here..."
+          }
+          placeholder="Type here..."
+          onChange={handleChange}
+          onFocus={() => setChatFocus(true)}
+          onBlur={() => setChatFocus(false)}
+          autoComplete="off"
+          onKeyPress={checkForEnter}
+        />
+      )}
       <Box
         sx={{
           padding: 1,
@@ -183,18 +289,45 @@ export function Chat(): JSX.Element {
           bgcolor: "primary.light",
         }}
       >
-        {chat.map((chatMessage) => (
+        {filteredChat.map((chatMessage) => (
           <Typography
             variant={chatMessage.variant || "body1"}
             key={chatMessage.id}
-            sx={{ color: `${chatMessage.color || "text"}.dark` }}
+            sx={{
+              color: `${
+                chatMessage.type === "private"
+                  ? "secondary"
+                  : chatMessage.color || "text"
+              }.dark`,
+            }}
           >
             {chatMessage.time && (
               <Typography variant="caption">
                 ({timeAgo(new Date(chatMessage.time * 1000))})&nbsp;
               </Typography>
             )}
-            <b>{chatMessage.from}</b> {emojify(chatMessage.message)}
+            {chatMessage.heroId && (
+              <Button
+                onClick={() => {
+                  if (chatMessage.heroId) {
+                    handleWhisper(chatMessage.from, chatMessage.heroId);
+                  }
+                }}
+                sx={{
+                  color: "inherit",
+                  textTransform: "none",
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                  paddingLeft: 1,
+                  paddingRight: 0.5,
+                  margin: 0,
+                }}
+              >
+                <b>{chatMessage.from}:</b>
+              </Button>
+            )}
+            {!chatMessage.heroId && <b>{chatMessage.from}</b>}{" "}
+            {emojify(chatMessage.message)}
           </Typography>
         ))}
         {/* <Button variant="contained">Send</Button> */}
