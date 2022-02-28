@@ -34,6 +34,12 @@ type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
 const autoBattleSkipCount = 4;
 
+declare global {
+  interface Window {
+    setChallengeMonster?: (mob: string) => void;
+  }
+}
+
 export function Combat(): JSX.Element {
   const [autoBattleAttackType, setAutoBattleAttackType] = useState<AttackType>(
     AttackType.Melee
@@ -71,6 +77,13 @@ export function Combat(): JSX.Element {
       itemAllowsAutoBattle(item.baseItem)
     );
   }
+
+  useEffect(() => {
+    window.setChallengeMonster = setChallenge;
+    return () => {
+      delete window.setChallengeMonster;
+    };
+  }, [setChallenge]);
 
   useEffect(() => {
     refetchChallenges();
