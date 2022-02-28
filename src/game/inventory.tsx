@@ -470,6 +470,9 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.BigCaster:
       return "+100% Intelligence, Steal 20% Wisdom";
       break;
+    case EnchantmentType.WisDexWill:
+      return "+40% Wisdom, Dexterity, Willpower";
+      break;
     case EnchantmentType.StrengthSteal:
       return "Steal 20% Strength";
       break;
