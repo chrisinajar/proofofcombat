@@ -123,7 +123,7 @@ export function Chat(): JSX.Element {
           time: Date.now() / 1000,
           message: "",
           from: data.message,
-          color: data.type === "drop" ? "error.dark" : "secondary",
+          color: data.type === "drop" ? "error" : "secondary",
           variant: "body1",
         },
         ...oldChat,

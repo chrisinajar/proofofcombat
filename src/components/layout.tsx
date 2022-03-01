@@ -62,6 +62,10 @@ export function Layout({
           info: {
             main: "#339cef",
           },
+          error: {
+            main: "#f44336",
+            dark: "#621c13",
+          },
           background: actuallyDarkMode
             ? {
                 default: "#303030",
