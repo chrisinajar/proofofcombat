@@ -21,6 +21,7 @@ import {
   enchantmentDisplayName,
   addSpaces,
   isItemEquipped,
+  itemSorter,
 } from "src/helpers";
 
 export function EnchantItems({
@@ -41,7 +42,8 @@ export function EnchantItems({
 
       return !item.enchantment;
     })
-    .sort((a, b) => a.level - b.level);
+
+    .sort(itemSorter);
   const enchantmentsFound: { [x in EnchantmentType]?: true } = {};
   const enchantments: EnchantmentType[] = [...hero.enchantments]
     .sort()

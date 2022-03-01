@@ -14,7 +14,12 @@ import {
   useDisenchantItemMutation,
 } from "src/generated/graphql";
 
-import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
+import {
+  itemDisplayName,
+  addSpaces,
+  isItemEquipped,
+  itemSorter,
+} from "src/helpers";
 
 export function DisenchantItems({
   hero,
@@ -36,7 +41,7 @@ export function DisenchantItems({
 
       return !!item.enchantment;
     })
-    .sort((a, b) => a.level - b.level);
+    .sort(itemSorter);
 
   let selectedItem = disenchantableItems.find((item) => item.id === value);
 

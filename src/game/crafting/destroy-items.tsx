@@ -13,7 +13,12 @@ import {
   useDestroyItemMutation,
 } from "src/generated/graphql";
 
-import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
+import {
+  itemDisplayName,
+  addSpaces,
+  isItemEquipped,
+  itemSorter,
+} from "src/helpers";
 
 export function DestroyItems({
   hero,
@@ -35,7 +40,7 @@ export function DestroyItems({
 
       return !!item.enchantment;
     })
-    .sort((a, b) => a.level - b.level);
+    .sort(itemSorter);
   const label = "Select item to destroy";
 
   let selectedItem = destroyableItems.find((item) => item.id === value);

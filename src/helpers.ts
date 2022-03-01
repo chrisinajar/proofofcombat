@@ -128,6 +128,30 @@ export function itemAllowsAutoBattle(item: string): boolean {
   return false;
 }
 
+export function itemSorter(a: InventoryItem, b: InventoryItem): number {
+  if (a.level !== b.level) {
+    return a.level - b.level;
+  }
+
+  if (a.name > b.name) {
+    return 1;
+  }
+  if (b.name > a.name) {
+    return -1;
+  }
+
+  if (!a.enchantment || !b.enchantment) {
+    return 0;
+  }
+  if (a.enchantment > b.enchantment) {
+    return 1;
+  }
+  if (b.enchantment > a.enchantment) {
+    return -1;
+  }
+  return 0;
+}
+
 export function isItemEquipped(hero: Hero, item: InventoryItem): boolean {
   if (hero.equipment.leftHand?.id && hero.equipment.leftHand.id === item.id) {
     return true;
