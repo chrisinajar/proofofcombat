@@ -8,8 +8,12 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 
 import type { Hero } from "src/generated/graphql";
+import { useDarkMode } from "src/hooks/use-dark-mode";
 import { useToken } from "src/token";
 import { AppBarHeroStats, AppBarHero } from "./app-bar-hero-stats";
 
@@ -18,6 +22,7 @@ type AppBarProps = {
 };
 
 export function AppBar({ hero }: AppBarProps): JSX.Element {
+  const [darkMode, setDarkMode] = useDarkMode();
   const router = useRouter();
   const client = useApolloClient();
 
@@ -53,6 +58,19 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
                   </Typography>
                 </React.Fragment>
               )}
+              <FormGroup>
+                <Typography variant="caption" align="right">
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={darkMode ?? false}
+                        onChange={(e) => setDarkMode(e.target.checked)}
+                      />
+                    }
+                    label={darkMode ? "Dark mode" : "Light mode"}
+                  />
+                </Typography>
+              </FormGroup>
             </Grid>
           </Grid>
         </Container>
