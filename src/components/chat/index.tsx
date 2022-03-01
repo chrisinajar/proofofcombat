@@ -9,13 +9,26 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tab from "@mui/material/Tab";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Tooltip from "@mui/material/Tooltip";
 
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 
+import MessageIcon from "@mui/icons-material/Message";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import CancelIcon from "@mui/icons-material/Cancel";
+
 import { InventoryItem, useGetChatTokenQuery } from "src/generated/graphql";
+import { useHero } from "src/hooks/use-hero";
 import { useToken } from "src/token";
 import { itemDisplayName } from "src/helpers";
+
+import { Trade } from "./trade";
 
 const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
 
@@ -60,18 +73,16 @@ type Hello = {
 };
 
 type MessageTabsType = {
-  [x in string]:
-    | {
-        type: "private";
-        heroId: string;
-      }
-    | {
-        type: "built-in";
-      };
+  [x in string]: {
+    type: "private" | "built-in";
+    heroId?: string;
+  };
 };
 
 export function Chat(): JSX.Element {
+  const hero = useHero();
   const { data } = useGetChatTokenQuery();
+  const [tradeMode, setTradeMode] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [isChatFocused, setChatFocus] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -164,11 +175,16 @@ export function Chat(): JSX.Element {
     }
   }
 
-  async function checkForEnter(e: React.KeyboardEvent) {
-    if (e.key !== "Enter" || !socketRef.current) {
+  function checkForEnter(e: React.KeyboardEvent) {
+    if (e.key === "Enter") {
+      handleSendChat();
       return;
     }
-
+  }
+  async function handleSendChat() {
+    if (!socketRef.current) {
+      return;
+    }
     const tabData = messageTabs[currentTab];
 
     if (tabData.type === "private") {
@@ -201,6 +217,9 @@ export function Chat(): JSX.Element {
   }
 
   function handleWhisper(heroName: string, heroId: string) {
+    if (heroId === hero?.id) {
+      return;
+    }
     console.log("Trying to whisper", heroName, heroId.substr(0, 4));
     setMessageTabs((tabs) => ({
       ...tabs,
@@ -213,6 +232,9 @@ export function Chat(): JSX.Element {
   }
 
   function handleChangeTab(event: React.SyntheticEvent, newTab: string) {
+    if (tradeMode) {
+      setTradeMode(false);
+    }
     setCurrentTab(newTab);
   }
 
@@ -249,6 +271,10 @@ export function Chat(): JSX.Element {
     return false;
   });
 
+  const chatLabel = isChatFocused
+    ? `Max message: ${chatLimit - cleanMessage.length}/${chatLimit}`
+    : "Type here...";
+
   return (
     <React.Fragment>
       <TabContext value={currentTab}>
@@ -263,24 +289,44 @@ export function Chat(): JSX.Element {
         </TabList>
       </TabContext>
       {currentTab !== "notifications" && (
-        <TextField
-          sx={{ marginTop: 1 }}
-          fullWidth
-          disabled={!socketRef.current?.connected}
-          value={message}
-          name="Chat input"
-          label={
-            isChatFocused
-              ? `Max message: ${chatLimit - cleanMessage.length}/${chatLimit}`
-              : "Type here..."
-          }
-          placeholder="Type here..."
-          onChange={handleChange}
-          onFocus={() => setChatFocus(true)}
-          onBlur={() => setChatFocus(false)}
-          autoComplete="off"
-          onKeyPress={checkForEnter}
-        />
+        <FormControl sx={{ marginTop: 1 }} fullWidth variant="outlined">
+          <InputLabel htmlFor="chat-input">{chatLabel}</InputLabel>
+          <OutlinedInput
+            disabled={!socketRef.current?.connected}
+            value={message}
+            id="chat-input"
+            name="Chat input"
+            label={chatLabel}
+            placeholder="Type here..."
+            onChange={handleChange}
+            onFocus={() => setChatFocus(true)}
+            onBlur={() => setChatFocus(false)}
+            autoComplete="off"
+            onKeyPress={checkForEnter}
+            endAdornment={
+              <InputAdornment position="end">
+                <Tooltip title="Send message">
+                  <IconButton aria-label="send chat" onClick={handleSendChat}>
+                    <MessageIcon />
+                  </IconButton>
+                </Tooltip>
+                {messageTabs[currentTab]?.type === "private" && (
+                  <Tooltip
+                    title={tradeMode ? "Cancel trade" : "Trade with player"}
+                  >
+                    <IconButton onClick={() => setTradeMode(!tradeMode)}>
+                      {tradeMode && <CancelIcon />}
+                      {!tradeMode && <CompareArrowsIcon />}
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+      )}
+      {tradeMode && hero && messageTabs[currentTab]?.heroId && (
+        <Trade hero={hero} to={messageTabs[currentTab].heroId ?? ""} />
       )}
       <Box
         sx={{
@@ -298,7 +344,7 @@ export function Chat(): JSX.Element {
                 chatMessage.type === "private"
                   ? "secondary"
                   : chatMessage.color || "text"
-              }.dark`,
+              }.main`,
             }}
           >
             {chatMessage.time && (

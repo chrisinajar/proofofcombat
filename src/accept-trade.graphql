@@ -1,0 +1,57 @@
+mutation AcceptTrade($offer: ID!) {
+  acceptTrade(offer: $offer) {
+    hero {
+      id
+
+      gold
+      inventory {
+        id
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
+      }
+
+      outgoingTrades {
+        id
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+      }
+      incomingTrades {
+        id
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

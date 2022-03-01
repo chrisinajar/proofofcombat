@@ -1,0 +1,45 @@
+mutation DismissTrade($offer: ID!) {
+  dismissTrade(offer: $offer) {
+    hero {
+      id
+      outgoingTrades {
+        id
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+      }
+      incomingTrades {
+        id
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

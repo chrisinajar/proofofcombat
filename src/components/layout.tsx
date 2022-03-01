@@ -28,7 +28,7 @@ export function Layout({
   const [timeDifference, setTimeDifference] = useState<number>(0);
   const { data } = useMeQuery({
     fetchPolicy: "network-only",
-    pollInterval: 10000,
+    pollInterval: 60000,
     skip: !showHero,
     onCompleted: (data) => {
       if (data?.me?.now) {
@@ -68,8 +68,8 @@ export function Layout({
           },
           background: actuallyDarkMode
             ? {
-                default: "#303030",
-                paper: "#696969",
+                default: "#141414",
+                paper: "#383838",
               }
             : {
                 default: "#ededed",

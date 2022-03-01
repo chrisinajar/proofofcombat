@@ -1,0 +1,25 @@
+mutation OfferTrade($offer: TradeOfferInput!) {
+  offerTrade(offer: $offer) {
+    trade {
+      id
+      gold
+      item {
+        id
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
+      }
+      toName
+      toId
+      fromName
+      fromId
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

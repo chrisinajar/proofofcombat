@@ -168,6 +168,40 @@ query Me {
             wisdom
           }
         }
+        outgoingTrades {
+          gold
+          item {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          toName
+          toId
+          fromName
+          fromId
+          id
+        }
+        incomingTrades {
+          gold
+          item {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          toName
+          toId
+          fromName
+          fromId
+          id
+        }
       }
     }
   }

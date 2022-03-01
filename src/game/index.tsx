@@ -34,7 +34,7 @@ export default function Home(): JSX.Element {
   const { data, loading, error } = useMeQuery();
   const [selectedTab, setSelectedTab] = useState("1");
   const { data: leaderboardData } = useLeaderboardQuery({
-    pollInterval: 10000,
+    pollInterval: 30000,
   });
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {

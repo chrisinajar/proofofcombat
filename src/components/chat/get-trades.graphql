@@ -1,0 +1,46 @@
+query GetTrades {
+  me {
+    account {
+      id
+      nextAllowedAction
+      hero {
+        id
+        gold
+        outgoingTrades {
+          gold
+          item {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          toName
+          toId
+          fromName
+          fromId
+          id
+        }
+        incomingTrades {
+          gold
+          item {
+            id
+            baseItem
+            owner
+            name
+            type
+            level
+            enchantment
+          }
+          toName
+          toId
+          fromName
+          fromId
+          id
+        }
+      }
+    }
+  }
+}
