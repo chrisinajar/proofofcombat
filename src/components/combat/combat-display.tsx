@@ -52,6 +52,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     onAutoBattle,
     fightMutationRef,
   } = props;
+  const [killedByAnother, setKilledByAnother] = useState<boolean>(false);
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
@@ -61,6 +62,9 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   const showAutoBattle = !autoBattle && canAutoBattle;
 
   useEffect(() => {
+    if (killedByAnother) {
+      setKilledByAnother(false);
+    }
     if (fightLoading) {
       return;
     }
@@ -91,8 +95,18 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           onVictory();
         }
       }
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      if (e.graphQLErrors && e.graphQLErrors[0]) {
+        const [gqlError] = e.graphQLErrors;
+        if (gqlError.extensions?.delay) {
+          return;
+        }
+        if (gqlError.message.startsWith("Key not found in database")) {
+          setKilledByAnother(true);
+          setEnemyHealth(0);
+          return;
+        }
+      }
       if (onError) {
         onError(e);
       }
@@ -208,6 +222,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
             </React.Fragment>
           )}
         </Grid>
+        {killedByAnother && "This enemy was killed by another player"}
         {fightResult &&
           fightResult.log.map((entry, i) => (
             <React.Fragment key={`${entry.from}-${i}`}>
