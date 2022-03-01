@@ -286,7 +286,7 @@ export function Chat(): JSX.Element {
         sx={{
           padding: 1,
           minHeight: "600px",
-          bgcolor: "primary.light",
+          bgcolor: "background.paper",
         }}
       >
         {filteredChat.map((chatMessage) => (

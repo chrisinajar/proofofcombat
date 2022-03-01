@@ -29,7 +29,7 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
   }
 
   return (
-    <MuiAppBar position="static">
+    <MuiAppBar position="static" color="primary" enableColorOnDark>
       <Toolbar>
         <Container>
           <Grid container columns={3}>

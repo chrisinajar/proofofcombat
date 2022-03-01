@@ -65,7 +65,12 @@ export default function Home(): JSX.Element {
           <QuestEventDisplay event={hero.currentQuest} />
         )}
       </React.Fragment>
-      <Box sx={{ width: "100%", typography: "body1" }}>
+      <Box
+        sx={{
+          width: "100%",
+          typography: "body1",
+        }}
+      >
         <TabContext value={selectedTab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
