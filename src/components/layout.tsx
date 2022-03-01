@@ -7,7 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { useMeQuery } from "src/generated/graphql";
-import { DelayContext } from "src/hooks/use-delay";
+import { useDelay } from "src/hooks/use-delay";
 import { DarkModeContext } from "src/hooks/use-dark-mode";
 import { AppBar } from "./app-bar";
 import { DelayBar } from "./delay-bar";
@@ -40,7 +40,7 @@ export function Layout({
       }
     },
   });
-  const [currentDelay, setCurrentDelay] = useState<number>(0);
+  const [currentDelay, setCurrentDelay] = useDelay();
   const [currentMaxDelay, setCurrentMaxDelay] = useState<number>(0);
   const nextTime =
     Number(data?.me?.account?.nextAllowedAction ?? 0) + timeDifference;
@@ -121,13 +121,11 @@ export function Layout({
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
           <DarkModeContext.Provider value={[actuallyDarkMode, setDarkMode]}>
-            <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
-              <AppBar hero={hero} />
-              <HeroBars hero={hero} />
-              <DelayBar delay={currentDelay} />
-              <Container>{children}</Container>
-              <Footer />
-            </DelayContext.Provider>
+            <AppBar hero={hero} />
+            <HeroBars hero={hero} />
+            <DelayBar delay={currentDelay} />
+            <Container>{children}</Container>
+            <Footer />
           </DarkModeContext.Provider>
         </ThemeProvider>
       );
@@ -138,11 +136,9 @@ export function Layout({
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />
       <DarkModeContext.Provider value={[actuallyDarkMode, setDarkMode]}>
-        <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
-          <AppBar />
-          <Container>{children}</Container>
-          <Footer />
-        </DelayContext.Provider>
+        <AppBar />
+        <Container>{children}</Container>
+        <Footer />
       </DarkModeContext.Provider>
     </ThemeProvider>
   );

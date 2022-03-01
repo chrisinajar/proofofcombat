@@ -1,4 +1,10 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -19,9 +25,28 @@ const authLink = setContext((req, { headers }) => {
   };
 });
 
-export function createClient() {
+export function createClient({
+  onDelay,
+}: {
+  onDelay?: (delay: number) => void;
+}) {
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach((error) => {
+        const { message, locations, path, extensions } = error;
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        );
+        if (extensions.delay && onDelay) {
+          onDelay(extensions.remaining as number);
+        }
+      });
+
+    if (networkError) console.log(`[Network error]: ${networkError}`);
+  });
+
   const client = new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: from([errorLink, authLink.concat(httpLink)]),
 
     cache: new InMemoryCache(),
   });

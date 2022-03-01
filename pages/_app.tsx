@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
 
-import CssBaseline from "@mui/material/CssBaseline";
-
+import { DelayContext } from "src/hooks/use-delay";
 import { createClient } from "../src/apollo";
 
-const apolloClient = createClient();
-
 function MyApp({ Component, pageProps }: AppProps) {
+  const [currentDelay, setCurrentDelay] = useState<number>(0);
+  const apolloClient = useMemo(() => {
+    return createClient({
+      onDelay: setCurrentDelay,
+    });
+  }, []);
+
   return (
     <React.Fragment>
       <Head>
@@ -24,9 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ApolloProvider client={apolloClient}>
-        <Component {...pageProps} />
-      </ApolloProvider>
+      <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
+        <ApolloProvider client={apolloClient}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </DelayContext.Provider>
     </React.Fragment>
   );
 }
