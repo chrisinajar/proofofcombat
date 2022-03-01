@@ -153,10 +153,7 @@ function EquipmentSlot({
                   itemDisplayName(inventoryItem)
                 )}
                 {inventoryItem.enchantment && (
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "primary.dark" }}
-                  >
+                  <Typography variant="subtitle2" sx={{ color: "info.main" }}>
                     &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}
                   </Typography>
                 )}
