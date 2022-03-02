@@ -22,6 +22,7 @@ import {
 } from "src/generated/graphql";
 
 import {
+  itemSorter,
   itemDisplayName,
   itemAllowsRebirth,
   itemAllowsCrafting,
@@ -123,7 +124,7 @@ function EquipmentSlot({
   const [value, setValue] = useState<string>(equipped || "");
   const items = hero.inventory
     .filter((item) => canEquipTo(slot, item))
-    .sort((a, b) => a.level - b.level);
+    .sort(itemSorter);
 
   return (
     <React.Fragment>

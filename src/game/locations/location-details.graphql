@@ -1,0 +1,37 @@
+query LocationDetails($location: LocationInput!) {
+  locationDetails(location: $location) {
+    specialLocations {
+      description
+      type
+      name
+      location {
+        x
+        y
+      }
+    }
+    terrain {
+      terrain
+    }
+    shop {
+      name
+      trades {
+        price {
+          gold
+          dust
+          baseItems
+          enchantments
+          questItems
+          description
+        }
+        offer {
+          gold
+          dust
+          baseItems
+          enchantments
+          questItems
+          description
+        }
+      }
+    }
+  }
+}

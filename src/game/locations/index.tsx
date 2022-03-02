@@ -20,6 +20,7 @@ import {
 
 import { Map } from "./map";
 import { Docks } from "./docks";
+import { NpcShop } from "./npc-shop";
 
 export function Locations(): JSX.Element | null {
   const hero = useHero();
@@ -116,6 +117,8 @@ export function Locations(): JSX.Element | null {
   const teleportCost = Math.round(
     Math.pow(distance2d(hero.location, { x: teleportX, y: teleportY }) * 5, 1.3)
   );
+
+  console.log({ locationDetails });
 
   return (
     <React.Fragment>
@@ -258,6 +261,12 @@ export function Locations(): JSX.Element | null {
             <Docks location={specialLocation} />
           </Grid>
         )}
+
+        {/*locationDetails?.shop && (
+          <Grid item style={{ textAlign: "center" }} xs={2}>
+            <NpcShop shop={locationDetails?.shop} />
+          </Grid>
+        )*/}
       </Grid>
     </React.Fragment>
   );
