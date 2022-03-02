@@ -15,6 +15,7 @@ query LocationDetails($location: LocationInput!) {
     shop {
       name
       trades {
+        id
         price {
           gold
           dust

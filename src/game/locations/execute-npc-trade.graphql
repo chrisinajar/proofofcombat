@@ -1,0 +1,30 @@
+mutation ExecuteNpcTrade($trade: ID!) {
+  npcTrade(trade: $trade) {
+    success
+    message
+    hero {
+      id
+      gold
+      enchantingDust
+      enchantments
+      inventory {
+        enchantment
+        level
+        type
+        name
+        baseItem
+        owner
+        id
+      }
+      currentQuest {
+        quest
+        message
+        id
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

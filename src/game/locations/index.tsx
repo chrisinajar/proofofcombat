@@ -262,11 +262,11 @@ export function Locations(): JSX.Element | null {
           </Grid>
         )}
 
-        {/*locationDetails?.shop && (
+        {locationDetails?.shop && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
             <NpcShop shop={locationDetails?.shop} />
           </Grid>
-        )*/}
+        )}
       </Grid>
     </React.Fragment>
   );
