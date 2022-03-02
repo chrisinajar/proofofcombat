@@ -19,7 +19,7 @@ import {
   useDismissTradeMutation,
   useAcceptTradeMutation,
 } from "src/generated/graphql";
-import { itemDisplayName, isItemEquipped } from "src/helpers";
+import { itemDisplayName, isItemEquipped, itemSorter } from "src/helpers";
 
 export function Trade({
   hero,
@@ -49,12 +49,14 @@ export function Trade({
   const { incomingTrades, outgoingTrades } = data.me.account.hero;
 
   const itemSelectLabel = "Select an item to offer";
-  const items = hero.inventory.filter((item) => {
-    if (item.type === InventoryItemType.Quest) {
-      return false;
-    }
-    return true;
-  });
+  const items = hero.inventory
+    .filter((item) => {
+      if (item.type === InventoryItemType.Quest) {
+        return false;
+      }
+      return true;
+    })
+    .sort(itemSorter);
 
   function handleGoldChange(e: React.ChangeEvent<HTMLInputElement>) {
     let value = Number(e.target.value);
