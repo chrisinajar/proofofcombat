@@ -9,7 +9,13 @@ import RawLocationData from "./location-data.json";
 
 type TerrainType = "land" | "water" | "forbidden";
 type MapNames = "default";
-type SpecialLocationType = "dock" | "quest" | "city" | "bridge" | "tavern";
+type SpecialLocationType =
+  | "dock"
+  | "quest"
+  | "city"
+  | "bridge"
+  | "tavern"
+  | "hermit";
 
 type LocationData = {
   terrain: TerrainType;

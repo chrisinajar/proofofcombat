@@ -246,6 +246,12 @@ export function Locations(): JSX.Element | null {
             </React.Fragment>
           )}
           <Map />
+          {specialLocation?.description &&
+            specialLocation.description.map((line, i) => (
+              <Typography variant="body1" key={`loc-desc-${i}`}>
+                {line}
+              </Typography>
+            ))}
         </Grid>
         {specialLocation?.type === "dock" && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
