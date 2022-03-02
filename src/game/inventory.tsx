@@ -376,6 +376,27 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "totem-of-hero":
       return "2x Leveling rate, +Level cap, auto-battler, +100% XP";
       break;
+    case "warriors-armlette":
+      return "Upgrades Fighter and Berserker classes";
+      break;
+    case "tome-of-knowledge":
+      return "Upgrades Wizard and Warlock classes";
+      break;
+    case "quiver-of-speed":
+      return "Upgrades Ranger class";
+      break;
+    case "vampire-ring":
+      return "Upgrades Blood Mage class";
+      break;
+    case "gambling-kit":
+      return "Upgrades Gambler class";
+      break;
+    case "patrons-wisdom":
+      return "Upgrades Battle Mage class";
+      break;
+    case "liturgical-censer":
+      return "Upgrades Paladin class";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":
