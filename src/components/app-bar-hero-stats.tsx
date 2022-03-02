@@ -66,7 +66,7 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           <span id="hero-stats-level">{hero.level.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          <Tooltip title={classDescription} leaveDelay={2000}>
+          <Tooltip title={classDescription} leaveDelay={4000}>
             <span>
               Class: <span id="hero-stats-class">{addSpaces(hero.class)}</span>
               <HelpIcon sx={{ fontSize: 10, verticalAlign: "top" }} />
