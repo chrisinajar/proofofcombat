@@ -118,8 +118,6 @@ export function Locations(): JSX.Element | null {
     Math.pow(distance2d(hero.location, { x: teleportX, y: teleportY }) * 5, 1.3)
   );
 
-  console.log({ locationDetails });
-
   return (
     <React.Fragment>
       <Grid container columns={2} spacing={3}>

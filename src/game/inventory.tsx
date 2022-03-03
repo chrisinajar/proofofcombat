@@ -398,6 +398,12 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "liturgical-censer":
       return "Upgrades Paladin class";
       break;
+    case "dont-get-hit":
+      return "Double dodge, double accuracy";
+      break;
+    case "aqua-lungs":
+      return "Allows water travel";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":
