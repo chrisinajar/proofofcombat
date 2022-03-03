@@ -86,7 +86,7 @@ export function Chat(): JSX.Element {
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [isChatFocused, setChatFocus] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [currentTab, setCurrentTab] = useState<string>("chat");
+  const [currentTab, setCurrentTab] = useState<string>("all");
   const [messageTabs, setMessageTabs] = useState<MessageTabsType>({
     all: { type: "built-in" },
     chat: { type: "built-in" },
