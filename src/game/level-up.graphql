@@ -1,5 +1,5 @@
-mutation LevelUp($attribute: AttributeType!, $spendAll: Boolean) {
-  increaseAttribute(attribute: $attribute, spendAll: $spendAll) {
+mutation LevelUp($attribute: AttributeType!, $amount: Int) {
+  increaseAttribute(attribute: $attribute, amount: $amount) {
     hero {
       id
       attributePoints

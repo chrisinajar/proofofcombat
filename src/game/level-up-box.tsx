@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import Switch from "@mui/material/Switch";
+import Slider from "@mui/material/Slider";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { AttributeType, useLevelUpMutation } from "src/generated/graphql";
@@ -16,19 +16,21 @@ import { useHero } from "src/hooks/use-hero";
 
 export function LevelUpBox(): JSX.Element {
   const [currentDelay, setDelay] = useDelay();
-  const [spendAll, setSpendAll] = useState<boolean>(false);
+  let [spendAmount, setSpendAmount] = useState<number>(1);
   const [levelUpMutation, { loading }] = useLevelUpMutation();
   const hero = useHero();
 
-  const switchLabel = spendAll
-    ? `Spending ${hero?.attributePoints ?? "--"} attribute points`
-    : "Spending 1 attribute point";
+  if (hero?.attributePoints) {
+    spendAmount = Math.min(spendAmount, hero.attributePoints);
+  }
+
+  const switchLabel = `Spending ${spendAmount.toLocaleString()} attribute points`;
 
   async function levelUp(attribute: keyof typeof AttributeType) {
     console.log("Leveling up...", attribute);
     try {
       await levelUpMutation({
-        variables: { attribute: AttributeType[attribute], spendAll },
+        variables: { attribute: AttributeType[attribute], amount: spendAmount },
       });
     } catch (e: any) {
       if (e.graphQLErrors && e.graphQLErrors[0]?.extensions?.delay) {
@@ -52,19 +54,26 @@ export function LevelUpBox(): JSX.Element {
             Each of your attributes increases by 1 when you level up. You may
             also choose an attribute to further increase.
           </Typography>
-          <Typography align="center">
+          <Box sx={{ textAlign: "center", align: "center", ml: 1, mr: 1 }}>
             {hero && hero.attributePoints > 2 && (
-              <FormControlLabel
-                control={
-                  <Switch
-                    value={currentDelay}
-                    onChange={(e) => setSpendAll(e.target.checked)}
-                  />
-                }
-                label={switchLabel}
-              />
+              <React.Fragment>
+                <Typography id="level-up-stat-slider-label">
+                  {switchLabel}
+                </Typography>
+                <Slider
+                  min={1}
+                  max={hero.attributePoints}
+                  value={spendAmount}
+                  onChange={(e, value) =>
+                    !Array.isArray(value) && setSpendAmount(value)
+                  }
+                  id="level-up-stat-slider"
+                  aria-labelledby="level-up-stat-slider-label"
+                  valueLabelDisplay="auto"
+                />
+              </React.Fragment>
             )}
-          </Typography>
+          </Box>
         </Container>
         <br />
         <Grid container columns={14} spacing={2}>
