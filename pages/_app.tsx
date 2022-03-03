@@ -6,6 +6,8 @@ import { ApolloProvider } from "@apollo/client";
 import { DelayContext } from "src/hooks/use-delay";
 import { createClient } from "../src/apollo";
 
+import "styles/globals.css";
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [currentDelay, setCurrentDelay] = useState<number>(0);
   const apolloClient = useMemo(() => {
