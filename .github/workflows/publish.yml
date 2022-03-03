@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
-      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:5000/
+      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
@@ -35,7 +35,7 @@ jobs:
           yarn
       - name: graphql codegen
         env:
-          NEXT_PUBLIC_BASE_URL: http://chrisinajar.com:4000/graphql
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
         run: |
           yarn generate
       - name: build project
@@ -51,4 +51,4 @@ jobs:
 
       - name: Send deploy notification
         run: |
-          curl http://chrisinajar.com:4000/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
+          curl https://chrisinajar.com:8443/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
