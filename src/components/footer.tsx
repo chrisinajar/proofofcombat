@@ -27,7 +27,7 @@ export function Footer(): JSX.Element {
           <Grid item sm={1} xs={3}>
             <Typography align="center">
               <a
-                href="https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fchrisinajar.com%3A4333%2Fgraphql"
+                href="https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fchrisinajar.com%3A8443%2Fgraphql"
                 target="_blank"
                 rel="noreferrer"
               >
