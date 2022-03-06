@@ -264,29 +264,31 @@ function TerrainEditor({
 export default function MapPreview(): JSX.Element {
   const rerender = useForceUpdate();
   return (
-    <div
-      style={{
-        position: "relative",
-        width: `${128 * gridSize}px`,
-        height: `${96 * gridSize}px`,
-        backgroundImage: "url(maps/default.jpg)",
-        backgroundSize: "100% 100%",
-      }}
-    >
-      <NoSsr>
-        {LocationData.default.locations.map((worldColumn, x) =>
-          worldColumn.map((location, y) => {
-            return (
-              <SpecialLocationEditor
-                key={`${x}, ${y}`}
-                x={x}
-                y={y}
-                rerender={rerender}
-              />
-            );
-          })
-        )}
-      </NoSsr>
+    <div style={{ overflow: "scroll" }}>
+      <div
+        style={{
+          position: "relative",
+          width: `${128 * gridSize}px`,
+          height: `${96 * gridSize}px`,
+          backgroundImage: "url(maps/default.jpg)",
+          backgroundSize: "100% 100%",
+        }}
+      >
+        <NoSsr>
+          {LocationData.default.locations.map((worldColumn, x) =>
+            worldColumn.map((location, y) => {
+              return (
+                <SpecialLocationEditor
+                  key={`${x}, ${y}`}
+                  x={x}
+                  y={y}
+                  rerender={rerender}
+                />
+              );
+            })
+          )}
+        </NoSsr>
+      </div>
     </div>
   );
 }

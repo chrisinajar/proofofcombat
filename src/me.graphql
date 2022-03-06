@@ -38,6 +38,28 @@ query Me {
               id
             }
           }
+          rebirth {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+          }
+          droop {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+          }
           id
         }
         currentQuest {

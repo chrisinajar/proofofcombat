@@ -171,7 +171,7 @@ export function Trade({
               {incomingTrades.map((offer) => (
                 <React.Fragment key={offer.id}>
                   <Box sx={{ mt: 1, bgcolor: "info.main", p: 2 }}>
-                    From: <b>{offer.toName}</b>
+                    From: <b>{offer.fromName}</b>
                     <br />
                     Item: <b>{itemDisplayName(offer.item)}</b>
                     <br />

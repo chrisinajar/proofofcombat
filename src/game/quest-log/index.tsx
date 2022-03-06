@@ -3,8 +3,11 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { Quest } from "src/generated/graphql";
+
 import { useHero } from "src/hooks/use-hero";
 
+import { QuestEntry } from "./quest";
 import { WashedUpQuestLog } from "./washed-up";
 
 export function QuestLog(): JSX.Element | null {
@@ -30,7 +33,9 @@ export function QuestLog(): JSX.Element | null {
     <Box>
       <Typography variant="h4">Quest Log</Typography>
       <br />
-      {questLog.washedUp && <WashedUpQuestLog quest={questLog.washedUp} />}
+      {Object.values(questLog).map((quest) => (
+        <QuestEntry quest={quest} />
+      ))}
     </Box>
   );
 }

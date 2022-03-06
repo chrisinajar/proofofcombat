@@ -2,19 +2,15 @@ import React, { useState, useMemo } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/client";
+import { SnackbarProvider } from "notistack";
 
 import { DelayContext } from "src/hooks/use-delay";
-import { createClient } from "../src/apollo";
+import { ProofOfApolloProvider } from "../src/apollo";
 
 import "styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [currentDelay, setCurrentDelay] = useState<number>(0);
-  const apolloClient = useMemo(() => {
-    return createClient({
-      onDelay: setCurrentDelay,
-    });
-  }, []);
 
   return (
     <React.Fragment>
@@ -31,9 +27,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <DelayContext.Provider value={[currentDelay, setCurrentDelay]}>
-        <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
-        </ApolloProvider>
+        <SnackbarProvider maxSnack={3}>
+          <ProofOfApolloProvider>
+            <Component {...pageProps} />
+          </ProofOfApolloProvider>
+        </SnackbarProvider>
       </DelayContext.Provider>
     </React.Fragment>
   );

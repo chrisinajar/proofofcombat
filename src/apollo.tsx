@@ -1,11 +1,17 @@
+import React, { useMemo } from "react";
 import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
   from,
 } from "@apollo/client";
-import { onError } from "@apollo/client/link/error";
+import { onError as makeErrorLink } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
+import { ApolloProvider } from "@apollo/client";
+
+import { useSnackbar } from "notistack";
+
+import { useDelay } from "src/hooks/use-delay";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -27,13 +33,16 @@ const authLink = setContext((req, { headers }) => {
 
 export function createClient({
   onDelay,
+  onError,
 }: {
   onDelay?: (delay: number) => void;
+  onError?: (message: string) => void;
 }) {
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
+  const errorLink = makeErrorLink(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
       graphQLErrors.forEach((error) => {
         const { message, locations, path, extensions } = error;
+        onError?.(message);
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
         );
@@ -52,4 +61,29 @@ export function createClient({
   });
 
   return client;
+}
+
+// im so funny
+export function ProofOfApolloProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
+  const [currentDelay, setCurrentDelay] = useDelay();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  function showError(e: string) {
+    enqueueSnackbar(e, {
+      variant: "error",
+    });
+    console.log(e);
+  }
+
+  const apolloClient = useMemo(() => {
+    return createClient({
+      onDelay: setCurrentDelay,
+      onError: showError,
+    });
+  }, []);
+
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 }

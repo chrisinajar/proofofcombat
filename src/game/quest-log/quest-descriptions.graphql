@@ -1,0 +1,6 @@
+query QuestDescription($quest: Quest!) {
+  quest(quest: $quest) {
+    id
+    description
+  }
+}
