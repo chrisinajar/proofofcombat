@@ -13,9 +13,11 @@ export function QuestEntry({
   quest?: QuestProgress | null;
 }): JSX.Element {
   const { data, loading } = useQuestDescriptionQuery({
-    variables: {
-      quest: quest?.lastEvent?.quest,
-    },
+    variables: quest?.lastEvent?.quest
+      ? {
+          quest: quest?.lastEvent?.quest,
+        }
+      : undefined,
     skip: !quest?.lastEvent?.quest,
   });
 

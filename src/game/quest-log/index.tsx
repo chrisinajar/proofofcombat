@@ -3,7 +3,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { Quest } from "src/generated/graphql";
+import { Quest, QuestProgress } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
 
@@ -33,9 +33,12 @@ export function QuestLog(): JSX.Element | null {
     <Box>
       <Typography variant="h4">Quest Log</Typography>
       <br />
-      {Object.values(questLog).map((quest) => (
-        <QuestEntry quest={quest} />
-      ))}
+      {Object.values(questLog).map((quest) => {
+        if (!quest || typeof quest === "string") {
+          return null;
+        }
+        return <QuestEntry quest={quest} />;
+      })}
     </Box>
   );
 }
