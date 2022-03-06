@@ -259,6 +259,11 @@ export function Locations(): JSX.Element | null {
             <Docks location={specialLocation} />
           </Grid>
         )}
+        {/*specialLocation?.type === "tavern" && (
+          <Grid item style={{ textAlign: "center" }} xs={2}>
+            <Button>Talk to the tavern keeper</Button>
+          </Grid>
+        )*/}
 
         {locationDetails?.shop && (
           <Grid item style={{ textAlign: "center" }} xs={2}>

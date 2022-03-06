@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { emojify } from "node-emoji";
 import { timeAgo } from "short-time-ago";
+import { useSnackbar } from "notistack";
 
 import Button from "@mui/material/Button";
 import FormGroup from "@mui/material/FormGroup";
@@ -80,6 +81,7 @@ type MessageTabsType = {
 };
 
 export function Chat(): JSX.Element {
+  const { enqueueSnackbar } = useSnackbar();
   const hero = useHero();
   const { data } = useGetChatTokenQuery();
   const [tradeMode, setTradeMode] = useState<boolean>(false);
@@ -127,6 +129,22 @@ export function Chat(): JSX.Element {
         );
       }
 
+      if (data.type === "drop") {
+        if (data.item) {
+          enqueueSnackbar(`You found ${itemDisplayName(data.item)}`, {
+            variant: "success",
+          });
+        } else {
+          enqueueSnackbar(data.message, {
+            variant: "success",
+          });
+        }
+      } else {
+        enqueueSnackbar(data.message, {
+          variant: "info",
+        });
+      }
+
       setChat((oldChat) => [
         {
           type: data.type ?? "notification",
@@ -141,6 +159,9 @@ export function Chat(): JSX.Element {
       ]);
     });
     socketRef.current.on("system-message", (data: SystemMessage) => {
+      enqueueSnackbar(data.message, {
+        variant: "warning",
+      });
       setChat((oldChat) => [
         {
           type: "system",
