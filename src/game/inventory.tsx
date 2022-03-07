@@ -484,10 +484,10 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "Damage 10% Constitution";
       break;
     case EnchantmentType.LifeSteal:
-      return "Leach 10% Constitution";
+      return "Leech 10% Constitution";
       break;
     case EnchantmentType.Vampirism:
-      return "Leach 20% Constitution, Steal 30% Constitution";
+      return "Leech 20% Constitution, Steal 30% Constitution";
       break;
     case EnchantmentType.BigMelee:
       return "+100% Strength, Steal 40% Dexterity";

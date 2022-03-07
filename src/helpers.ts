@@ -24,7 +24,7 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.MinusEnemyAllStats]: "Complete Oppression",
   [EnchantmentType.LifeHeal]: "Healing",
   [EnchantmentType.LifeDamage]: "Harming",
-  [EnchantmentType.LifeSteal]: "The Leach",
+  [EnchantmentType.LifeSteal]: "The Leech",
 
   [EnchantmentType.StrengthSteal]: "Stolen Strength",
   [EnchantmentType.DexteritySteal]: "Thieves Hands",
