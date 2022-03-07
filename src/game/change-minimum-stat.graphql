@@ -12,7 +12,6 @@ mutation ChangeMinimumStat($name: String!, $value: Int!) {
           willpower
           luck
         }
-        autoDust
       }
     }
     account {
