@@ -105,6 +105,13 @@ export function itemAllowsRebirth(item: string): boolean {
   return false;
 }
 
+export function itemUpgradesAutomation(item: string): boolean {
+  if (item === "unimaginable-gearbox") {
+    return true;
+  }
+  return false;
+}
+
 export function itemAllowsCrafting(item: string): boolean {
   if (item === "crafting-hammer") {
     return true;

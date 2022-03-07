@@ -224,6 +224,19 @@ query Me {
           fromId
           id
         }
+
+        settings {
+          minimumStats {
+            strength
+            dexterity
+            intelligence
+            constitution
+            wisdom
+            willpower
+            luck
+          }
+          autoDust
+        }
       }
     }
   }

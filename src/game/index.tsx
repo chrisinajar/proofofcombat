@@ -16,7 +16,7 @@ import { Layout } from "src/components/layout";
 import { Chat } from "src/components/chat";
 import { Combat } from "src/components/combat";
 import { useToken } from "src/token";
-import { addSpaces } from "src/helpers";
+import { addSpaces, itemUpgradesAutomation } from "src/helpers";
 
 import { useMeQuery, useLeaderboardQuery } from "src/generated/graphql";
 
@@ -27,6 +27,7 @@ import { Inventory } from "./inventory";
 import { QuestEventDisplay } from "./quest-event-display";
 import { QuestLog } from "./quest-log";
 import { CombatStats } from "./combat-stats";
+import { Settings } from "./settings";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -57,6 +58,10 @@ export default function Home(): JSX.Element {
     return <Layout>{loading && <LinearProgress />}</Layout>;
   }
 
+  const hasUpgradedAutomation = !!hero?.inventory.find((item) =>
+    itemUpgradesAutomation(item.baseItem)
+  );
+
   return (
     <Layout showHero>
       <React.Fragment>
@@ -85,6 +90,7 @@ export default function Home(): JSX.Element {
               <Tab label="Map" value="5" />
               <Tab label="Quests" value="6" />
               <Tab label="Stats" value="7" />
+              {hasUpgradedAutomation && <Tab label="Settings" value="8" />}
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -152,6 +158,9 @@ export default function Home(): JSX.Element {
           </TabPanel>
           <TabPanel value="7">
             {hero?.combatStats && <CombatStats stats={hero.combatStats} />}
+          </TabPanel>
+          <TabPanel value="8">
+            <Settings />
           </TabPanel>
         </TabContext>
         <br />

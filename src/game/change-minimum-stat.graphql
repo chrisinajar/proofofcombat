@@ -1,0 +1,23 @@
+mutation ChangeMinimumStat($name: String!, $value: Int!) {
+  changeMinimumStat(name: $name, value: $value) {
+    hero {
+      id
+      settings {
+        minimumStats {
+          strength
+          dexterity
+          intelligence
+          constitution
+          wisdom
+          willpower
+          luck
+        }
+        autoDust
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}
