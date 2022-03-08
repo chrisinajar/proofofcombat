@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import Box from "@mui/material/Box";
@@ -31,28 +31,37 @@ import { Settings } from "./settings";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
+  const routeParts = router.route.split("/");
+  const terminalRoute = routeParts.pop();
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
-  const [selectedTab, setSelectedTab] = useState("1");
+  const [selectedTab, setSelectedTab] = useState(terminalRoute);
   const { data: leaderboardData } = useLeaderboardQuery({
     pollInterval: 30000,
   });
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+    if (newValue === "play") {
+      router.push("/play", undefined, { scroll: false });
+    } else {
+      router.push(`/play/${newValue}`, undefined, { scroll: false });
+    }
     setSelectedTab(newValue);
   };
 
   const hero = data?.me?.account?.hero ?? null;
 
-  if (error || !token) {
-    router.push(`/?auth=${router.asPath}`);
-    return (
-      <Layout>
-        <br />
-        Redirecting...
-      </Layout>
-    );
-  }
+  useEffect(() => {
+    if (error || !token) {
+      router.push(`/?auth=${router.asPath}`);
+      return (
+        <Layout>
+          <br />
+          Redirecting...
+        </Layout>
+      );
+    }
+  }, [error, token]);
 
   if (loading) {
     return <Layout>{loading && <LinearProgress />}</Layout>;
@@ -83,29 +92,30 @@ export default function Home(): JSX.Element {
               aria-label="navigation tabs"
               variant="scrollable"
             >
-              <Tab label="Welcome" value="1" />
-              <Tab label="Combat" value="2" />
-              <Tab label="Shop" value="3" />
-              <Tab label="Inventory" value="4" />
-              <Tab label="Map" value="5" />
-              <Tab label="Quests" value="6" />
-              <Tab label="Stats" value="7" />
-              {hasUpgradedAutomation && <Tab label="Settings" value="8" />}
+              <Tab label="Welcome" value="play" />
+              <Tab label="Combat" value="combat" />
+              <Tab label="Shop" value="shop" />
+              <Tab label="Inventory" value="inventory" />
+              <Tab label="Map" value="map" />
+              <Tab label="Quests" value="quests" />
+              {hasUpgradedAutomation && (
+                <Tab label="Settings" value="settings" />
+              )}
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value="play">
             <Grid container columns={12} spacing={4}>
               <Grid item xs={12} sm={7} md={8}>
-                <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                <Typography variant="h5" sx={{ mb: 2 }}>
                   Welcome to <b>Proof of Combat</b>!
                 </Typography>
-                <Typography sx={{ marginBottom: 2 }}>
+                <Typography sx={{ mb: 2 }}>
                   This game is under very active development, so except things
                   to change often and for new features and content to appear on
                   a near daily basis.
                 </Typography>
 
-                <Typography sx={{ marginBottom: 2 }}>
+                <Typography sx={{ mb: 2 }}>
                   If you'd like to discuss upcoming features, join the{" "}
                   <a
                     href="https://discord.gg/t7AZSxvfJG"
@@ -116,6 +126,10 @@ export default function Home(): JSX.Element {
                   </a>
                   !
                 </Typography>
+                <Typography variant="h5" sx={{ mb: 2 }}>
+                  Combat Stats
+                </Typography>
+                {hero?.combatStats && <CombatStats stats={hero.combatStats} />}
               </Grid>
               {leaderboardData?.leaderboard && (
                 <Grid item xs={12} sm={5} md={4}>
@@ -135,7 +149,7 @@ export default function Home(): JSX.Element {
               )}
             </Grid>
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value="combat">
             <Typography>
               Challenge a monster from the list, then fight it to the death.
               Note that other players in the same location see the same monster
@@ -144,22 +158,19 @@ export default function Home(): JSX.Element {
             <br />
             <Combat />
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel value="shop">
             <Shop />
           </TabPanel>
-          <TabPanel value="4">
+          <TabPanel value="inventory">
             <Inventory />
           </TabPanel>
-          <TabPanel value="5">
+          <TabPanel value="map">
             <Locations />
           </TabPanel>
-          <TabPanel value="6">
+          <TabPanel value="quests">
             <QuestLog />
           </TabPanel>
-          <TabPanel value="7">
-            {hero?.combatStats && <CombatStats stats={hero.combatStats} />}
-          </TabPanel>
-          <TabPanel value="8">
+          <TabPanel value="settings">
             <Settings />
           </TabPanel>
         </TabContext>
