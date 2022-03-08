@@ -35,7 +35,9 @@ export default function Home(): JSX.Element {
   const terminalRoute = routeParts.pop();
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
-  const [selectedTab, setSelectedTab] = useState(terminalRoute);
+  const [selectedTab, setSelectedTab] = useState<string>(
+    terminalRoute ?? "play"
+  );
   const { data: leaderboardData } = useLeaderboardQuery({
     pollInterval: 30000,
   });
@@ -54,14 +56,18 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     if (error || !token) {
       router.push(`/?auth=${router.asPath}`);
-      return (
-        <Layout>
-          <br />
-          Redirecting...
-        </Layout>
-      );
+      return;
     }
   }, [error, token]);
+
+  if (error || !token) {
+    return (
+      <Layout>
+        <br />
+        Redirecting...
+      </Layout>
+    );
+  }
 
   if (loading) {
     return <Layout>{loading && <LinearProgress />}</Layout>;
