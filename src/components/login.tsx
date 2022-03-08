@@ -25,6 +25,9 @@ export function Login(): JSX.Element {
   }
 
   async function handleLogin() {
+    if (!name.trim().length || !password.trim().length) {
+      return;
+    }
     try {
       const { data } = await loginMutation({
         variables: { name, password },

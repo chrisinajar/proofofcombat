@@ -31,6 +31,9 @@ export function Signup(props: SignupProps): JSX.Element {
 
   async function handleSignup() {
     console.log("Attempting to create an account...");
+    if (!user.trim().length || !password.trim().length) {
+      return;
+    }
     try {
       await signupMutation({
         variables: {
