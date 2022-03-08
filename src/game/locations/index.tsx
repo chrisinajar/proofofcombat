@@ -8,13 +8,13 @@ import Divider from "@mui/material/Divider";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
+import { useLocation, useSpecialLocation } from "src/hooks/use-location";
 
 import { distance2d } from "src/helpers";
 
 import {
   useMoveLocationMutation,
   MoveDirection,
-  useLocationDetailsQuery,
   useTeleportMutation,
 } from "src/generated/graphql";
 
@@ -30,18 +30,9 @@ export function Locations(): JSX.Element | null {
   const [moveMutation, { loading }] = useMoveLocationMutation();
   const [teleportMutation, { loading: teleportLoading }] =
     useTeleportMutation();
-  const { data: locationData } = useLocationDetailsQuery({
-    variables: hero?.location
-      ? {
-          location: {
-            x: hero.location.x,
-            y: hero.location.y,
-            map: hero.location.map,
-          },
-        }
-      : undefined,
-    skip: !hero?.location,
-  });
+
+  const locationDetails = useLocation();
+  const specialLocation = useSpecialLocation();
 
   useEffect(() => {
     if (hero) {
@@ -53,12 +44,6 @@ export function Locations(): JSX.Element | null {
   if (!hero) {
     return null;
   }
-
-  const locationDetails = locationData?.locationDetails;
-  const specialLocations = locationDetails?.specialLocations || [];
-
-  // for now we're only supporting 1 special location
-  const specialLocation = specialLocations.length ? specialLocations[0] : null;
 
   const shouldDisable =
     loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading;
