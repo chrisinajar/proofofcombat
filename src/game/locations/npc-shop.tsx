@@ -51,9 +51,9 @@ export function NpcShop({ shop }: { shop: NpcShopType }): JSX.Element {
           {message}
         </Typography>
       )}
-      <Typography>
-        {shop.trades.map((trade, i) => (
-          <React.Fragment key={`npc shop items ${i}`}>
+      {shop.trades.map((trade, i) => (
+        <React.Fragment key={`npc shop items ${i}`}>
+          <Typography>
             <TradeOffer trade={trade} />
             <Button
               disabled={loading}
@@ -62,9 +62,9 @@ export function NpcShop({ shop }: { shop: NpcShopType }): JSX.Element {
             >
               Trade
             </Button>
-          </React.Fragment>
-        ))}
-      </Typography>
+          </Typography>
+        </React.Fragment>
+      ))}
     </React.Fragment>
   );
 }
