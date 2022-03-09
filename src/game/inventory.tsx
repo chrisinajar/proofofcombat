@@ -404,6 +404,18 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "aqua-lungs":
       return "Allows water travel";
       break;
+    case "trophy-hellhound":
+      return "2x All Stats, +1 Weapon Tier";
+      break;
+    case "trophy-hiddenstump":
+      return "2x All Stats, 2x Dodge";
+      break;
+    case "trophy-steamgear":
+      return "2x All Stats, Improved auto-battler";
+      break;
+    case "trophy-drowning":
+      return "2x All Stats, +1 Armor Tier";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":
