@@ -521,6 +521,10 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
     case EnchantmentType.AllStatsSteal:
       return "Steal 20% All Stats";
+      break;
+    case EnchantmentType.CounterSpell:
+      return "Cancels out 1 enemy enchantment";
+      break;
     default:
       return "???";
       break;

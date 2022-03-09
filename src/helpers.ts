@@ -41,6 +41,8 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.BigCaster]: "The Sorcerer",
   [EnchantmentType.WisDexWill]: "The Monk",
 
+  [EnchantmentType.CounterSpell]: "Countering",
+
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere
   // [EnchantmentType.FishermansStrength]: "Quest Reward",

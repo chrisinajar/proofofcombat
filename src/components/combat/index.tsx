@@ -87,6 +87,7 @@ export function Combat(): JSX.Element {
 
   useEffect(() => {
     refetchChallenges();
+    refetch();
   }, [hero?.location.x, hero?.location.y, hero?.location.map]);
 
   autoBattleRef.current = async () => {
