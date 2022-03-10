@@ -427,34 +427,34 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
 
     case EnchantmentType.BonusStrength:
-      return "+20% Strength";
+      return "+30% Strength";
       break;
     case EnchantmentType.BonusDexterity:
-      return "+20% Dexterity";
+      return "+30% Dexterity";
       break;
     case EnchantmentType.BonusConstitution:
-      return "+20% Constitution";
+      return "+30% Constitution";
       break;
     case EnchantmentType.BonusIntelligence:
-      return "+20% Intelligence";
+      return "+30% Intelligence";
       break;
     case EnchantmentType.BonusWisdom:
-      return "+20% Wisdom";
+      return "+30% Wisdom";
       break;
     case EnchantmentType.BonusWillpower:
-      return "+20% Willpower";
+      return "+30% Willpower";
       break;
     case EnchantmentType.BonusLuck:
-      return "+20% Luck";
+      return "+30% Luck";
       break;
     case EnchantmentType.BonusPhysical:
-      return "+10% Strength, Dexterity, Constitution";
+      return "+20% Strength, Dexterity, Constitution";
       break;
     case EnchantmentType.BonusMental:
-      return "+10% Intelligence, Wisdom, Willpower";
+      return "+20% Intelligence, Wisdom, Willpower";
       break;
     case EnchantmentType.BonusAllStats:
-      return "+10% All Stats";
+      return "+20% All Stats";
       break;
     case EnchantmentType.MinusEnemyArmor:
       return "-50% Enemy Armor";
@@ -511,28 +511,28 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "+40% Wisdom, Dexterity, Willpower";
       break;
     case EnchantmentType.StrengthSteal:
-      return "Steal 20% Strength";
+      return "Steal 30% Strength";
       break;
     case EnchantmentType.DexteritySteal:
-      return "Steal 20% Dexterity";
+      return "Steal 30% Dexterity";
       break;
     case EnchantmentType.ConstitutionSteal:
-      return "Steal 20% Constitution";
+      return "Steal 30% Constitution";
       break;
     case EnchantmentType.IntelligenceSteal:
-      return "Steal 20% Intelligence";
+      return "Steal 30% Intelligence";
       break;
     case EnchantmentType.WisdomSteal:
-      return "Steal 20% Wisdom";
+      return "Steal 30% Wisdom";
       break;
     case EnchantmentType.WillpowerSteal:
-      return "Steal 20% Willpower";
+      return "Steal 30% Willpower";
       break;
     case EnchantmentType.LuckSteal:
-      return "Steal 20% Luck";
+      return "Steal 30% Luck";
       break;
     case EnchantmentType.AllStatsSteal:
-      return "Steal 20% All Stats";
+      return "Steal 30% All Stats";
       break;
     case EnchantmentType.CounterSpell:
       return "Cancels out 1 enemy enchantment";
