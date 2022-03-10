@@ -31,6 +31,7 @@ export function DelayBar({ delay }: DelayBarProps): JSX.Element {
   return (
     <div
       id="delay-bar-container"
+      className={delay > 0 'is-in-delay' : 'no-delay'}
       style={{
         width: "100%",
         height: "6px",
