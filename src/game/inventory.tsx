@@ -462,6 +462,12 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "vampires-darkness":
       return "-75% Enemy Enchantment Resist, +30% Constitution";
       break;
+    case "naga-scale":
+      return "Cancels out 1 enemy enchantment";
+      break;
+    case "unimaginable-gearbox":
+      return "Improved auto-battler";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":
