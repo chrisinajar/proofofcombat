@@ -26,17 +26,17 @@ export function Layout({
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [darkMode, setDarkMode] = useState<boolean | null>(null);
   const [timeDifference, setTimeDifference] = useState<number>(0);
+  const [lastMeTime, setLastMeTime] = useState<number>(0);
   const { data } = useMeQuery({
-    fetchPolicy: "network-only",
     pollInterval: 60000,
     skip: !showHero,
     onCompleted: (data) => {
       if (data?.me?.now) {
-        // console.log(
-        //   "Adjusting time drift to",
-        //   Date.now() - Number(data?.me?.now)
-        // );
-        setTimeDifference(Date.now() - Number(data?.me?.now));
+        const serverNow = Number(data.me.now);
+        if (serverNow !== lastMeTime) {
+          setTimeDifference(Date.now() - serverNow);
+          setLastMeTime(serverNow);
+        }
       }
     },
   });
