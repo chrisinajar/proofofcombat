@@ -70,7 +70,7 @@ export function ProofOfApolloProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const [currentDelay, setCurrentDelay] = useDelay();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   function showError(e: string) {
     enqueueSnackbar(e, {
       variant: "error",

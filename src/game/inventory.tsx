@@ -416,6 +416,52 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "trophy-drowning":
       return "2x All Stats, +1 Armor Tier";
       break;
+
+    case "archers-impatience":
+      return "50% Double Shot";
+      break;
+    case "archers-determination":
+      return "Ranged -20% Armor, 50% Double Shot";
+      break;
+    case "archers-balance":
+      return "Ranged -20% Armor, 75% Double Shot";
+      break;
+    case "attackers-precision":
+      return "+30% Dexterity";
+      break;
+    case "attackers-honor":
+      return "Melee -20% Armor, +30% Dexterity";
+      break;
+    case "attackers-warbanner":
+      return "+1 Melee Weapon Tier, Melee -20% Armor, +30% Dexterity";
+      break;
+    case "casters-book":
+      return "+30% Wisdom";
+      break;
+    case "casters-wisdom":
+      return "Caster -20% Armor, +30% Wisdom";
+      break;
+    case "casters-destiny":
+      return "+1 Spell Focus Tier, Caster -20% Armor, +30% Wisdom";
+      break;
+    case "smiters-inspiration":
+      return "+30% Willpower";
+      break;
+    case "smiters-calling":
+      return "Smite -20% Armor, +30% Willpower";
+      break;
+    case "smiters-light":
+      return "+1 Shield Tier, Smite -20% Armor, +30% Willpower";
+      break;
+    case "vampires-blood":
+      return "+30% Constitution";
+      break;
+    case "vampires-gaze":
+      return "-50% Enemy Enchantment Resist, +30% Constitution";
+      break;
+    case "vampires-darkness":
+      return "-75% Enemy Enchantment Resist, +30% Constitution";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":
