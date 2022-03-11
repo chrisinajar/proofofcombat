@@ -424,7 +424,7 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "Ranged -20% Armor, 50% Double Shot";
       break;
     case "archers-balance":
-      return "Ranged -20% Armor, 75% Double Shot";
+      return "+1 Ranged Weapon Tier, Ranged -20% Armor, 50% Double Shot";
       break;
     case "attackers-precision":
       return "+30% Dexterity";
