@@ -71,6 +71,17 @@ query AdminAccount($id: ID!) {
             id
           }
         }
+        nagaScale {
+          id
+          progress
+          finished
+          started
+          lastEvent {
+            quest
+            message
+            id
+          }
+        }
         id
       }
       currentQuest {
