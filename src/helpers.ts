@@ -52,10 +52,10 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
   [EnchantmentType.SuperMeleeVamp]: "Bloodletting",
   [EnchantmentType.SuperSorcVamp]: "Bookburning",
   [EnchantmentType.SuperVamp]: "Nosferatu's Breath",
-  [EnchantmentType.SuperVampMelee]: "Putrid ",
+  [EnchantmentType.SuperVampMelee]: "Flesh Consumption",
   [EnchantmentType.SuperVampSorc]: "Necrotic Consumption",
-  [EnchantmentType.SuperBattleMage]: "Putrid ",
-  [EnchantmentType.SuperAllStats]: "Putrid ",
+  [EnchantmentType.SuperBattleMage]: "Demon Hunting",
+  [EnchantmentType.SuperAllStats]: "Overwhelming Power",
 
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere
