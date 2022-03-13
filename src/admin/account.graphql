@@ -2,6 +2,9 @@ query AdminAccount($id: ID!) {
   account(id: $id) {
     id
     name
+    banned
+    nextAllowedAction
+    access
     hero {
       version
       id

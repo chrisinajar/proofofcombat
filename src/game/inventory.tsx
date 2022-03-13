@@ -589,6 +589,43 @@ function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.CounterSpell:
       return "Cancels out 1 enemy enchantment";
       break;
+
+    case EnchantmentType.SuperDexterity:
+      return "+200% Dexterity, +50% Willpower/Wisdom, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperWillpower:
+      return "+200% Willpower, +50% Dexterity/Wisdom, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperWisdom:
+      return "+200% Wisdom, +50% Willpower/Dexterity, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperMelee:
+      return "+250% Strength, Steal 80% Dexterity, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperCaster:
+      return "+250% Intelligence, Steal 80% Wisdom, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperMeleeVamp:
+      return "+200% Strength, Steal 50% Dexterity/Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperSorcVamp:
+      return "+200% Intelligence, Steal 50% Wisdom/Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperVamp:
+      return "Leech 50% Constitution, Steal 80% Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperVampMelee:
+      return "+150% Strength, Steal 60% Dexterity/Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperVampSorc:
+      return "+150% Intelligence, Steal 60% Wisdom/Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperBattleMage:
+      return "+150% Strength/Intelligence, Steal 60% Dexterity/Wisdom, CounterSpell, Minus Armor, Bonus Armor";
+      break;
+    case EnchantmentType.SuperAllStats:
+      return "+100% All Stats, Leech 20% Constitution, CounterSpell, Minus Armor, Bonus Armor";
+      break;
     default:
       return "???";
       break;

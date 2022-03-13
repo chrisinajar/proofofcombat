@@ -12,6 +12,8 @@ import {
   useAdminAccountQuery,
 } from "src/generated/graphql";
 
+import { CreateItem } from "./create-item";
+
 export default function AdminPage(): JSX.Element {
   const [showData, setShowData] = useState<boolean>(false);
   const [accountId, setAccountId] = useState<string>("");
@@ -47,10 +49,18 @@ export default function AdminPage(): JSX.Element {
         >
           {accounts &&
             accounts.map((account) => (
-              <MenuItem value={account.id}>{account.name}</MenuItem>
+              <MenuItem key={account.id} value={account.id}>
+                {account.name}
+              </MenuItem>
             ))}
         </Select>
       </FormControl>
+      <br />
+      <br />
+      <br />
+      {account && <CreateItem account={account} />}
+      <br />
+      <br />
       <br />
       <Button onClick={() => setShowData(!showData)}>Toggle raw data</Button>
       {showData && <pre>{JSON.stringify(account, null, 2)}</pre>}

@@ -1,0 +1,9 @@
+mutation CreateItem(
+  $id: ID!
+  $baseItem: String!
+  $enchantment: EnchantmentType
+) {
+  createItem(id: $id, baseItem: $baseItem, enchantment: $enchantment) {
+    id
+  }
+}

@@ -43,6 +43,20 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
 
   [EnchantmentType.CounterSpell]: "Countering",
 
+  // tier 4's
+  [EnchantmentType.SuperDexterity]: "Putrid Speed",
+  [EnchantmentType.SuperWillpower]: "Unallowable Willpower",
+  [EnchantmentType.SuperWisdom]: "Impermissible Wisdom",
+  [EnchantmentType.SuperMelee]: "Vicious Slaughtering",
+  [EnchantmentType.SuperCaster]: "Godly Magic",
+  [EnchantmentType.SuperMeleeVamp]: "Bloodletting",
+  [EnchantmentType.SuperSorcVamp]: "Bookburning",
+  [EnchantmentType.SuperVamp]: "Nosferatu's Breath",
+  [EnchantmentType.SuperVampMelee]: "Putrid ",
+  [EnchantmentType.SuperVampSorc]: "Necrotic Consumption",
+  [EnchantmentType.SuperBattleMage]: "Putrid ",
+  [EnchantmentType.SuperAllStats]: "Putrid ",
+
   // quest rewards, here to make typescript happy and im lazy :D
   // not used anywhere
   // [EnchantmentType.FishermansStrength]: "Quest Reward",
