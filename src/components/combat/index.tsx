@@ -25,7 +25,7 @@ import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
 import { CombatDisplay } from "./combat-display";
-import { itemAllowsAutoBattle } from "src/helpers";
+import { itemAllowsAutoBattle, itemImprovesAutoBattle } from "src/helpers";
 
 const challengeLabel = "Select a new monster to challenge";
 const fightLabel = "Fight an existing monster!";
@@ -71,10 +71,14 @@ export function Combat(): JSX.Element {
     (m) => m.id === currentFight
   );
   let canAutoBattle = false;
+  let hasImprovedAutoBattle = false;
 
   if (hero) {
     canAutoBattle = !!hero.inventory.find((item) =>
       itemAllowsAutoBattle(item.baseItem)
+    );
+    hasImprovedAutoBattle = !!hero.inventory.find((item) =>
+      itemImprovesAutoBattle(item.baseItem)
     );
   }
 
@@ -125,14 +129,15 @@ export function Combat(): JSX.Element {
     if (!autoBattle || !autoBattleTarget.length) {
       return;
     }
+    const intervalTime = hasImprovedAutoBattle ? 500 : 2000;
     const timerId = setInterval(() => {
       autoBattleRef.current();
-    }, 2000 / autoBattleSkipCount);
+    }, intervalTime / autoBattleSkipCount);
 
     return () => {
       clearInterval(timerId);
     };
-  }, [autoBattle]);
+  }, [autoBattle, hasImprovedAutoBattle]);
 
   useEffect(() => {
     if (monstersData?.monsters?.length) {

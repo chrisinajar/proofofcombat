@@ -124,6 +124,12 @@ export function itemAllowsCrafting(item: string): boolean {
   return false;
 }
 
+export function itemImprovesAutoBattle(item: string): boolean {
+  if (item === "orb-of-forbidden-power") {
+    return true;
+  }
+  return false;
+}
 export function itemAllowsAutoBattle(item: string): boolean {
   if (item === "totem-of-hero") {
     return true;
