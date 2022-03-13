@@ -1,0 +1,19 @@
+query AdminAccounts {
+  accounts {
+    count
+    accounts {
+      id
+      name
+      hero {
+        id
+        name
+        class
+        location {
+          x
+          y
+          map
+        }
+      }
+    }
+  }
+}

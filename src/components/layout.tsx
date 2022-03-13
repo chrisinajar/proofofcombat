@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
-import LinearProgress from "@mui/material/LinearProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
 

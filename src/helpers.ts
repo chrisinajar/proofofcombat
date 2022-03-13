@@ -111,6 +111,9 @@ export function itemUpgradesAutomation(item: string): boolean {
   if (item === "unimaginable-gearbox") {
     return true;
   }
+  if (item === "orb-of-forbidden-power") {
+    return true;
+  }
   return false;
 }
 
@@ -132,6 +135,9 @@ export function itemAllowsAutoBattle(item: string): boolean {
     return true;
   }
   if (item === "totem-of-champion-rebirth") {
+    return true;
+  }
+  if (item === "orb-of-forbidden-power") {
     return true;
   }
   return false;

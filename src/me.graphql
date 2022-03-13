@@ -4,6 +4,7 @@ query Me {
     account {
       id
       nextAllowedAction
+      access
 
       hero {
         version

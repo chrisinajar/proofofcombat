@@ -1,0 +1,250 @@
+query AdminAccount($id: ID!) {
+  account(id: $id) {
+    id
+    name
+    hero {
+      version
+      id
+      name
+      class
+
+      level
+      levelCap
+      experience
+      needed
+      gold
+      enchantingDust
+      attributePoints
+      enchantments
+
+      location {
+        x
+        y
+        map
+      }
+
+      questLog {
+        washedUp {
+          id
+          progress
+          finished
+          started
+          lastEvent {
+            quest
+            message
+            id
+          }
+        }
+        rebirth {
+          id
+          progress
+          finished
+          started
+          lastEvent {
+            quest
+            message
+            id
+          }
+        }
+        droop {
+          id
+          progress
+          finished
+          started
+          lastEvent {
+            quest
+            message
+            id
+          }
+        }
+        clockwork {
+          id
+          progress
+          finished
+          started
+          lastEvent {
+            quest
+            message
+            id
+          }
+        }
+        id
+      }
+      currentQuest {
+        quest
+        message
+        id
+      }
+
+      inventory {
+        id
+        baseItem
+        owner
+        name
+        type
+        level
+        enchantment
+      }
+      equipment {
+        id
+        accessories {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        footArmor {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        headArmor {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        legArmor {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        handArmor {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        bodyArmor {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        rightHand {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        leftHand {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+      }
+
+      combat {
+        health
+        maxHealth
+      }
+      stats {
+        dexterity
+        intelligence
+        willpower
+        constitution
+        wisdom
+        luck
+        strength
+      }
+
+      combatStats {
+        damageAmplification
+        damageReduction
+        armorReduction
+        enemyStats {
+          luck
+          willpower
+          wisdom
+          intelligence
+          constitution
+          strength
+          dexterity
+        }
+        stats {
+          willpower
+          constitution
+          dexterity
+          intelligence
+          luck
+          strength
+          wisdom
+        }
+      }
+      outgoingTrades {
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+        id
+      }
+      incomingTrades {
+        gold
+        item {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+        toName
+        toId
+        fromName
+        fromId
+        id
+      }
+
+      settings {
+        minimumStats {
+          strength
+          dexterity
+          intelligence
+          constitution
+          wisdom
+          willpower
+          luck
+        }
+        autoDust
+      }
+    }
+  }
+}
