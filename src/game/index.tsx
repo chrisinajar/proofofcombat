@@ -91,8 +91,6 @@ export default function Home(): JSX.Element {
     itemUpgradesAutomation(item.baseItem)
   );
 
-  console.log(access);
-
   return (
     <Layout showHero>
       <NoSsr>
