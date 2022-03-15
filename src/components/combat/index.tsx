@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { setInterval, clearInterval } from "worker-timers";
 
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -70,8 +71,6 @@ export function Combat(): JSX.Element {
   const locationDetails = useLocation();
 
   let playerList: PublicHero[] = locationDetails?.players ?? [];
-
-  playerList = playerList.filter((p) => p.combat.health > 0);
 
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight
@@ -230,13 +229,14 @@ export function Combat(): JSX.Element {
     monster = "";
   }
 
-  const existingDuelPlayer = playerList.find((p) => p.id === duelPlayer);
+  const activeDuelPlayer = playerList.find((p) => p.id === activeDuel);
 
+  playerList = playerList.filter((p) => p.combat.health > 0);
+
+  const existingDuelPlayer = playerList.find((p) => p.id === duelPlayer);
   if (!existingDuelPlayer) {
     duelPlayer = "";
   }
-
-  const activeDuelPlayer = playerList.find((p) => p.id === activeDuel);
 
   const challengeLabel = "Select a new monster to challenge";
   const fightLabel = "Fight an existing monster!";
