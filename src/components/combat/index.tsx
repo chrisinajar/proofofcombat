@@ -82,6 +82,8 @@ export function Combat(): JSX.Element {
     );
   }
 
+  const anyLoading = healLoading || loading || fightLoading;
+
   useEffect(() => {
     window.setChallengeMonster = setChallenge;
     return () => {
@@ -104,7 +106,7 @@ export function Combat(): JSX.Element {
     if (autoBattleCount !== 0) {
       return;
     }
-    if (currentDelay > 0) {
+    if (anyLoading || currentDelay > 0) {
       return;
     }
     if (hero?.combat.health === 0) {
