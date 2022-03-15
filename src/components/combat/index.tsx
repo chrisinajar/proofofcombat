@@ -69,7 +69,9 @@ export function Combat(): JSX.Element {
   const fightMutationRef = useRef<(attackType: AttackType) => void>((a) => {});
   const locationDetails = useLocation();
 
-  const playerList: PublicHero[] = locationDetails?.players ?? [];
+  let playerList: PublicHero[] = locationDetails?.players ?? [];
+
+  playerList = playerList.filter((p) => p.combat.health > 0);
 
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight
