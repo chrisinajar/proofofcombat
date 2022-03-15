@@ -40,5 +40,16 @@ query LocationDetails($location: LocationInput!) {
         }
       }
     }
+    players {
+      id
+      name
+      level
+      class
+      local
+      combat {
+        health
+        maxHealth
+      }
+    }
   }
 }

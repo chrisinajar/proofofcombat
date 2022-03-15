@@ -32,12 +32,11 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       experience
       attributePoints
       gold
+      needed
       combat {
         health
         maxHealth
       }
-      needed
-      gold
       stats {
         luck
         willpower

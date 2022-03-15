@@ -19,16 +19,15 @@ import {
   Monster,
   MonsterInstance,
   AttackType,
+  PublicHero,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
+import { useLocation } from "src/hooks/use-location";
 
 import { CombatDisplay } from "./combat-display";
 import { itemAllowsAutoBattle, itemImprovesAutoBattle } from "src/helpers";
-
-const challengeLabel = "Select a new monster to challenge";
-const fightLabel = "Fight an existing monster!";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
@@ -55,6 +54,8 @@ export function Combat(): JSX.Element {
   const [currentDelay, setDelay] = useDelay();
   const [challenge, setChallenge] = useState<string>("");
   let [monster, setMonster] = useState<string>("");
+  let [duelPlayer, setDuelPlayer] = useState<string>("");
+  const [activeDuel, setActiveDuel] = useState<string>("");
   const { data: monstersData, loading, error, refetch } = useMonstersQuery();
   const [challengeMutation] = useChallengeMutation();
   const [healMutation, { loading: healLoading }] = useHealMutation();
@@ -66,6 +67,13 @@ export function Combat(): JSX.Element {
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
   const fightMutationRef = useRef<(attackType: AttackType) => void>((a) => {});
+  const locationDetails = useLocation();
+
+  const playerList: PublicHero[] = locationDetails?.players ?? [];
+
+  if (locationDetails && locationDetails.players) {
+    console.log(locationDetails.players);
+  }
 
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight
@@ -178,6 +186,7 @@ export function Combat(): JSX.Element {
       (m) => m.id === monster
     );
     setCurrentFight(monster);
+    setActiveDuel("");
   }
 
   async function handleChallenge() {
@@ -212,11 +221,28 @@ export function Combat(): JSX.Element {
     setAutoBattleTarget(mob);
   }
 
+  async function handleDuel() {
+    setActiveDuel(duelPlayer);
+    setCurrentFight("");
+  }
+
   const existingMonster = monstersData?.monsters?.find((m) => m.id === monster);
 
   if (!existingMonster) {
     monster = "";
   }
+
+  const existingDuelPlayer = playerList.find((p) => p.id === duelPlayer);
+
+  if (!existingDuelPlayer) {
+    duelPlayer = "";
+  }
+
+  const activeDuelPlayer = playerList.find((p) => p.id === activeDuel);
+
+  const challengeLabel = "Select a new monster to challenge";
+  const fightLabel = "Fight an existing monster!";
+  const duelLabel = "Duel with a nearby player!";
 
   return (
     <React.Fragment>
@@ -302,6 +328,43 @@ export function Combat(): JSX.Element {
                 </Button>
               </FormControl>
             </Grid>
+            {playerList.length > 1 && (
+              <Grid item md={3} xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="duel-select-label">{duelLabel}</InputLabel>
+                  <Select
+                    id="duel-select"
+                    labelId="duel-select-label"
+                    value={duelPlayer}
+                    label={duelLabel}
+                    disabled={autoBattle}
+                    onChange={(e) => setDuelPlayer(e.target.value)}
+                  >
+                    {playerList
+                      .filter((other) => other.id !== hero.id)
+                      .sort((a, b) => a.level - b.level)
+                      .map((publicHero) => (
+                        <MenuItem key={publicHero.id} value={publicHero.id}>
+                          {publicHero.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                  <Button
+                    id="duel-button"
+                    disabled={
+                      !duelPlayer.length ||
+                      currentDelay > 0 ||
+                      healLoading ||
+                      autoBattle
+                    }
+                    onClick={handleDuel}
+                    variant="contained"
+                  >
+                    Duel Player!
+                  </Button>
+                </FormControl>
+              </Grid>
+            )}
           </React.Fragment>
         )}
         {autoBattle && (
@@ -353,6 +416,22 @@ export function Combat(): JSX.Element {
             onAutoBattle={handleAutoBattle}
             fightMutationRef={fightMutationRef}
             onVictory={() => setMobKillCount(mobKillCount + 1)}
+          />
+        )}
+        {activeDuelPlayer && (
+          <CombatDisplay
+            key={`${activeDuelPlayer.id}-${currentFightId}`}
+            fight={{
+              id: activeDuelPlayer.id,
+              monster: activeDuelPlayer,
+            }}
+            onError={() => {
+              refetch();
+              setCurrentFight(null);
+            }}
+            duel
+            autoBattle={false}
+            canAutoBattle={false}
           />
         )}
         <Grid item lg={3} xs={6}>

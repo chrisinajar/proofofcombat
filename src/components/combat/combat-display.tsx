@@ -17,7 +17,9 @@ import {
   CombatEntry,
   AttackType,
   useFightMutation,
+  useAttackHeroMutation,
   EnchantmentType,
+  InventoryItem,
 } from "src/generated/graphql";
 
 import { itemDisplayName } from "src/helpers";
@@ -25,6 +27,7 @@ import { itemDisplayName } from "src/helpers";
 type CombatDisplayProps = {
   autoBattle: boolean;
   canAutoBattle: boolean;
+  duel?: true;
   fight: {
     id: string;
     monster: {
@@ -39,7 +42,7 @@ type CombatDisplayProps = {
   onVictory?: () => void;
   onError?: (e: any) => void;
   onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
-  fightMutationRef: React.MutableRefObject<(attackType: AttackType) => void>;
+  fightMutationRef?: React.MutableRefObject<(attackType: AttackType) => void>;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
@@ -51,13 +54,27 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     onError,
     onAutoBattle,
     fightMutationRef,
+    duel,
   } = props;
   const [killedByAnother, setKilledByAnother] = useState<boolean>(false);
   const [fightMutation, { data: fightData, loading: fightLoading }] =
     useFightMutation();
+  const [duelPlayerMutation, { data: duelData, loading: duelLoading }] =
+    useAttackHeroMutation();
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
   const [lastAttack, setLastAttack] = useState<AttackType>(AttackType.Melee);
-  const fightResult = fightData?.fight;
+  const fightResult: {
+    victory: boolean;
+    gold?: number | null;
+    experience?: number | null;
+    didLevel?: boolean | null;
+    log: CombatEntry[];
+    drop?: InventoryItem | null;
+  } | null = fightData?.fight || duelData?.attackHero || null;
+  const monsterOrPlayer =
+    fightData?.fight?.monster?.monster ||
+    duelData?.attackHero?.otherHero ||
+    null;
 
   const showAutoBattle = !autoBattle && canAutoBattle;
 
@@ -65,34 +82,50 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     if (killedByAnother) {
       setKilledByAnother(false);
     }
-    if (fightLoading) {
+    if (fightLoading || duelLoading) {
       return;
     }
     setEnemyHealth(
       (100 *
-        (fightResult
-          ? fightResult.monster.monster.combat.health
+        (monsterOrPlayer
+          ? monsterOrPlayer.combat.health
           : monster.combat.health)) /
         monster.combat.maxHealth
     );
   }, [
-    fightResult?.monster.monster.combat.health,
-    fightResult?.monster.monster.combat.maxHealth,
+    monsterOrPlayer?.combat.health,
+    monsterOrPlayer?.combat.maxHealth,
     monster.combat.maxHealth,
   ]);
 
   async function handleFight(attackType: AttackType) {
     setLastAttack(attackType);
+
     try {
-      const data = await fightMutation({
-        variables: {
-          monster: monsterId,
-          attackType,
-        },
-      });
-      if (data.data?.fight.victory) {
-        if (onVictory) {
-          onVictory();
+      console.log({ duel, monsterId });
+      if (duel) {
+        const data = await duelPlayerMutation({
+          variables: {
+            id: monsterId,
+            attackType,
+          },
+        });
+        if (data.data?.attackHero.victory) {
+          if (onVictory) {
+            onVictory();
+          }
+        }
+      } else {
+        const data = await fightMutation({
+          variables: {
+            monster: monsterId,
+            attackType,
+          },
+        });
+        if (data.data?.fight.victory) {
+          if (onVictory) {
+            onVictory();
+          }
         }
       }
     } catch (e: any) {
