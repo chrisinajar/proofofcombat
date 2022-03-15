@@ -71,10 +71,6 @@ export function Combat(): JSX.Element {
 
   const playerList: PublicHero[] = locationDetails?.players ?? [];
 
-  if (locationDetails && locationDetails.players) {
-    console.log(locationDetails.players);
-  }
-
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight
   );
