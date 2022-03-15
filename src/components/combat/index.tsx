@@ -104,6 +104,9 @@ export function Combat(): JSX.Element {
     if (autoBattleCount !== 0) {
       return;
     }
+    if (currentDelay > 0) {
+      return;
+    }
     if (hero?.combat.health === 0) {
       console.log("[AutoBattler] Healing!");
       return handleHeal();
