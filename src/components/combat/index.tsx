@@ -76,15 +76,15 @@ export function Combat(): JSX.Element {
     (m) => m.id === currentFight
   );
   let canAutoBattle = false;
-  let hasImprovedAutoBattle = false;
+  let improvedAutoBattleCount = 0;
 
   if (hero) {
     canAutoBattle = !!hero.inventory.find((item) =>
       itemAllowsAutoBattle(item.baseItem)
     );
-    hasImprovedAutoBattle = !!hero.inventory.find((item) =>
+    improvedAutoBattleCount = hero.inventory.filter((item) =>
       itemImprovesAutoBattle(item.baseItem)
-    );
+    ).length;
   }
 
   const anyLoading = healLoading || loading || fightLoading;
@@ -102,7 +102,10 @@ export function Combat(): JSX.Element {
   }, [hero?.location.x, hero?.location.y, hero?.location.map]);
 
   autoBattleRef.current = async () => {
-    setAutoBattleCount((autoBattleCount + 1) % autoBattleSkipCount);
+    setAutoBattleCount(
+      (autoBattleCount + 1) %
+        (autoBattleSkipCount / Math.pow(2, improvedAutoBattleCount))
+    );
     setAutoBattleBars([
       Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[0],
       Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[1],
@@ -139,7 +142,7 @@ export function Combat(): JSX.Element {
     if (!autoBattle || !autoBattleTarget.length) {
       return;
     }
-    const intervalTime = hasImprovedAutoBattle ? 500 : 2000;
+    const intervalTime = 2000;
     const timerId = setInterval(() => {
       autoBattleRef.current();
     }, intervalTime / autoBattleSkipCount);
@@ -147,7 +150,7 @@ export function Combat(): JSX.Element {
     return () => {
       clearInterval(timerId);
     };
-  }, [autoBattle, hasImprovedAutoBattle]);
+  }, [autoBattle, improvedAutoBattleCount]);
 
   useEffect(() => {
     if (monstersData?.monsters?.length) {
