@@ -234,12 +234,12 @@ export function Combat(): JSX.Element {
 
   const activeDuelPlayer = playerList.find((p) => p.id === activeDuel);
 
-  playerList = playerList.filter((p) => p.combat.health > 0);
-
   const existingDuelPlayer = playerList.find((p) => p.id === duelPlayer);
   if (!existingDuelPlayer) {
     duelPlayer = "";
   }
+
+  playerList = playerList.filter((p) => p.combat.health > 0);
 
   const challengeLabel = "Select a new monster to challenge";
   const fightLabel = "Fight an existing monster!";
