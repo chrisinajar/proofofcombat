@@ -5,6 +5,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import NoSsr from "@mui/material/NoSsr";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
 
 import { useDismissQuestMutation, Maybe } from "src/generated/graphql";
 
@@ -16,35 +21,39 @@ export function QuestEventDisplay({
   const { message } = event;
   const [dismissQuest, { loading }] = useDismissQuestMutation();
 
-  function handleClick() {
+  function handleDismissQuest() {
     dismissQuest();
   }
 
   return (
     <NoSsr>
-      <Box
-        sx={{
-          bgcolor: "success.light",
-          color: "success.contract",
-          fontStyle: "italic",
-          padding: 2,
-        }}
+      <Dialog
+        open
+        onClose={handleDismissQuest}
+        aria-labelledby="quest-event-title"
+        aria-describedby="quest-event-description"
       >
-        {message &&
-          message.map((str, i) => <Typography key={`${i}`}>{str}</Typography>)}
-        <br />
-        <Divider />
-        <br />
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleClick}
-          disabled={loading}
-        >
-          Continue
-        </Button>
-        <br />
-      </Box>
+        <DialogTitle id="quest-event-title">Quest Event</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText id="quest-event-description">
+            {message &&
+              message.map((str, i) => (
+                <Typography key={`${i}`}>{str}</Typography>
+              ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDismissQuest}
+            disabled={loading}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
     </NoSsr>
   );
 }

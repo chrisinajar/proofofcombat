@@ -9,6 +9,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import NoSsr from "@mui/material/NoSsr";
+import Link from "@mui/material/Link";
 
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -118,7 +119,9 @@ export default function Home(): JSX.Element {
                 <Tab label="Shop" value="shop" />
                 <Tab label="Inventory" value="inventory" />
                 <Tab label="Map" value="map" />
-                <Tab label="Quests" value="quests" />
+                {hero && Object.keys(hero.questLog).length > 1 && (
+                  <Tab label="Quests" value="quests" />
+                )}
                 {hasUpgradedAutomation && (
                   <Tab label="Settings" value="settings" />
                 )}
@@ -140,14 +143,16 @@ export default function Home(): JSX.Element {
                   </Typography>
 
                   <Typography sx={{ mb: 2 }}>
-                    If you'd like to discuss upcoming features, join the{" "}
-                    <a
+                    If you'd like to talk more with other players, report bugs,
+                    or discuss upcoming features,{" "}
+                    <Link
+                      underline="hover"
                       href="https://discord.gg/t7AZSxvfJG"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      discord
-                    </a>
+                      join the discord
+                    </Link>
                     !
                   </Typography>
                   <Typography variant="h5" sx={{ mb: 2 }}>

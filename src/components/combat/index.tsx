@@ -62,7 +62,7 @@ export function Combat(): JSX.Element {
   const [healMutation, { loading: healLoading }] = useHealMutation();
   const { data: challengesData, refetch: refetchChallenges } =
     useChallengesQuery();
-  const challenges: Pick<Monster, "id" | "name" | "level">[] =
+  let challenges: Pick<Monster, "id" | "name" | "level">[] =
     challengesData?.challenges || [];
   const hero = useHero();
   const [fightMutation, { data: fightData, loading: fightLoading }] =
@@ -238,6 +238,13 @@ export function Combat(): JSX.Element {
   const existingDuelPlayer = playerList.find((p) => p.id === duelPlayer);
   if (!existingDuelPlayer) {
     duelPlayer = "";
+  }
+
+  if (hero) {
+    const showAll = hero.levelCap > 100;
+    if (!showAll) {
+      challenges = challenges.slice(0, hero.level);
+    }
   }
 
   playerList = playerList.filter((p) => p.combat.health > 0);

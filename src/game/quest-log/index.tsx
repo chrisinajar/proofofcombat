@@ -8,7 +8,6 @@ import { Quest, QuestProgress } from "src/generated/graphql";
 import { useHero } from "src/hooks/use-hero";
 
 import { QuestEntry } from "./quest";
-import { WashedUpQuestLog } from "./washed-up";
 
 export function QuestLog(): JSX.Element | null {
   const hero = useHero();
@@ -33,12 +32,26 @@ export function QuestLog(): JSX.Element | null {
     <Box>
       <Typography variant="h4">Quest Log</Typography>
       <br />
-      {Object.values(questLog).map((quest) => {
-        if (!quest || typeof quest === "string") {
-          return null;
-        }
-        return <QuestEntry quest={quest} />;
-      })}
+      {Object.values(questLog)
+        .filter((entry): entry is QuestProgress => typeof entry !== "string")
+        .sort((a, b) => {
+          if (a.finished) {
+            if (b.finished) {
+              return b.progress - a.progress;
+            }
+            return 1;
+          }
+          if (b.finished) {
+            return -1;
+          }
+          return b.progress - a.progress;
+        })
+        .map((quest) => {
+          if (!quest || typeof quest === "string") {
+            return null;
+          }
+          return <QuestEntry key={quest.id} quest={quest} />;
+        })}
     </Box>
   );
 }
