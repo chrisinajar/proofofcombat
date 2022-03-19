@@ -33,7 +33,10 @@ export function QuestLog(): JSX.Element | null {
       <Typography variant="h4">Quest Log</Typography>
       <br />
       {Object.values(questLog)
-        .filter((entry): entry is QuestProgress => typeof entry !== "string")
+        .filter(
+          (entry): entry is QuestProgress =>
+            !!entry && typeof entry !== "string"
+        )
         .sort((a, b) => {
           if (a.finished) {
             if (b.finished) {
