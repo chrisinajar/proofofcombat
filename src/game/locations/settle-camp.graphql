@@ -1,0 +1,39 @@
+mutation SettleCamp {
+  settleCamp {
+    hero {
+      id
+      gold
+      home {
+        id
+        location {
+          x
+          y
+          map
+        }
+        owner
+        publicOwner {
+          id
+          name
+          level
+          class
+          local
+          combat {
+            health
+            maxHealth
+          }
+        }
+        type
+        upgrades
+        resources {
+          name
+          value
+          maximum
+        }
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

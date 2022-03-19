@@ -1,0 +1,20 @@
+mutation SellResource($resource: String!, $amount: Int!) {
+  sellResource(resource: $resource, amount: $amount) {
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      gold
+      home {
+        id
+        resources {
+          name
+          value
+          maximum
+        }
+      }
+    }
+  }
+}

@@ -102,7 +102,6 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     setLastAttack(attackType);
 
     try {
-      console.log({ duel, monsterId });
       if (duel) {
         const data = await duelPlayerMutation({
           variables: {

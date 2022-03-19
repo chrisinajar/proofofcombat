@@ -2,6 +2,7 @@ import {
   useLocationDetailsQuery,
   SpecialLocation,
   LocationDetails,
+  PlayerLocation,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
@@ -34,4 +35,13 @@ export function useSpecialLocation(): SpecialLocation | null {
   const specialLocation = specialLocations.length ? specialLocations[0] : null;
 
   return specialLocation;
+}
+
+export function usePlayerLocation(): PlayerLocation | null {
+  const locationDetails = useLocation();
+  const playerLocations = locationDetails?.playerLocations || [];
+
+  const playerLocation = playerLocations.length ? playerLocations[0] : null;
+
+  return playerLocation;
 }

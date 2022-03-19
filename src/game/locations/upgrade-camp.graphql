@@ -1,0 +1,21 @@
+mutation UpgradeCamp($upgrade: PlayerLocationUpgrades!) {
+  upgradeCamp(upgrade: $upgrade) {
+    hero {
+      id
+      gold
+      home {
+        id
+        upgrades
+        resources {
+          name
+          value
+          maximum
+        }
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

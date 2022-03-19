@@ -1,5 +1,32 @@
 query LocationDetails($location: LocationInput!) {
   locationDetails(location: $location) {
+    playerLocations {
+      id
+      location {
+        x
+        y
+        map
+      }
+      upgrades
+      resources {
+        name
+        value
+        maximum
+      }
+      owner
+      publicOwner {
+        id
+        name
+        level
+        class
+        local
+        combat {
+          health
+          maxHealth
+        }
+      }
+      type
+    }
     specialLocations {
       description
       type

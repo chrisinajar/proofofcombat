@@ -1,0 +1,10 @@
+query AvailableUpgrades {
+  availableUpgrades {
+    cost {
+      name
+      value
+    }
+    name
+    type
+  }
+}

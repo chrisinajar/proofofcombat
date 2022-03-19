@@ -208,6 +208,7 @@ export function Combat(): JSX.Element {
         setMonster(data?.challenge?.id);
       }
       setCurrentFightId(currentFightId + 1);
+      setActiveDuel("");
     } catch (e) {
       refetch();
     }

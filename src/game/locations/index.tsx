@@ -8,7 +8,11 @@ import Divider from "@mui/material/Divider";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
-import { useLocation, useSpecialLocation } from "src/hooks/use-location";
+import {
+  useLocation,
+  useSpecialLocation,
+  usePlayerLocation,
+} from "src/hooks/use-location";
 
 import { distance2d } from "src/helpers";
 
@@ -21,6 +25,7 @@ import {
 import { Map } from "./map";
 import { Docks } from "./docks";
 import { NpcShop } from "./npc-shop";
+import { Camp } from "./camp";
 
 export function Locations(): JSX.Element | null {
   const hero = useHero();
@@ -33,6 +38,7 @@ export function Locations(): JSX.Element | null {
 
   const locationDetails = useLocation();
   const specialLocation = useSpecialLocation();
+  const playerLocation = usePlayerLocation();
 
   useEffect(() => {
     if (hero) {
@@ -86,7 +92,6 @@ export function Locations(): JSX.Element | null {
     if (x === NaN || y === NaN || !Number.isFinite(x) || !Number.isFinite(y)) {
       return;
     }
-    console.log({ x, y });
 
     y = Math.min(95, Math.max(0, Math.round(y)));
     x = Math.min(127, Math.max(0, Math.round(x)));
@@ -108,6 +113,9 @@ export function Locations(): JSX.Element | null {
       <Grid container columns={2} spacing={3}>
         <Grid item xs={2} sm={1}>
           <Grid container columns={6} spacing={3}>
+            <Grid item style={{ textAlign: "center" }} xs={6}>
+              <Camp hero={hero} />
+            </Grid>
             <Grid item style={{ textAlign: "center" }} xs={6}>
               {hero.combat.health > 0 && (
                 <Typography>Use buttons to move around the map.</Typography>
@@ -217,7 +225,15 @@ export function Locations(): JSX.Element | null {
           {specialLocation && (
             <Typography variant="subtitle2">{specialLocation.type}</Typography>
           )}
-          {!specialLocation && locationDetails && (
+          {playerLocation && (
+            <React.Fragment>
+              <Typography variant="h6">
+                {playerLocation.publicOwner?.name ?? "???"}'s Settlement
+              </Typography>
+              <Typography variant="subtitle2">{playerLocation.type}</Typography>
+            </React.Fragment>
+          )}
+          {!specialLocation && !playerLocation && locationDetails && (
             <React.Fragment>
               <Typography variant="h6">Wilderness</Typography>
               <Typography variant="subtitle2">
@@ -225,7 +241,7 @@ export function Locations(): JSX.Element | null {
               </Typography>
             </React.Fragment>
           )}
-          {!specialLocation && !locationDetails && (
+          {!specialLocation && !playerLocation && !locationDetails && (
             <React.Fragment>
               <Typography variant="h6">&nbsp;</Typography>
               <Typography variant="subtitle2">loading...</Typography>
