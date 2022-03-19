@@ -34,7 +34,7 @@ export function QuestEntry({ quest }: { quest: QuestProgress }): JSX.Element {
   const questDescription = data.quest;
   let progress = quest.progress || 1;
 
-  progress = Math.log(progress, 2);
+  progress = Math.log2(progress);
 
   return (
     <Accordion>
