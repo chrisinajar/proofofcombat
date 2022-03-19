@@ -151,10 +151,21 @@ export default function Home(): JSX.Element {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      join the discord
+                      join the discord!
                     </Link>
-                    !
                   </Typography>
+                  <Typography sx={{ mb: 2 }}>
+                    If you need help finding things,{" "}
+                    <Link
+                      underline="hover"
+                      href="https://github.com/chrisinajar/proofofcombat/wiki/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      check the wiki
+                    </Link>
+                  </Typography>
+
                   <Typography variant="h5" sx={{ mb: 2 }}>
                     Combat Stats
                   </Typography>
