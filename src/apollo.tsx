@@ -55,6 +55,8 @@ export function createClient({
   });
 
   const client = new ApolloClient({
+    name: "Proof of Combat",
+    version: "Browser",
     link: from([errorLink, authLink.concat(httpLink)]),
 
     cache: new InMemoryCache(),
