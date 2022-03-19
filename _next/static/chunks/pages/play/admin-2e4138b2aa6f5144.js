@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[731],{6440:function(n,u,_){(window.__NEXT_P=window.__NEXT_P||[]).push(["/play/admin",function(){return _(5373)}])},5373:function(n,u,_){"use strict";_.r(u);var t=_(5169);u.default=t.Z}},function(n){n.O(0,[984,6,863,18,373,774,888,179],(function(){return u=6440,n(n.s=u);var u}));var u=n.O();_N_E=u}]);
