@@ -6,12 +6,12 @@ type TokenData = [token: TokenType, setToken: TokenSetter];
 
 const setToken: TokenSetter = (newToken: TokenType) => {
   tokenData[0] = newToken;
-  if (typeof localStorage !== "undefined") {
-    localStorage.token = newToken;
+  if (typeof sessionStorage !== "undefined") {
+    sessionStorage.token = newToken;
   }
 };
 const tokenData: TokenData = [
-  typeof localStorage !== "undefined" ? localStorage.token ?? null : null,
+  typeof sessionStorage !== "undefined" ? sessionStorage.token ?? null : null,
   setToken,
 ];
 
