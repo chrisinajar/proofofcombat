@@ -26,9 +26,12 @@ import { Map } from "./map";
 import { Docks } from "./docks";
 import { NpcShop } from "./npc-shop";
 import { Camp } from "./camp";
+import { SettlementManager } from "./settlement";
 
 export function Locations(): JSX.Element | null {
   const hero = useHero();
+  const [showSettlementManager, setIsShowingSettlement] =
+    useState<boolean>(false);
   const [teleportX, setTeleportX] = useState<number>(-1);
   const [teleportY, setTeleportY] = useState<number>(-1);
   const [currentDelay, setDelay] = useDelay();
@@ -49,6 +52,10 @@ export function Locations(): JSX.Element | null {
 
   if (!hero) {
     return null;
+  }
+
+  if (showSettlementManager) {
+    return <SettlementManager hero={hero} />;
   }
 
   const shouldDisable =
@@ -108,13 +115,17 @@ export function Locations(): JSX.Element | null {
     Math.pow(distance2d(hero.location, { x: teleportX, y: teleportY }) * 5, 1.3)
   );
 
+  function handleShowSettlement() {
+    setIsShowingSettlement(true);
+  }
+
   return (
     <React.Fragment>
       <Grid container columns={2} spacing={3}>
         <Grid item xs={2} sm={1}>
           <Grid container columns={6} spacing={3}>
             <Grid item style={{ textAlign: "center" }} xs={6}>
-              <Camp hero={hero} />
+              <Camp hero={hero} onShowSettlement={handleShowSettlement} />
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={6}>
               {hero.combat.health > 0 && (
@@ -247,7 +258,7 @@ export function Locations(): JSX.Element | null {
               <Typography variant="subtitle2">loading...</Typography>
             </React.Fragment>
           )}
-          <Map />
+          <Map location={hero.location} />
           {specialLocation?.description &&
             specialLocation.description.map((line, i) => (
               <Typography variant="body1" key={`loc-desc-${i}`}>

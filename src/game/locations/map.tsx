@@ -2,19 +2,23 @@ import React from "react";
 
 import { useHero } from "src/hooks/use-hero";
 
-const minimapSize = [24, 24];
-const gridSize = [128, 96];
-const cellSize = 16;
-const indicatorSize = 8;
+import { Location } from "src/generated/graphql";
 
-export function Map(): JSX.Element | null {
-  const hero = useHero();
-  if (!hero) {
-    return null;
-  }
+const imageCellSize = 16;
 
-  const { location } = hero;
-
+export function Map({
+  location,
+  minimapSize = [24, 24],
+  gridSize = [128, 96],
+  cellSize = 16,
+  indicatorSize = 8,
+}: {
+  location: Location;
+  minimapSize?: [number, number];
+  gridSize?: [number, number];
+  cellSize?: number;
+  indicatorSize?: number;
+}): JSX.Element | null {
   const centerPoint = [
     Math.round(
       Math.min(
@@ -39,6 +43,7 @@ export function Map(): JSX.Element | null {
         backgroundPosition: `-${centerPoint[0] * cellSize}px -${
           centerPoint[1] * cellSize
         }px`,
+        backgroundSize: `${128 * cellSize}px ${96 * cellSize}px `,
         width: `${minimapSize[0] * cellSize}px`,
         height: `${minimapSize[1] * cellSize}px`,
       }}

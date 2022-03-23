@@ -1,0 +1,86 @@
+query SettlementManager {
+  settlementManager {
+    id
+
+    availableUpgrades {
+      cost {
+        name
+        value
+      }
+      name
+      type
+    }
+
+    availableBuildings {
+      cost {
+        name
+        value
+      }
+      name
+      type
+    }
+
+    capital {
+      id
+      location {
+        x
+        y
+        map
+      }
+      upgrades
+      resources {
+        name
+        value
+        maximum
+      }
+      owner
+      publicOwner {
+        id
+        name
+        level
+        class
+        local
+        combat {
+          health
+          maxHealth
+        }
+      }
+      type
+      connections {
+        id
+        location {
+          x
+          y
+          map
+        }
+        upgrades
+        resources {
+          name
+          value
+          maximum
+        }
+        owner
+        publicOwner {
+          id
+          name
+          level
+          class
+          local
+          combat {
+            health
+            maxHealth
+          }
+        }
+        type
+        availableUpgrades {
+          cost {
+            name
+            value
+          }
+          name
+          type
+        }
+      }
+    }
+  }
+}
