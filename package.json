@@ -18,6 +18,7 @@
     "@types/capitalize": "^2.0.0",
     "@types/escape-html": "^1.0.1",
     "@types/node-emoji": "^1.8.1",
+    "@types/tinycolor2": "^1.4.3",
     "capitalize": "^2.0.4",
     "escape-html": "^1.0.3",
     "graphql": "^16.3.0",
@@ -31,6 +32,7 @@
     "react-dom": "17.0.2",
     "short-time-ago": "^2.0.0",
     "socket.io-client": "^4.4.1",
+    "tinycolor2": "^1.4.2",
     "worker-timers": "^7.0.45"
   },
   "devDependencies": {

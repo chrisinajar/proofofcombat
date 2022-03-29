@@ -13,6 +13,7 @@ import {
 } from "src/generated/graphql";
 
 import { CreateItem } from "./create-item";
+import { GiveGold } from "./give-gold";
 
 export default function AdminPage(): JSX.Element {
   const [showData, setShowData] = useState<boolean>(false);
@@ -59,6 +60,7 @@ export default function AdminPage(): JSX.Element {
       <br />
       <br />
       {account && <CreateItem account={account} />}
+      {account && <GiveGold account={account} />}
       <br />
       <br />
       <br />

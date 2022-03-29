@@ -24,9 +24,11 @@ import {
 export function CampResourceShop({
   hero,
   camp,
+  onBuyResource,
 }: {
   hero: Hero;
   camp: PlayerLocation;
+  onBuyResource?: () => void;
 }): JSX.Element {
   const [sellMode, setSellMode] = useState<boolean>(false);
   const [sellResourceMutation, { loading: sellLoading }] =
@@ -51,6 +53,10 @@ export function CampResourceShop({
       });
       setAmount("");
       setResourceType("");
+      // i hate this syntax: onBuyResource?.();
+      if (onBuyResource) {
+        onBuyResource();
+      }
     } catch (e) {}
   }
 

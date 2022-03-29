@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import tc2 from "tinycolor2";
 
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
@@ -15,6 +16,7 @@ export function MapIcon({
   tooltip,
   hover = false,
   onClick,
+  color = "rgb(33, 5, 33)",
 }: {
   location: Location;
   icon: JSX.Element;
@@ -23,6 +25,7 @@ export function MapIcon({
   tooltip?: string;
   hover?: boolean;
   onClick?: () => void;
+  color?: string;
 }): JSX.Element {
   const relativeLocation = [
     location.x - boundingBox.min.x,
@@ -52,10 +55,10 @@ export function MapIcon({
           position: "absolute",
           left: `${xTile * cellSize}px`,
           top: `${yTile * cellSize}px`,
-          backgroundColor: "rgba(22, 0, 22, 0.4)",
+          backgroundColor: tc2(color).darken(20).setAlpha(0.4).toRgbString(),
           "&:hover": hover
             ? {
-                backgroundColor: "rgba(33, 5, 33, 0.8)",
+                backgroundColor: tc2(color).setAlpha(0.8).toRgbString(),
               }
             : undefined,
         }}

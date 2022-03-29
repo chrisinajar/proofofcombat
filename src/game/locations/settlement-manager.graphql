@@ -1,6 +1,7 @@
 query SettlementManager {
   settlementManager {
     id
+    range
 
     availableUpgrades {
       cost {

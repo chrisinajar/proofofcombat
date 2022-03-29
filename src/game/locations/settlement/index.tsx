@@ -11,10 +11,23 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import AgricultureIcon from "@mui/icons-material/Agriculture";
+import HouseIcon from "@mui/icons-material/House";
+import EmojiNatureIcon from "@mui/icons-material/EmojiNature";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShieldIcon from "@mui/icons-material/Shield";
+import ApartmentIcon from "@mui/icons-material/Apartment";
 
+import LoadingButton from "@mui/lab/LoadingButton";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -24,6 +37,7 @@ import {
   Hero,
   Location,
   useSettlementManagerQuery,
+  useDestroyBuildingMutation,
   PlayerLocationType,
 } from "src/generated/graphql";
 
@@ -32,6 +46,14 @@ import { Map } from "../map";
 import { getBoundingBox, combineResources } from "./helpers";
 import { MapIcon } from "./map-icon";
 import { BuildBuildingMapButtons } from "./build-building-map-buttons";
+import { BuildingDetails } from "./building-details";
+
+const IconMap: { [x in PlayerLocationType]?: JSX.Element } = {
+  [PlayerLocationType.Farm]: <AgricultureIcon />,
+  [PlayerLocationType.Shrine]: <AccountBalanceIcon />,
+  [PlayerLocationType.Apiary]: <EmojiNatureIcon />,
+  [PlayerLocationType.Barracks]: <ShieldIcon />,
+};
 
 export function SettlementManager({
   hero,
@@ -40,10 +62,20 @@ export function SettlementManager({
   hero: Hero;
   onClose?: () => void;
 }): JSX.Element | null {
+  const [destroyBuildingMutation, { loading: destroyBuildingLoading }] =
+    useDestroyBuildingMutation();
+  const [destroyConfirmation, setDestroyConfirmation] =
+    useState<PlayerLocation | null>(null);
+  const [selectedBuilding, setSelectedBuilding] =
+    useState<PlayerLocation | null>(null);
   const [buildBuilding, setBuildBuilding] = useState<PlayerLocationType | null>(
     null
   );
-  const { data: managerData, loading } = useSettlementManagerQuery();
+  const {
+    data: managerData,
+    managerDataLoading,
+    refetch,
+  } = useSettlementManagerQuery();
   const theme = useTheme();
   const atLeastSmall = useMediaQuery(theme.breakpoints.up("sm"));
   const atLeastMedium = useMediaQuery(theme.breakpoints.up("md"));
@@ -54,7 +86,7 @@ export function SettlementManager({
   const md = atLeastSmall && atLeastMedium && !atLeastLarge;
   const lg = atLeastSmall && atLeastMedium && atLeastLarge;
 
-  const [currentMode, setCurrentMode] = useState<string>("");
+  const [currentMode, setCurrentMode] = useState<string | false>("info");
   useEffect(() => {
     if (!hero.home && onClose) {
       onClose();
@@ -66,7 +98,7 @@ export function SettlementManager({
     return null;
   }
 
-  if (loading) {
+  if (managerDataLoading) {
     return null;
   }
 
@@ -76,9 +108,8 @@ export function SettlementManager({
 
   const { settlementManager } = managerData;
 
-  console.log({ buildBuilding });
-
-  const { capital, availableBuildings, availableUpgrades } = settlementManager;
+  const { capital, availableBuildings, availableUpgrades, range } =
+    settlementManager;
 
   const resources = combineResources(
     capital.resources,
@@ -108,8 +139,72 @@ export function SettlementManager({
       Math.min(desiredMapSize / width, desiredMapSize / height) / cellResolution
     ) * cellResolution;
 
+  function cancelDestroyBuilding() {
+    setDestroyConfirmation(null);
+  }
+  function handleClickLocation(location: PlayerLocation) {
+    console.log(currentMode);
+    if (currentMode === "destroy") {
+      setDestroyConfirmation(location);
+    } else if (currentMode === "info") {
+      setSelectedBuilding(location);
+    }
+  }
+  async function handleDestroyBuilding() {
+    if (!destroyConfirmation) {
+      return;
+    }
+    try {
+      await destroyBuildingMutation({
+        variables: {
+          location: {
+            x: destroyConfirmation.location.x,
+            y: destroyConfirmation.location.y,
+            map: destroyConfirmation.location.map,
+          },
+        },
+      });
+    } catch (e) {
+    } finally {
+      setDestroyConfirmation(null);
+    }
+  }
+
+  function handleBuyResource() {
+    refetch();
+  }
+
   return (
     <Box>
+      <Dialog
+        open={!!destroyConfirmation}
+        onClose={cancelDestroyBuilding}
+        aria-labelledby="destroy-building-title"
+        aria-describedby="destroy-building-description"
+      >
+        <DialogTitle id="destroy-building-title">Destroy Building?</DialogTitle>
+        <DialogContent>
+          {destroyConfirmation && (
+            <DialogContentText id="destroy-building-description">
+              Are you sure you want to destroy the {destroyConfirmation.type} at{" "}
+              {destroyConfirmation.location.x}, {destroyConfirmation.location.y}
+              ?
+            </DialogContentText>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDestroyBuilding} color="info">
+            Cancel
+          </Button>
+          <LoadingButton
+            loading={destroyBuildingLoading}
+            onClick={handleDestroyBuilding}
+            color="error"
+          >
+            Destroy
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
       <TabContext value={currentMode}>
         <Grid container columns={6} spacing={1}>
           <Grid item xs={6}>
@@ -134,7 +229,7 @@ export function SettlementManager({
                 (resource.name === "food" || resource.name === "water")
               ) {
                 return (
-                  <Grid item xs={6} sm={3} md={2} lg={1}>
+                  <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
                     <Typography color="error">
                       <b>{words(resource.name)}</b>:{" "}
                       {resource.value.toLocaleString()}
@@ -145,7 +240,7 @@ export function SettlementManager({
                 );
               }
               return (
-                <Grid item xs={6} sm={3} md={2} lg={1}>
+                <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
                   <b>{words(resource.name)}</b>:{" "}
                   {resource.value.toLocaleString()}
                   {resource.maximum &&
@@ -171,8 +266,10 @@ export function SettlementManager({
                 flexGrow: 1,
               }}
             >
-              <Tab icon={<ConstructionIcon />} label="Build" value="1" />
-              <Tab icon={<StorefrontIcon />} label="Market" value="2" />
+              <Tab icon={<ApartmentIcon />} label="View" value="info" />
+              <Tab icon={<ConstructionIcon />} label="Build" value="build" />
+              <Tab icon={<DeleteIcon />} label="Destroy" value="destroy" />
+              <Tab icon={<StorefrontIcon />} label="Market" value="market" />
             </TabList>
           </Grid>
           <Grid item xs={6} md={2} lg={3}>
@@ -184,26 +281,40 @@ export function SettlementManager({
                 cellSize={cellSize}
               />
               <MapIcon
+                onClick={() => handleClickLocation(capital)}
                 cellSize={cellSize}
                 boundingBox={boundingBox}
                 location={capital.location}
                 tooltip="Capital"
-                icon={<AccountBalanceIcon />}
+                icon={<HouseIcon />}
               />
+              {capital.connections.map((connection) => (
+                <MapIcon
+                  hover={currentMode === "destroy"}
+                  key={connection.id}
+                  onClick={() => handleClickLocation(connection)}
+                  cellSize={cellSize}
+                  boundingBox={boundingBox}
+                  location={connection.location}
+                  tooltip={connection.type}
+                  icon={IconMap[connection.type] ?? <AccountBalanceIcon />}
+                />
+              ))}
               {buildBuilding && (
                 <React.Fragment>
                   <BuildBuildingMapButtons
+                    type={buildBuilding}
                     cellSize={cellSize}
                     boundingBox={boundingBox}
                     capital={capital}
+                    range={range}
                   />
                 </React.Fragment>
               )}
             </Box>
           </Grid>
           <Grid item xs={6} md={4} lg={3}>
-            <TabPanel value=""></TabPanel>
-            <TabPanel value="1">
+            <TabPanel value="build">
               <Typography variant="h6">Construct new buildings</Typography>
               <Typography variant="subtitle2">
                 Each building uses a map tile.
@@ -219,8 +330,22 @@ export function SettlementManager({
                 ))}
               </Stack>
             </TabPanel>
-            <TabPanel value="2">
-              <CampResourceShop hero={hero} camp={capital} />
+            <TabPanel value="destroy">
+              Click on a location to demolish the building there. You will get
+              nothing back, and this cannot be undone.
+            </TabPanel>
+            <TabPanel value="market">
+              <CampResourceShop
+                hero={hero}
+                camp={capital}
+                onBuyResource={handleBuyResource}
+              />
+            </TabPanel>
+            <TabPanel value="info">
+              {!selectedBuilding && <Typography></Typography>}
+              {selectedBuilding && (
+                <BuildingDetails location={selectedBuilding} />
+              )}
             </TabPanel>
           </Grid>
         </Grid>

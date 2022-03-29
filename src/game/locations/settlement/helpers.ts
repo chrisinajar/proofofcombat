@@ -24,18 +24,18 @@ export function getBoundingBox(locations: PlayerLocation[]): BoundingBox {
 export function combineResources(
   ...resources: CampResources[][]
 ): CampResources[] {
-  return resources.reduce((total, newResources) => {
+  return resources.reduce<CampResources>((total, newResources) => {
     newResources.forEach((entry) => {
-      const resource = total.find((res) => res.name === entry.name);
+      let resource = total.find((res) => res.name === entry.name);
       if (resource) {
-        resource.value += entry.value;
+        resource.value = resource.value + entry.value;
         if (resource.maximum || entry.maximum) {
           resource.maximum = (resource.maximum ?? 0) + (entry.maximum ?? 0);
         }
       } else {
-        total.push(entry);
+        total.push({ ...entry });
       }
     });
     return total;
-  });
+  }, []);
 }
