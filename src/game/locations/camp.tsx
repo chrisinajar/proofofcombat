@@ -38,7 +38,15 @@ import {
 
 import { useSpecialLocation } from "src/hooks/use-location";
 
-export function Camp({ hero }: { hero: Hero }): JSX.Element | null {
+import { CampResourceShop } from "./camp-resource-shop";
+
+export function Camp({
+  hero,
+  onShowSettlement,
+}: {
+  hero: Hero;
+  onShowSettlement?: () => void;
+}): JSX.Element | null {
   const specialLocation = useSpecialLocation();
   let isLocal = false;
   if (
@@ -58,7 +66,13 @@ export function Camp({ hero }: { hero: Hero }): JSX.Element | null {
   return (
     <Box>
       {!hero.home && <SettleCamp hero={hero} />}
-      {hero.home && <ManageCamp isLocal={isLocal} hero={hero} />}
+      {hero.home && (
+        <ManageCamp
+          isLocal={isLocal}
+          hero={hero}
+          onShowSettlement={onShowSettlement}
+        />
+      )}
       <Divider sx={{ mt: 2, mb: 2 }} />
     </Box>
   );
@@ -99,9 +113,11 @@ function SettleCamp({ hero }: { hero: Hero }): JSX.Element {
 function ManageCamp({
   hero,
   isLocal,
+  onShowSettlement,
 }: {
   hero: Hero;
   isLocal: boolean;
+  onShowSettlement?: () => void;
 }): JSX.Element | null {
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
@@ -179,6 +195,11 @@ function ManageCamp({
   const hasTradingPost = !!hero.home.upgrades.find(
     (up) => up === PlayerLocationUpgrades.TradingPost
   );
+  const hasSettlement = !!hero.home.upgrades.find(
+    (up) => up === PlayerLocationUpgrades.Settlement
+  );
+
+  const dialogLabel = hasSettlement ? "Manage Settlement" : "Manage Campsite";
 
   return (
     <Box>
@@ -188,13 +209,16 @@ function ManageCamp({
         aria-labelledby="manage-camp-title"
         aria-describedby="manage-camp-description"
       >
-        <DialogTitle id="manage-camp-title">Manage Campsite</DialogTitle>
+        <DialogTitle id="manage-camp-title">{dialogLabel}</DialogTitle>
 
         <DialogContent>
           <CampResourceDisplay camp={hero.home} />
           <DialogContentText id="manage-camp-description">
-            The fire crackles and pops as you work. Your tools and supplies lie
-            staggered across the campsite.
+            The fire crackles and pops as you work.
+            {!hasSettlement &&
+              " Your tools and supplies lie staggered across the campsite."}
+            {hasSettlement &&
+              " Your tools sit organized in the shed, spare the ones in use"}
           </DialogContentText>
           <CampResourceShop hero={hero} camp={hero.home} />
           {hasTradingPost && <CampTradingPost hero={hero} camp={hero.home} />}
@@ -211,7 +235,7 @@ function ManageCamp({
         </DialogActions>
       </Dialog>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        Your Campsite
+        Your {hasSettlement ? "Settlement" : "Campsite"}
       </Typography>
       <Typography sx={{ mb: 2 }}>
         The fire crackles and pops as it burns through the night.
@@ -220,10 +244,14 @@ function ManageCamp({
         color="warning"
         variant="contained"
         loading={loading}
-        onClick={() => setShowManageModal(true)}
+        onClick={() =>
+          hasSettlement && onShowSettlement
+            ? onShowSettlement()
+            : setShowManageModal(true)
+        }
         startIcon={<FireplaceIcon />}
       >
-        Open Camp Management
+        Open {hasSettlement ? "Settlement" : "Camps"} Management
       </LoadingButton>
     </Box>
   );
@@ -247,117 +275,6 @@ function CampResourceDisplay({ camp }: { camp: PlayerLocation }): JSX.Element {
         </Grid>
       ))}
     </Grid>
-  );
-}
-
-function CampResourceShop({
-  hero,
-  camp,
-}: {
-  hero: Hero;
-  camp: PlayerLocation;
-}): JSX.Element {
-  const [sellMode, setSellMode] = useState<boolean>(false);
-  const [sellResourceMutation, { loading: sellLoading }] =
-    useSellResourceMutation();
-  const [buyResourceMutation, { loading: buyLoading }] =
-    useBuyResourceMutation();
-  useSellResourceMutation;
-  const [resourceType, setResourceType] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
-
-  const loading = buyLoading || sellLoading;
-
-  async function handleBuyResource() {
-    try {
-      const mutation = sellMode ? sellResourceMutation : buyResourceMutation;
-
-      await mutation({
-        variables: {
-          amount: Number(amount),
-          resource: resourceType,
-        },
-      });
-      setAmount("");
-      setResourceType("");
-    } catch (e) {}
-  }
-
-  const hasTradingPost = !!camp.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.TradingPost
-  );
-
-  const isInvalid =
-    !resourceType.length ||
-    !amount.length ||
-    Number(amount) < 1 ||
-    isNaN(Number(amount)) ||
-    !Number.isFinite(Number(amount));
-
-  return (
-    <Box>
-      <Grid container columns={6} spacing={1}>
-        {hasTradingPost && (
-          <Grid item xs={6}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography>Buy</Typography>
-              <Switch
-                color="success"
-                checked={sellMode}
-                onChange={(e) => setSellMode(e.target.checked)}
-              />
-
-              <Typography>Sell</Typography>
-            </Stack>
-          </Grid>
-        )}
-        <Grid item xs={6} sm={3}>
-          <FormControl fullWidth sx={{ mt: 1, minWidth: 200 }}>
-            <InputLabel>
-              Select resource to {sellMode ? "sell" : "buy"}
-            </InputLabel>
-            <Select
-              label={`Select resource to ${sellMode ? "sell" : "buy"}`}
-              value={resourceType}
-              onChange={(e) => setResourceType(e.target.value)}
-            >
-              <MenuItem value="wood">Wood</MenuItem>
-              <MenuItem value="food">Food</MenuItem>
-              <MenuItem value="water">Water</MenuItem>
-              <MenuItem value="stone">Stone</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <FormControl fullWidth sx={{ mt: 1, minWidth: 200 }}>
-            <TextField
-              label={`Amount to ${sellMode ? "sell" : "buy"}`}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl fullWidth>
-            <LoadingButton
-              color={sellMode ? "success" : "error"}
-              loading={loading}
-              variant="contained"
-              disabled={isInvalid}
-              onClick={handleBuyResource}
-            >
-              {sellMode && "Sell "}
-              {!sellMode && "Buy "}
-              {isInvalid && "Resources"}
-              {!isInvalid &&
-                `${resourceType} for ${(
-                  Number(amount) * 10000
-                ).toLocaleString()} Gold`}
-            </LoadingButton>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Box>
   );
 }
 
@@ -394,9 +311,15 @@ function CampUpgrades({
     } catch (e) {}
   }
 
+  const hasSettlement = !!camp.upgrades.find(
+    (up) => up === PlayerLocationUpgrades.Settlement
+  );
+
   return (
     <Box>
-      <Typography variant="h6">Camp Upgrades</Typography>
+      <Typography variant="h6">
+        {hasSettlement ? "Settlement" : "Camp"} Upgrades
+      </Typography>
       {upgradeList.map((upgrade) => (
         <Tooltip
           key={upgrade.type}

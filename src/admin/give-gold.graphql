@@ -1,0 +1,9 @@
+mutation GiveGold($id: ID!, $amount: Float!) {
+  giveGold(id: $id, amount: $amount) {
+    id
+    hero {
+      id
+      gold
+    }
+  }
+}

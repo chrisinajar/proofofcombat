@@ -24,7 +24,7 @@ export function useLocation(): LocationDetails | null {
     skip: !hero?.location,
   });
 
-  return locationData?.locationDetails ?? null;
+  return (locationData?.locationDetails as LocationDetails) ?? null;
 }
 
 export function useSpecialLocation(): SpecialLocation | null {
