@@ -1,5 +1,11 @@
 import React from "react";
 
-export function BuildingDetails(): JSX.Element {
+import { PlayerLocation } from "src/generated/graphql";
+
+export function BuildingDetails({
+  location,
+}: {
+  location: PlayerLocation;
+}): JSX.Element {
   return <div>details</div>;
 }

@@ -17,6 +17,7 @@ query SettlementManager {
         name
         value
       }
+      description
       name
       type
     }
@@ -47,6 +48,15 @@ query SettlementManager {
         }
       }
       type
+      availableUpgrades {
+        cost {
+          name
+          value
+        }
+        name
+        type
+      }
+
       connections {
         id
         location {

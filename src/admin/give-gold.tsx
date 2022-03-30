@@ -32,7 +32,7 @@ export function GiveGold({
       <Button onClick={handleCreateItem}>
         Give {Number(amount).toLocaleString()} Gold to {account.name}
       </Button>
-      {data?.createItem?.id}
+      {data?.giveGold?.id}
     </Box>
   );
 }

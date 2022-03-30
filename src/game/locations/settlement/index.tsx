@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -39,6 +40,7 @@ import {
   useSettlementManagerQuery,
   useDestroyBuildingMutation,
   PlayerLocationType,
+  PlayerLocation,
 } from "src/generated/graphql";
 
 import { CampResourceShop } from "../camp-resource-shop";
@@ -73,9 +75,9 @@ export function SettlementManager({
   );
   const {
     data: managerData,
-    managerDataLoading,
+    loading: managerDataLoading,
     refetch,
-  } = useSettlementManagerQuery();
+  } = useSettlementManagerQuery({ pollInterval: 60000 });
   const theme = useTheme();
   const atLeastSmall = useMediaQuery(theme.breakpoints.up("sm"));
   const atLeastMedium = useMediaQuery(theme.breakpoints.up("md"));
@@ -86,7 +88,7 @@ export function SettlementManager({
   const md = atLeastSmall && atLeastMedium && !atLeastLarge;
   const lg = atLeastSmall && atLeastMedium && atLeastLarge;
 
-  const [currentMode, setCurrentMode] = useState<string | false>("info");
+  const [currentMode, setCurrentMode] = useState<string>("info");
   useEffect(() => {
     if (!hero.home && onClose) {
       onClose();
@@ -108,8 +110,14 @@ export function SettlementManager({
 
   const { settlementManager } = managerData;
 
-  const { capital, availableBuildings, availableUpgrades, range } =
-    settlementManager;
+  const {
+    capital: capitalData,
+    availableBuildings,
+    availableUpgrades,
+    range,
+  } = settlementManager;
+
+  const capital = capitalData as PlayerLocation;
 
   const resources = combineResources(
     capital.resources,
@@ -118,7 +126,9 @@ export function SettlementManager({
   const population = resources.find((r) => r.name === "population")?.value ?? 0;
   const food = resources.find((r) => r.name === "food")?.value ?? 0;
 
-  const boundingBox = getBoundingBox([...capital.connections, capital]);
+  const boundingBox = getBoundingBox(
+    [...capital.connections, capital].map((loc) => loc.location)
+  );
 
   // 1 padding on all sides + center point
   const width = boundingBox.max.x - boundingBox.min.x + 5;
@@ -281,7 +291,9 @@ export function SettlementManager({
                 cellSize={cellSize}
               />
               <MapIcon
-                onClick={() => handleClickLocation(capital)}
+                onClick={() =>
+                  handleClickLocation({ ...capital, connections: [] })
+                }
                 cellSize={cellSize}
                 boundingBox={boundingBox}
                 location={capital.location}
@@ -292,7 +304,9 @@ export function SettlementManager({
                 <MapIcon
                   hover={currentMode === "destroy"}
                   key={connection.id}
-                  onClick={() => handleClickLocation(connection)}
+                  onClick={() =>
+                    handleClickLocation({ ...connection, connections: [] })
+                  }
                   cellSize={cellSize}
                   boundingBox={boundingBox}
                   location={connection.location}
@@ -316,17 +330,39 @@ export function SettlementManager({
           <Grid item xs={6} md={4} lg={3}>
             <TabPanel value="build">
               <Typography variant="h6">Construct new buildings</Typography>
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Each building uses a map tile.
               </Typography>
               <Stack alignItems="start">
                 {availableBuildings.map((building) => (
-                  <Button
-                    key={building.type}
-                    onClick={() => setBuildBuilding(building.type)}
-                  >
-                    {building.name}
-                  </Button>
+                  <Box sx={{ mb: 3 }}>
+                    <Divider sx={{ mb: 1 }} />
+                    <Typography variant="h5">{building.name}</Typography>
+                    <Typography sx={{ mb: 1 }}>
+                      {building.description}
+                    </Typography>
+                    <Typography variant="h6">Cost to build</Typography>
+                    <Box sx={{ pl: 2 }}>
+                      {building.cost.map((cost) => (
+                        <React.Fragment key={cost.name}>
+                          <li>
+                            <b>{words(cost.name)}:</b>{" "}
+                            {cost.value.toLocaleString()}
+                          </li>
+                        </React.Fragment>
+                      ))}
+                    </Box>
+
+                    <Button
+                      sx={{ mt: 2 }}
+                      key={building.type}
+                      onClick={() => setBuildBuilding(building.type)}
+                      variant="contained"
+                      color="success"
+                    >
+                      Build Building
+                    </Button>
+                  </Box>
                 ))}
               </Stack>
             </TabPanel>

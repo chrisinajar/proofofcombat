@@ -5,18 +5,18 @@ export type BoundingBox = {
   max: Location;
 };
 
-export function getBoundingBox(locations: PlayerLocation[]): BoundingBox {
+export function getBoundingBox(locations: Location[]): BoundingBox {
   return locations.reduce(
     (box, location) => {
-      box.min.x = Math.min(box.min.x, location.location.x);
-      box.min.y = Math.min(box.min.y, location.location.y);
-      box.max.x = Math.max(box.max.x, location.location.x);
-      box.max.y = Math.max(box.max.y, location.location.y);
+      box.min.x = Math.min(box.min.x, location.x);
+      box.min.y = Math.min(box.min.y, location.y);
+      box.max.x = Math.max(box.max.x, location.x);
+      box.max.y = Math.max(box.max.y, location.y);
       return box;
     },
     {
-      min: { map: locations[0].location.map, x: 127, y: 96 },
-      max: { map: locations[0].location.map, x: 0, y: 0 },
+      min: { map: locations[0].map, x: 127, y: 96 },
+      max: { map: locations[0].map, x: 0, y: 0 },
     }
   );
 }
@@ -24,7 +24,7 @@ export function getBoundingBox(locations: PlayerLocation[]): BoundingBox {
 export function combineResources(
   ...resources: CampResources[][]
 ): CampResources[] {
-  return resources.reduce<CampResources>((total, newResources) => {
+  return resources.reduce<CampResources[]>((total, newResources) => {
     newResources.forEach((entry) => {
       let resource = total.find((res) => res.name === entry.name);
       if (resource) {

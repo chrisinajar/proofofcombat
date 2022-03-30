@@ -88,6 +88,7 @@ export function BuildBuildingMapButtons({
     <React.Fragment>
       {entries.map((entry) => (
         <MapIcon
+          key={`${entry.x}-${entry.y}`}
           onClick={() => handleBuildBuilding(entry)}
           hover
           color="rgb(10, 120, 10)"
