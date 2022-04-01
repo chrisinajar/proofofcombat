@@ -116,12 +116,16 @@ export default function Home(): JSX.Element {
               >
                 <Tab label="Welcome" value="play" />
                 <Tab label="Combat" value="combat" />
-                <Tab label="Shop" value="shop" />
-                <Tab label="Inventory" value="inventory" />
-                <Tab label="Map" value="map" />
-                {hero && Object.keys(hero.questLog).length > 1 && (
-                  <Tab label="Quests" value="quests" />
+                {!!(hero?.inventory.length || hero?.gold) && (
+                  <Tab label="Shop" value="shop" />
                 )}
+                {!!hero?.inventory.length && (
+                  <Tab label="Inventory" value="inventory" />
+                )}
+                <Tab label="Map" value="map" />
+                {hero &&
+                  Object.values(hero.questLog).filter((val) => !!val).length >
+                    2 && <Tab label="Quests" value="quests" />}
                 {hasUpgradedAutomation && (
                   <Tab label="Settings" value="settings" />
                 )}
