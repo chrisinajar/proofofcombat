@@ -72,6 +72,17 @@ query Me {
               id
             }
           }
+          settlements {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+          }
           id
         }
         currentQuest {
