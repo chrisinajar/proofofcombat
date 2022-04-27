@@ -128,6 +128,9 @@ export function itemUpgradesAutomation(item: string): boolean {
   if (item === "orb-of-forbidden-power") {
     return true;
   }
+  if (item === "cracked-orb-of-forbidden-power") {
+    return true;
+  }
   return false;
 }
 
@@ -140,6 +143,9 @@ export function itemAllowsCrafting(item: string): boolean {
 
 export function itemImprovesAutoBattle(item: string): boolean {
   if (item === "orb-of-forbidden-power") {
+    return true;
+  }
+  if (item === "cracked-orb-of-forbidden-power") {
     return true;
   }
   return false;
@@ -158,6 +164,9 @@ export function itemAllowsAutoBattle(item: string): boolean {
     return true;
   }
   if (item === "orb-of-forbidden-power") {
+    return true;
+  }
+  if (item === "cracked-orb-of-forbidden-power") {
     return true;
   }
   return false;
