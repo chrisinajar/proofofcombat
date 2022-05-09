@@ -20,6 +20,16 @@ query AdminAccount($id: ID!) {
       attributePoints
       enchantments
 
+      skillPercent
+      activeSkill
+      skills {
+        attackingAccuracy
+        castingAccuracy
+        attackingDamage
+        castingDamage
+        vitality
+      }
+
       location {
         x
         y
