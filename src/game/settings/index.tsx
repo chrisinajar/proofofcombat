@@ -14,6 +14,7 @@ import {
 } from "src/generated/graphql";
 
 import { AutoDustSetting } from "./auto-dust";
+import { SkillSettings } from "./skills";
 
 function MaximumStatField({
   hero,
@@ -80,9 +81,10 @@ export function Settings(): JSX.Element {
   return (
     <Box>
       <Typography variant="h2">Settings</Typography>
-      <Typography variant="subtitle2">
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Configure your mysterious automation
       </Typography>
+      <SkillSettings hero={hero} />
       <Typography variant="h5">Minimum Stats</Typography>
       <Typography variant="subtitle2">
         Prevents transfering from lowering your stats below these values...

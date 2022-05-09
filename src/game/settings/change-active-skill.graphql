@@ -1,0 +1,8 @@
+mutation ChangeActiveSkill($skill: HeroSkill!) {
+  changeActiveSkill(skill: $skill) {
+    hero {
+      id
+      activeSkill
+    }
+  }
+}

@@ -1,0 +1,8 @@
+mutation ChangeSkillPercent($percent: Int!) {
+  changeSkillPercent(percent: $percent) {
+    hero {
+      id
+      skillPercent
+    }
+  }
+}
