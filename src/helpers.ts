@@ -108,6 +108,13 @@ export function addSpaces(str: string): string {
     .join(" ");
 }
 
+export function itemAllowsVoidTravel(item: string): boolean {
+  if (item === "void-vessel") {
+    return true;
+  }
+  return false;
+}
+
 export function itemAllowsRebirth(item: string): boolean {
   if (item === "totem-of-rebirth") {
     return true;

@@ -45,3 +45,9 @@ export function usePlayerLocation(): PlayerLocation | null {
 
   return playerLocation;
 }
+
+export function useCanVoidTravel(): boolean {
+  const locationDetails = useLocation();
+
+  return locationDetails?.voidTravel;
+}

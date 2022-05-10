@@ -1,5 +1,6 @@
 query LocationDetails($location: LocationInput!) {
   locationDetails(location: $location) {
+    voidTravel
     playerLocations {
       id
       location {

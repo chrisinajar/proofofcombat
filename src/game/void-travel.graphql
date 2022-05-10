@@ -1,0 +1,35 @@
+mutation VoidTravel {
+  voidTravel {
+    monsters {
+      id
+      location {
+        x
+        y
+        map
+      }
+      monster {
+        level
+        id
+        name
+        terrain
+        attackType
+        combat {
+          maxHealth
+          health
+        }
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+    hero {
+      id
+      location {
+        map
+        y
+        x
+      }
+    }
+  }
+}

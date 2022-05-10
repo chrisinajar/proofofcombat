@@ -26,9 +26,11 @@ import {
   itemDisplayName,
   itemAllowsRebirth,
   itemAllowsCrafting,
+  itemAllowsVoidTravel,
 } from "src/helpers";
 import { RebirthMenu } from "./rebirth";
 import { CreaftingMenu } from "./crafting";
+import { VoidTravelMenu } from "./void-travel";
 
 type Slots =
   | "leftHand"
@@ -342,6 +344,11 @@ export function Inventory(): JSX.Element | null {
             <CreaftingMenu hero={hero} disabled={shouldDisable} />
           </Grid>
         )}
+        {itemAllowsVoidTravel(selectedQuestItem) && (
+          <Grid item xs={6}>
+            <VoidTravelMenu hero={hero} disabled={shouldDisable} />
+          </Grid>
+        )}
       </Grid>
     </React.Fragment>
   );
@@ -476,6 +483,9 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
     case "crafting-hammer":
       return "Select to show crafting menu";
+      break;
+    case "void-vessel":
+      return "Select to show void travel";
       break;
 
     case EnchantmentType.BonusStrength:

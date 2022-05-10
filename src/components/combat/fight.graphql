@@ -33,6 +33,18 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
       attributePoints
       gold
       needed
+      skills {
+        attackingAccuracy
+        castingAccuracy
+        attackingDamage
+        castingDamage
+        vitality
+      }
+      location {
+        map
+        x
+        y
+      }
       combat {
         health
         maxHealth

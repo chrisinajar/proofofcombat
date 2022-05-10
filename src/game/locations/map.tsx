@@ -39,7 +39,7 @@ export function Map({
       style={{
         position: "relative",
         display: "inline-block",
-        backgroundImage: "url(/maps/default.jpg)",
+        backgroundImage: `url(/maps/${location.map}.jpg)`,
         backgroundPosition: `-${centerPoint[0] * cellSize}px -${
           centerPoint[1] * cellSize
         }px`,

@@ -13,8 +13,10 @@ function formatPercentage(num: number, base: number): string {
 
 export function CombatStats({
   stats,
+  hero,
 }: {
   stats: ExtendedCombatStats;
+  hero: Hero;
 }): JSX.Element {
   return (
     <Box>
@@ -46,6 +48,27 @@ export function CombatStats({
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Bonus Damage</b>:{" "}
           {formatPercentage(stats.damageAmplification - 1, 1)}
+        </Grid>
+        <Grid item xs={6}>
+          <Divider />
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Attacking Accuracy</b>:{" "}
+          {hero.skills.attackingAccuracy.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Attacking Damage</b>:{" "}
+          {hero.skills.attackingDamage.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Casting Accuracy</b>:{" "}
+          {hero.skills.castingAccuracy.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Casting Damage</b>: {hero.skills.castingDamage.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Vitality</b>: {hero.skills.vitality.toLocaleString()}
         </Grid>
         <Grid item xs={6}>
           <Divider />

@@ -174,7 +174,7 @@ export default function Home(): JSX.Element {
                     Combat Stats
                   </Typography>
                   {hero?.combatStats && (
-                    <CombatStats stats={hero.combatStats} />
+                    <CombatStats hero={hero} stats={hero.combatStats} />
                   )}
                 </Grid>
                 {leaderboardData?.leaderboard && (
