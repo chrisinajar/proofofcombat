@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Grid";
 
-import { ExtendedCombatStats } from "src/generated/graphql";
+import { ExtendedCombatStats, HeroSkills } from "src/generated/graphql";
 
 function formatPercentage(num: number, base: number): string {
   return `${(Math.round((num / base) * 1000) / 10).toLocaleString()}%`;
@@ -13,10 +13,10 @@ function formatPercentage(num: number, base: number): string {
 
 export function CombatStats({
   stats,
-  hero,
+  skills,
 }: {
   stats: ExtendedCombatStats;
-  hero: Hero;
+  skills: HeroSkills;
 }): JSX.Element {
   return (
     <Box>
@@ -53,22 +53,19 @@ export function CombatStats({
           <Divider />
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Attacking Accuracy</b>:{" "}
-          {hero.skills.attackingAccuracy.toLocaleString()}
+          <b>Attacking Accuracy</b>: {skills.attackingAccuracy.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Attacking Damage</b>:{" "}
-          {hero.skills.attackingDamage.toLocaleString()}
+          <b>Attacking Damage</b>: {skills.attackingDamage.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Casting Accuracy</b>:{" "}
-          {hero.skills.castingAccuracy.toLocaleString()}
+          <b>Casting Accuracy</b>: {skills.castingAccuracy.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Casting Damage</b>: {hero.skills.castingDamage.toLocaleString()}
+          <b>Casting Damage</b>: {skills.castingDamage.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Vitality</b>: {hero.skills.vitality.toLocaleString()}
+          <b>Vitality</b>: {skills.vitality.toLocaleString()}
         </Grid>
         <Grid item xs={6}>
           <Divider />

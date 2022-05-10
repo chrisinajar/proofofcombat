@@ -5,9 +5,15 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import { useCanVoidTravel } from "src/hooks/use-location";
-import { useVoidTravelMutation } from "src/generated/graphql";
+import { useVoidTravelMutation, Hero } from "src/generated/graphql";
 
-export function VoidTravelMenu(): JSX.Element {
+export function VoidTravelMenu({
+  hero,
+  disabled,
+}: {
+  hero: Hero;
+  disabled: boolean;
+}): JSX.Element {
   const canTravel = useCanVoidTravel();
   const [voidTravelMutation] = useVoidTravelMutation();
 
