@@ -29,6 +29,8 @@ query Me {
           attackingDamage
           castingDamage
           vitality
+          resilience
+          regeneration
         }
 
         location {

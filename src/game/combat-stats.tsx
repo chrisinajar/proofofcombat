@@ -49,9 +49,11 @@ export function CombatStats({
           <b>Bonus Damage</b>:{" "}
           {formatPercentage(stats.damageAmplification - 1, 1)}
         </Grid>
+
         <Grid item xs={6}>
           <Divider />
         </Grid>
+
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Attacking Accuracy</b>: {skills.attackingAccuracy.toLocaleString()}
         </Grid>
@@ -67,9 +69,17 @@ export function CombatStats({
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Vitality</b>: {skills.vitality.toLocaleString()}
         </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Resilience</b>: {skills.resilience.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Regeneration</b>: {skills.regeneration.toLocaleString()}
+        </Grid>
+
         <Grid item xs={6}>
           <Divider />
         </Grid>
+
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Enemy Strength</b>:{" "}
           {formatPercentage(stats.enemyStats.strength - 1000000, 1000000)}

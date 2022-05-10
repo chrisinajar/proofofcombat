@@ -28,6 +28,8 @@ query AdminAccount($id: ID!) {
         attackingDamage
         castingDamage
         vitality
+        resilience
+        regeneration
       }
 
       location {

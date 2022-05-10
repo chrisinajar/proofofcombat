@@ -23,6 +23,9 @@ const SkillDisplayNames: { [x in HeroSkill]: string } = {
   castingAccuracy: "Casting Accuracy",
   castingDamage: "Casting Damage",
   vitality: "Vitality",
+
+  resilience: "Resilience",
+  regeneration: "Regeneration",
 };
 
 export function SkillSettings({ hero }: { hero: Hero }): JSX.Element {

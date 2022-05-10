@@ -39,6 +39,8 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
         attackingDamage
         castingDamage
         vitality
+        resilience
+        regeneration
       }
       location {
         map
