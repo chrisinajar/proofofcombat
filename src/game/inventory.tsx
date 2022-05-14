@@ -475,6 +475,21 @@ function getEnchantmentDisplay(enchantment: string): string {
     case "unimaginable-gearbox":
       return "Improved auto-battler";
       break;
+    case "circle-of-protection":
+      return "Counter Spell";
+      break;
+    case "circle-of-hexing":
+      return "3x Counter Spell";
+      break;
+    case "ashen-circle-of-hexing":
+      return "+1 Weapon Tier, 3x Counter Spell";
+      break;
+    case "shadow-circle-of-hexing":
+      return "5x Counter Spell";
+      break;
+    case "thorny-circle-of-hexing":
+      return "+1 Armor Tier, 3x Counter Spell";
+      break;
     // menus
     case "totem-of-champion-rebirth":
     case "totem-of-hero-rebirth":

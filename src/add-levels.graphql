@@ -1,0 +1,27 @@
+mutation AddLevels($id: ID!, $levels: Int!) {
+  addLevels(id: $id, levels: $levels) {
+    id
+    hero {
+      id
+      level
+      levelCap
+      experience
+      needed
+      attributePoints
+
+      combat {
+        health
+        maxHealth
+      }
+      stats {
+        dexterity
+        intelligence
+        willpower
+        constitution
+        wisdom
+        luck
+        strength
+      }
+    }
+  }
+}

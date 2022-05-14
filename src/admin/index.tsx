@@ -14,6 +14,8 @@ import {
 
 import { CreateItem } from "./create-item";
 import { GiveGold } from "./give-gold";
+import { SetSkill } from "./set-skill";
+import { AddLevels } from "./add-levels";
 
 export default function AdminPage(): JSX.Element {
   const [showData, setShowData] = useState<boolean>(false);
@@ -61,6 +63,8 @@ export default function AdminPage(): JSX.Element {
       <br />
       {account && <CreateItem account={account} />}
       {account && <GiveGold account={account} />}
+      {account?.hero && <SetSkill hero={account.hero} />}
+      {account && <AddLevels account={account} />}
       <br />
       <br />
       <br />

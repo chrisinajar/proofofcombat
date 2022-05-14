@@ -1,0 +1,17 @@
+mutation SetSkill($id: ID!, $skill: HeroSkill!, $level: Int!) {
+  setSkill(id: $id, skill: $skill, level: $level) {
+    id
+    hero {
+      id
+      skills {
+        attackingAccuracy
+        castingAccuracy
+        attackingDamage
+        castingDamage
+        vitality
+        resilience
+        regeneration
+      }
+    }
+  }
+}
