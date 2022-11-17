@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Tooltip from "@mui/material/Tooltip";
+import Modal from "@mui/material/Modal";
 
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -24,12 +25,17 @@ import MessageIcon from "@mui/icons-material/Message";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import { InventoryItem, useGetChatTokenQuery } from "src/generated/graphql";
+import {
+  InventoryItem,
+  useGetChatTokenQuery,
+  ArtifactItem,
+} from "src/generated/graphql";
 import { useHero } from "src/hooks/use-hero";
 import { useToken } from "src/token";
 import { itemDisplayName } from "src/helpers";
 
 import { Trade } from "./trade";
+import { ArtifactModal } from "./artifact-modal";
 
 const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
 
@@ -64,11 +70,14 @@ type SystemMessage = {
   color: "success" | "primary" | "secondary" | "error";
   message: string;
 };
+
 type Notification = {
-  type: "drop" | "quest";
+  type: "drop" | "quest" | "artifact";
   message: string;
   item?: InventoryItem;
+  artifactItem?: ArtifactItem;
 };
+
 type Hello = {
   chat: ChatMessage[];
 };
@@ -94,6 +103,9 @@ export function Chat(): JSX.Element {
     chat: { type: "built-in" },
     notifications: { type: "built-in" },
   });
+  const [alertArtifact, setAlertArtifact] = useState<ArtifactItem | false>(
+    false
+  );
 
   const socketRef = useRef<Socket>();
 
@@ -129,11 +141,16 @@ export function Chat(): JSX.Element {
         );
       }
 
-      if (data.type === "drop") {
+      if (data.type === "drop" || data.type === "artifact") {
         if (data.item) {
           enqueueSnackbar(`You found ${itemDisplayName(data.item)}`, {
             variant: "success",
           });
+        } else if (data.artifactItem) {
+          enqueueSnackbar(`You found ${data.artifactItem.name}`, {
+            variant: "success",
+          });
+          setAlertArtifact(data.artifactItem);
         } else {
           enqueueSnackbar(data.message, {
             variant: "success",
@@ -298,6 +315,27 @@ export function Chat(): JSX.Element {
 
   return (
     <React.Fragment>
+      <Modal
+        open={!hero?.currentQuest && !!alertArtifact}
+        onClose={() => setAlertArtifact(null)}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            padding: [2, 4],
+            minWidth: "320px",
+            maxWidth: "580px",
+            width: "80%",
+            textAlign: "center",
+          }}
+        >
+          <ArtifactModal artifact={alertArtifact} />
+        </Box>
+      </Modal>
       <TabContext value={currentTab}>
         <TabList
           onChange={handleChangeTab}
