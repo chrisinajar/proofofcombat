@@ -111,7 +111,7 @@ export function ArtifactModifiers({
   sx,
 }: {
   artifact: ArtifactItem;
-  sx: any;
+  sx?: any;
 }): JSX.Element {
   const modifiers = modifiersForArtifact(artifact);
   return (
