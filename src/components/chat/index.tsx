@@ -324,7 +324,7 @@ export function Chat(): JSX.Element {
     <React.Fragment>
       <Modal
         open={!hero?.currentQuest && !!alertArtifact}
-        onClose={() => setAlertArtifact(null)}
+        onClose={() => setAlertArtifact(false)}
       >
         <Box
           sx={{
@@ -340,7 +340,7 @@ export function Chat(): JSX.Element {
             textAlign: "center",
           }}
         >
-          <ArtifactModal artifact={alertArtifact} />
+          {alertArtifact && <ArtifactModal artifact={alertArtifact} />}
         </Box>
       </Modal>
       <TabContext value={currentTab}>
