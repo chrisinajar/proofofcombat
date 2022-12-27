@@ -48,7 +48,14 @@ type ChatMessage = {
   to?: string;
   time?: number;
   color?: string;
-  type: "chat" | "private" | "notification" | "system" | "drop" | "quest";
+  type:
+    | "chat"
+    | "private"
+    | "notification"
+    | "system"
+    | "drop"
+    | "quest"
+    | "artifact";
   heroId?: string;
   variant?:
     | "button"
