@@ -141,9 +141,9 @@ export default function Home(): JSX.Element {
                     Welcome to <b>Proof of Combat</b>!
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
-                    This game is under very active development, so except things
-                    to change often and for new features and content to appear
-                    on a near daily basis.
+                    This game is no longer being developed actively, so don't expect things
+                    to change very often. Sometimes I jump back in and code a little, check
+                    the github for more details.
                   </Typography>
 
                   <Typography sx={{ mb: 2 }}>
