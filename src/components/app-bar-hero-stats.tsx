@@ -30,7 +30,7 @@ const ClassDescrptions: { [x in HeroClasses]?: string } = {
     "Brand new heroes gain bonus experience until they find their niche.",
   [HeroClasses.JackOfAllTrades]: "You gain +50% in all stats.",
   [HeroClasses.Gambler]:
-    "Gamblers gain an additional level of crit, random amounts of their luck added to accuracy and dodge, +20% to dexteriry wisdom and luck and +10% to all other stats",
+    "Gamblers gain an additional level of crit, random amounts of their luck added to accuracy and dodge, +20% to dexterity wisdom and luck and +10% to all other stats",
   [HeroClasses.Fighter]:
     "Fighters gain +50% strength, +30% to dexterity, and +20% to willpower",
   [HeroClasses.Berserker]:
