@@ -40,8 +40,11 @@ export function SkillSettings({ hero }: { hero: Hero }): JSX.Element {
     <div>
       <Typography variant="h4">Skills</Typography>
       <Typography sx={{ mb: 1 }}>
-        Select which skill you would like to improve, as well as how much of
-        your incoming experience you would like to devote to skills.
+        Select which skill you would like to improve, as well as percentage of
+        how devoted your character is to leveling it up as opposed to receiving
+        experience. This means that incoming experience is reduced by the
+        percentage, however the amount of experience you gain doesn't affect the
+        chances of gaining a skill level.
       </Typography>
 
       <FormControl sx={{ mb: 5 }}>
