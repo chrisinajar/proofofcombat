@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
   const [token, setToken] = useToken();
   const { data, loading, error } = useMeQuery();
   const [selectedTab, setSelectedTab] = useState<string>(
-    terminalRoute ?? "play"
+    terminalRoute ?? "play",
   );
   const { data: leaderboardData } = useLeaderboardQuery({
     pollInterval: 30000,
@@ -89,7 +89,7 @@ export default function Home(): JSX.Element {
   }
 
   const hasUpgradedAutomation = !!hero?.inventory.find((item) =>
-    itemUpgradesAutomation(item.baseItem)
+    itemUpgradesAutomation(item.baseItem),
   );
 
   return (
@@ -141,9 +141,10 @@ export default function Home(): JSX.Element {
                     Welcome to <b>Proof of Combat</b>!
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
-                    This game is no longer being developed actively, so don't expect things
-                    to change very often. Sometimes I jump back in and code a little, check
-                    the github for more details.
+                    This game is once again being developed actively. It's been
+                    a long time coming and there's a lot of major changes to the
+                    underlying engine in order to unlock cooler and more
+                    interesting mechanics for the game.
                   </Typography>
 
                   <Typography sx={{ mb: 2 }}>
@@ -159,15 +160,18 @@ export default function Home(): JSX.Element {
                     </Link>
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
-                    If you need help finding things,{" "}
+                    A great deal of the game is undocumented, but the parts
+                    which are documented can be found,{" "}
                     <Link
                       underline="hover"
                       href="https://github.com/chrisinajar/proofofcombat/wiki/"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      check the wiki
+                      in the wiki
                     </Link>
+                    . The game is nearly impossible to 100% out without
+                    consulting the wiki.
                   </Typography>
 
                   <Typography variant="h5" sx={{ mb: 2 }}>
