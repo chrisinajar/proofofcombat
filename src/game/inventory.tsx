@@ -119,7 +119,7 @@ function EquipmentSlot({
   ];
   const otherEquippedItems = otherEquipmentSlots
     .filter(
-      (otherSlot: Slots) => hero.equipment[otherSlot] && otherSlot !== slot
+      (otherSlot: Slots) => hero.equipment[otherSlot] && otherSlot !== slot,
     )
     .map((otherSlot: Slots) => hero.equipment[otherSlot]?.id);
 
@@ -431,7 +431,7 @@ function getEnchantmentDisplay(enchantment: string): string {
       return "Ranged -20% Armor, 50% Double Shot";
       break;
     case "archers-balance":
-      return "+1 Ranged Weapon Tier, Ranged -20% Armor, 50% Double Shot";
+      return "+1 Ranged Weapon Tier, Ranged -20% Armor, +50% Second Attack";
       break;
     case "attackers-precision":
       return "+30% Dexterity";
@@ -501,6 +501,12 @@ function getEnchantmentDisplay(enchantment: string): string {
       break;
     case "void-vessel":
       return "Select to show void travel";
+      break;
+    case "crafting-goggles":
+      return "Allows sorting and bulk crafting";
+      break;
+    case "heros-guidance":
+      return "+44% All Stats, -75% Enemy Enchantment Resist, -50% Enemy Armor, +1 Weapon Tier, +50% Ranged Second Attack, +Max gold";
       break;
 
     case EnchantmentType.BonusStrength:
