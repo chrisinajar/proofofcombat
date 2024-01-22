@@ -28,6 +28,7 @@ import { useDelay } from "src/hooks/use-delay";
 import { useLocation } from "src/hooks/use-location";
 
 import { CombatDisplay } from "./combat-display";
+import { StanceSelector } from "./stance-selector";
 import { itemAllowsAutoBattle, itemImprovesAutoBattle } from "src/helpers";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
@@ -42,7 +43,7 @@ declare global {
 
 export function Combat(): JSX.Element {
   const [autoBattleAttackType, setAutoBattleAttackType] = useState<AttackType>(
-    AttackType.Melee
+    AttackType.Melee,
   );
   const [mobKillCount, setMobKillCount] = useState<number>(0);
   const [autoBattleCount, setAutoBattleCount] = useState<number>(0);
@@ -73,17 +74,17 @@ export function Combat(): JSX.Element {
   let playerList: PublicHero[] = locationDetails?.players ?? [];
 
   const fightingMonster = monstersData?.monsters?.find(
-    (m) => m.id === currentFight
+    (m) => m.id === currentFight,
   );
   let canAutoBattle = false;
   let improvedAutoBattleCount = 0;
 
   if (hero) {
     canAutoBattle = !!hero.inventory.find((item) =>
-      itemAllowsAutoBattle(item.baseItem)
+      itemAllowsAutoBattle(item.baseItem),
     );
     improvedAutoBattleCount = hero.inventory.filter((item) =>
-      itemImprovesAutoBattle(item.baseItem)
+      itemImprovesAutoBattle(item.baseItem),
     ).length;
   }
 
@@ -104,7 +105,7 @@ export function Combat(): JSX.Element {
   autoBattleRef.current = async () => {
     setAutoBattleCount(
       (autoBattleCount + 1) %
-        (autoBattleSkipCount / Math.pow(2, improvedAutoBattleCount))
+        (autoBattleSkipCount / Math.pow(2, improvedAutoBattleCount)),
     );
     setAutoBattleBars([
       Math.random() > 0.5 ? Math.random() * 100 : autoBattleBars[0],
@@ -162,7 +163,7 @@ export function Combat(): JSX.Element {
         setMonster(monsterList[0].id);
       } else {
         const existingMonster = monstersData.monsters.find(
-          (m) => m.id === monster
+          (m) => m.id === monster,
         );
         if (!existingMonster) {
           setMonster(monsterList[0].id);
@@ -183,7 +184,7 @@ export function Combat(): JSX.Element {
 
   async function handleFight() {
     const existingMonster = monstersData?.monsters.find(
-      (m) => m.id === monster
+      (m) => m.id === monster,
     );
     setCurrentFight(monster);
     setActiveDuel("");
@@ -413,35 +414,41 @@ export function Combat(): JSX.Element {
           </Grid>
         )}
         {fightingMonster && (
-          <CombatDisplay
-            key={`${fightingMonster.id}-${currentFightId}`}
-            fight={fightingMonster}
-            onError={() => {
-              refetch();
-              setCurrentFight(null);
-            }}
-            autoBattle={autoBattle}
-            canAutoBattle={canAutoBattle}
-            onAutoBattle={handleAutoBattle}
-            fightMutationRef={fightMutationRef}
-            onVictory={() => setMobKillCount(mobKillCount + 1)}
-          />
+          <React.Fragment>
+            <StanceSelector />
+            <CombatDisplay
+              key={`${fightingMonster.id}-${currentFightId}`}
+              fight={fightingMonster}
+              onError={() => {
+                refetch();
+                setCurrentFight(null);
+              }}
+              autoBattle={autoBattle}
+              canAutoBattle={canAutoBattle}
+              onAutoBattle={handleAutoBattle}
+              fightMutationRef={fightMutationRef}
+              onVictory={() => setMobKillCount(mobKillCount + 1)}
+            />
+          </React.Fragment>
         )}
         {activeDuelPlayer && (
-          <CombatDisplay
-            key={`${activeDuelPlayer.id}-${currentFightId}`}
-            fight={{
-              id: activeDuelPlayer.id,
-              monster: activeDuelPlayer,
-            }}
-            onError={() => {
-              refetch();
-              setCurrentFight(null);
-            }}
-            duel
-            autoBattle={false}
-            canAutoBattle={false}
-          />
+          <React.Fragment>
+            <StanceSelector />
+            <CombatDisplay
+              key={`${activeDuelPlayer.id}-${currentFightId}`}
+              fight={{
+                id: activeDuelPlayer.id,
+                monster: activeDuelPlayer,
+              }}
+              onError={() => {
+                refetch();
+                setCurrentFight(null);
+              }}
+              duel
+              autoBattle={false}
+              canAutoBattle={false}
+            />
+          </React.Fragment>
         )}
         <Grid item lg={3} xs={6}>
           <Button

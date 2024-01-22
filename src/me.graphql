@@ -334,6 +334,8 @@ query Me {
             }
           }
         }
+        activeStance
+        availableStances
       }
     }
   }
