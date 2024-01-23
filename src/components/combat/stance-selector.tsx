@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useHero } from "src/hooks/use-hero";
 import { HeroStance } from "src/generated/graphql";
 
-const stanceDescriptions: { [x in HeroStance]: string } = {
+const stanceDescriptions: { [x in HeroStance]?: string } = {
   [HeroStance.Normal]: "Normal stance with no pros or cons.",
 };
 
