@@ -22,6 +22,7 @@ import {
   addSpaces,
   isItemEquipped,
   itemSorter,
+  getEnchantmentDisplay,
 } from "src/helpers";
 
 export function EnchantItems({
@@ -44,14 +45,15 @@ export function EnchantItems({
     })
 
     .sort(itemSorter);
-  const enchantmentsFound: { [x in EnchantmentType]?: true } = {};
+  const enchantmentsFound: { [x in EnchantmentType]?: number } = {};
   const enchantments: EnchantmentType[] = [...hero.enchantments]
     .sort()
     .filter((ench) => {
       if (enchantmentsFound[ench]) {
+        enchantmentsFound[ench]++;
         return false;
       }
-      enchantmentsFound[ench] = true;
+      enchantmentsFound[ench] = 1;
       return true;
     });
 
@@ -116,7 +118,7 @@ export function EnchantItems({
           onChange={(e) => {
             const itemId = e.target.value;
             const inventoryItem = hero.inventory.find(
-              (item) => item.id === itemId
+              (item) => item.id === itemId,
             );
             if (!inventoryItem) {
               return;
@@ -127,7 +129,7 @@ export function EnchantItems({
           {enchantableItems.map((item) => {
             return (
               <MenuItem key={item.id} value={item.id}>
-                {itemDisplayName(item)}{" "}
+                {itemDisplayName(item)}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
               </MenuItem>
             );
@@ -146,7 +148,7 @@ export function EnchantItems({
           onChange={(e) => {
             const ench = e.target.value;
             const existingEnchantment = enchantments.find(
-              (existing) => ench === existing
+              (existing) => ench === existing,
             );
             if (existingEnchantment) {
               setEnchantment(existingEnchantment);
@@ -156,7 +158,18 @@ export function EnchantItems({
           {enchantments.map((ench) => {
             return (
               <MenuItem key={ench} value={ench}>
-                {pureEnchantmentDisplayName(ench)}
+                {pureEnchantmentDisplayName(ench)}{" "}
+                {enchantmentsFound[ench] > 1
+                  ? `(${enchantmentsFound[ench]})`
+                  : ""}
+                {getEnchantmentDisplay(ench) !== "???" && (
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "primary.main" }}
+                  >
+                    &nbsp;{getEnchantmentDisplay(ench)}
+                  </Typography>
+                )}
               </MenuItem>
             );
           })}

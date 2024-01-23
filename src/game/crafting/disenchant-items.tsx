@@ -20,7 +20,8 @@ import {
   isItemEquipped,
   itemSorter,
   itemImprovesCrafting,
-  EnchantmentNames,
+  pureEnchantmentDisplayName,
+  getEnchantmentDisplay,
 } from "src/helpers";
 
 export function DisenchantItems({
@@ -119,6 +120,11 @@ export function DisenchantItems({
               >
                 {itemDisplayName(item)}{" "}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
+                {item.enchantment && (
+                  <Typography variant="subtitle2" sx={{ color: "info.main" }}>
+                    &nbsp;{getEnchantmentDisplay(item.enchantment)}
+                  </Typography>
+                )}
               </MenuItem>
             );
           })}
@@ -173,7 +179,15 @@ export function DisenchantItems({
             {destroyableEnchantments.map((enchantment) => {
               return (
                 <MenuItem key={enchantment} value={enchantment}>
-                  {EnchantmentNames[enchantment]}
+                  {pureEnchantmentDisplayName(enchantment)}
+                  {getEnchantmentDisplay(enchantment) !== "???" && (
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "primary.main" }}
+                    >
+                      &nbsp;{getEnchantmentDisplay(enchantment)}
+                    </Typography>
+                  )}
                 </MenuItem>
               );
             })}
