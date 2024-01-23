@@ -271,6 +271,9 @@ query AdminAccount($id: ID!) {
         }
         autoDust
       }
+
+      activeStance
+      availableStances
     }
   }
 }
