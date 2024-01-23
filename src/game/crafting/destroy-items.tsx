@@ -12,6 +12,7 @@ import {
   Hero,
   InventoryItemType,
   useDestroyItemMutation,
+  EnchantmentType,
 } from "src/generated/graphql";
 
 import {
@@ -54,13 +55,18 @@ export function DestroyItems({
     )
     .sort(itemSorter);
 
-  const destroyableEnchantments: EnchantmentType[] = [
-    ...new Set(
-      destroyableItems
-        .filter((item) => !isItemEquipped(hero, item))
-        .map((item) => item.enchantment),
-    ),
-  ];
+  const destroyableEnchantments: EnchantmentType[] = destroyableItems
+    .filter((item) => !isItemEquipped(hero, item))
+    .map((item) => item.enchantment)
+    .reduce<EnchantmentType[]>((memo, item) => {
+      if (!item) {
+        return memo;
+      }
+      if (memo.indexOf(item) < 0) {
+        memo.push(item);
+      }
+      return memo;
+    }, []);
 
   const label = "Select item to destroy";
 

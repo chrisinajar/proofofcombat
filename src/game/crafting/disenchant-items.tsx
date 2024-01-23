@@ -12,6 +12,7 @@ import {
   Hero,
   InventoryItemType,
   useDisenchantItemMutation,
+  EnchantmentType,
 } from "src/generated/graphql";
 
 import {
@@ -54,13 +55,18 @@ export function DisenchantItems({
     )
     .sort(itemSorter);
 
-  const destroyableEnchantments: EnchantmentType[] = [
-    ...new Set(
-      disenchantableItems
-        .filter((item) => !isItemEquipped(hero, item))
-        .map((item) => item.enchantment),
-    ),
-  ];
+  const destroyableEnchantments: EnchantmentType[] = disenchantableItems
+    .filter((item) => !isItemEquipped(hero, item))
+    .map((item) => item.enchantment)
+    .reduce<EnchantmentType[]>((memo, item) => {
+      if (!item) {
+        return memo;
+      }
+      if (memo.indexOf(item) < 0) {
+        memo.push(item);
+      }
+      return memo;
+    }, []);
 
   let selectedItem = filteredItems.find((item) => item.id === value);
 

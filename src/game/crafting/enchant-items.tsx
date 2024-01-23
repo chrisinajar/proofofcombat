@@ -45,12 +45,12 @@ export function EnchantItems({
     })
 
     .sort(itemSorter);
-  const enchantmentsFound: { [x in EnchantmentType]?: number } = {};
+  const enchantmentsFound = {} as { [x in EnchantmentType]: number };
   const enchantments: EnchantmentType[] = [...hero.enchantments]
     .sort()
     .filter((ench) => {
       if (enchantmentsFound[ench]) {
-        enchantmentsFound[ench]++;
+        enchantmentsFound[ench] = (enchantmentsFound[ench] ?? 0) + 1;
         return false;
       }
       enchantmentsFound[ench] = 1;
@@ -159,9 +159,9 @@ export function EnchantItems({
             return (
               <MenuItem key={ench} value={ench}>
                 {pureEnchantmentDisplayName(ench)}{" "}
-                {enchantmentsFound[ench] > 1
-                  ? `(${enchantmentsFound[ench]})`
-                  : ""}
+                {enchantmentsFound[ench] &&
+                  enchantmentsFound[ench] > 1 &&
+                  `(${enchantmentsFound[ench]})`}
                 {getEnchantmentDisplay(ench) !== "???" && (
                   <Typography
                     variant="subtitle2"

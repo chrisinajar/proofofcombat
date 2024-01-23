@@ -8,11 +8,32 @@ import Typography from "@mui/material/Typography";
 import { useHero } from "src/hooks/use-hero";
 import { HeroStance } from "src/generated/graphql";
 
-const stanceDescriptions: { [x in HeroStance]?: string } = {
+const stanceDescriptions: { [x in HeroStance]: string } = {
   [HeroStance.Normal]: "Normal stance with no pros or cons.",
+
+  [HeroStance.Combat]: "???",
+  [HeroStance.Reckless]: "???",
+  [HeroStance.Aggressive]: "???",
+  [HeroStance.Defensive]: "???",
+  [HeroStance.NecroticBeam]: "???",
+  [HeroStance.CloudofKnives]: "???",
+  [HeroStance.FrozenOrb]: "???",
+  [HeroStance.MageArmor]: "???",
+  [HeroStance.NormalArrow]: "???",
+  [HeroStance.BarbedArrow]: "???",
+  [HeroStance.BloodHunter]: "???",
+  [HeroStance.DarkPresence]: "???",
+  [HeroStance.AuraoftheLifeless]: "???",
+  [HeroStance.ShieldSmash]: "???",
+  [HeroStance.ShieldSlash]: "???",
+  [HeroStance.HolySmite]: "???",
+  [HeroStance.VengefulSmite]: "???",
+  [HeroStance.WarriorsStance]: "???",
+  [HeroStance.Hexblade]: "???",
+  [HeroStance.Focus]: "???",
 };
 
-export function StanceSelector(): JSX.Element {
+export function StanceSelector(): JSX.Element | null {
   const hero = useHero();
 
   if (!hero) {
@@ -23,7 +44,7 @@ export function StanceSelector(): JSX.Element {
     tooltip: stanceDescriptions[stance],
   }));
 
-  function handleChangeStance(stance) {
+  function handleChangeStance(stance: HeroStance) {
     console.log("Setting stance to", stance, hero);
   }
 
