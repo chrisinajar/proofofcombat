@@ -70,14 +70,14 @@ export const EnchantmentNames: { [x in EnchantmentType]?: string } = {
 };
 
 export function pureEnchantmentDisplayName(
-  enchantment: EnchantmentType
+  enchantment: EnchantmentType,
 ): string {
   return EnchantmentNames[enchantment] ?? addSpaces(enchantment);
 }
 
 export function enchantmentDisplayName(
   itemName: string,
-  enchantment: EnchantmentType
+  enchantment: EnchantmentType,
 ): string {
   return `${itemName} of ${EnchantmentNames[enchantment] ?? "The Unknown"}`;
 }
@@ -96,7 +96,7 @@ type DistanceableLocation = {
 
 export function distance2d(
   a: DistanceableLocation,
-  b: DistanceableLocation
+  b: DistanceableLocation,
 ): number {
   return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 }
@@ -143,6 +143,12 @@ export function itemUpgradesAutomation(item: string): boolean {
 
 export function itemAllowsCrafting(item: string): boolean {
   if (item === "crafting-hammer") {
+    return true;
+  }
+  return false;
+}
+export function itemImprovesCrafting(item: string): boolean {
+  if (item === "crafting-goggles") {
     return true;
   }
   return false;

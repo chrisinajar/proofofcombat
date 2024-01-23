@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -18,6 +19,8 @@ import {
   addSpaces,
   isItemEquipped,
   itemSorter,
+  itemImprovesCrafting,
+  EnchantmentNames,
 } from "src/helpers";
 
 export function DestroyItems({
@@ -28,26 +31,43 @@ export function DestroyItems({
   disabled: boolean;
 }): JSX.Element {
   let [value, setValue] = useState<string>("");
+  let [selectedEnchantment, setSelectedEnchantment] = useState<string>("");
+  const hasImprovedCrafting = !!hero.inventory.find((item) =>
+    itemImprovesCrafting(item.baseItem),
+  );
   const [destroyItemMutation, { loading }] = useDestroyItemMutation();
-  const destroyableItems = hero.inventory
-    .filter((item) => {
-      if (item.type === InventoryItemType.Quest) {
-        return false;
-      }
-      if (isItemEquipped(hero, item)) {
-        return false;
-      }
+  const destroyableItems = hero.inventory.filter((item) => {
+    if (item.type === InventoryItemType.Quest) {
+      return false;
+    }
+    if (isItemEquipped(hero, item)) {
+      return false;
+    }
 
-      return !!item.enchantment;
-    })
+    return !!item.enchantment;
+  });
+  const filteredItems = destroyableItems
+    .filter(
+      (item) =>
+        selectedEnchantment === "" || item.enchantment === selectedEnchantment,
+    )
     .sort(itemSorter);
+
+  const destroyableEnchantments: EnchantmentType[] = [
+    ...new Set(
+      destroyableItems
+        .filter((item) => !isItemEquipped(hero, item))
+        .map((item) => item.enchantment),
+    ),
+  ];
+
   const label = "Select item to destroy";
 
-  let selectedItem = destroyableItems.find((item) => item.id === value);
+  let selectedItem = filteredItems.find((item) => item.id === value);
 
   if (!selectedItem && value.length) {
-    if (destroyableItems.length) {
-      selectedItem = destroyableItems[0];
+    if (filteredItems.length) {
+      selectedItem = filteredItems[0];
       value = selectedItem.id;
     } else {
       value = "";
@@ -81,7 +101,7 @@ export function DestroyItems({
           onChange={(e) => {
             const itemId = e.target.value;
             const inventoryItem = hero.inventory.find(
-              (item) => item.id === itemId
+              (item) => item.id === itemId,
             );
             if (!inventoryItem) {
               return;
@@ -89,7 +109,7 @@ export function DestroyItems({
             setValue(itemId);
           }}
         >
-          {destroyableItems.map((item) => {
+          {filteredItems.map((item) => {
             return (
               <MenuItem
                 key={item.id}
@@ -116,6 +136,39 @@ export function DestroyItems({
           {!selectedItem && "Select Item"}
         </Button>
       </FormControl>
+      <br />
+      <br />
+      {hasImprovedCrafting && (
+        <FormControl fullWidth>
+          <InputLabel id="filter-select-label">
+            Filter by enchantment
+          </InputLabel>
+          <Select
+            id="filter-select"
+            labelId="filter-select-label"
+            value={selectedEnchantment || ""}
+            label="Filter by enchantment"
+            onChange={(e) => {
+              const itemId = e.target.value;
+              const inventoryItem = hero.inventory.find(
+                (item) => item.enchantment === itemId,
+              );
+              if (!inventoryItem) {
+                return;
+              }
+              setSelectedEnchantment(itemId);
+            }}
+          >
+            {destroyableEnchantments.map((enchantment) => {
+              return (
+                <MenuItem key={enchantment} value={enchantment}>
+                  {EnchantmentNames[enchantment]}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      )}
     </React.Fragment>
   );
 }

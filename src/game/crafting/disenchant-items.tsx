@@ -19,6 +19,8 @@ import {
   addSpaces,
   isItemEquipped,
   itemSorter,
+  itemImprovesCrafting,
+  EnchantmentNames,
 } from "src/helpers";
 
 export function DisenchantItems({
@@ -28,26 +30,42 @@ export function DisenchantItems({
   hero: Hero;
   disabled: boolean;
 }): JSX.Element {
+  let [selectedEnchantment, setSelectedEnchantment] = useState<string>("");
   let [value, setValue] = useState<string>("");
+  const hasImprovedCrafting = !!hero.inventory.find((item) =>
+    itemImprovesCrafting(item.baseItem),
+  );
   const [disenchantItemMutation, { loading }] = useDisenchantItemMutation();
-  const disenchantableItems = hero.inventory
-    .filter((item) => {
-      if (item.type === InventoryItemType.Quest) {
-        return false;
-      }
-      if (isItemEquipped(hero, item)) {
-        return false;
-      }
+  const disenchantableItems = hero.inventory.filter((item) => {
+    if (item.type === InventoryItemType.Quest) {
+      return false;
+    }
+    if (isItemEquipped(hero, item)) {
+      return false;
+    }
 
-      return !!item.enchantment;
-    })
+    return !!item.enchantment;
+  });
+  const filteredItems = disenchantableItems
+    .filter(
+      (item) =>
+        selectedEnchantment === "" || item.enchantment === selectedEnchantment,
+    )
     .sort(itemSorter);
 
-  let selectedItem = disenchantableItems.find((item) => item.id === value);
+  const destroyableEnchantments: EnchantmentType[] = [
+    ...new Set(
+      disenchantableItems
+        .filter((item) => !isItemEquipped(hero, item))
+        .map((item) => item.enchantment),
+    ),
+  ];
+
+  let selectedItem = filteredItems.find((item) => item.id === value);
 
   if (!selectedItem && value.length) {
-    if (disenchantableItems.length) {
-      selectedItem = disenchantableItems[0];
+    if (filteredItems.length) {
+      selectedItem = filteredItems[0];
       value = selectedItem.id;
     } else {
       value = "";
@@ -84,7 +102,7 @@ export function DisenchantItems({
           onChange={(e) => {
             const itemId = e.target.value;
             const inventoryItem = hero.inventory.find(
-              (item) => item.id === itemId
+              (item) => item.id === itemId,
             );
             if (!inventoryItem) {
               return;
@@ -92,7 +110,7 @@ export function DisenchantItems({
             setValue(itemId);
           }}
         >
-          {disenchantableItems.map((item) => {
+          {filteredItems.map((item) => {
             return (
               <MenuItem
                 key={item.id}
@@ -129,6 +147,39 @@ export function DisenchantItems({
           {!selectedItem && "Select Item"}
         </Button>
       </FormControl>
+      <br />
+      <br />
+      {hasImprovedCrafting && (
+        <FormControl fullWidth>
+          <InputLabel id="filter-select-label">
+            Filter by enchantment
+          </InputLabel>
+          <Select
+            id="filter-select"
+            labelId="filter-select-label"
+            value={selectedEnchantment || ""}
+            label="Filter by enchantment"
+            onChange={(e) => {
+              const itemId = e.target.value;
+              const inventoryItem = hero.inventory.find(
+                (item) => item.enchantment === itemId,
+              );
+              if (!inventoryItem) {
+                return;
+              }
+              setSelectedEnchantment(itemId);
+            }}
+          >
+            {destroyableEnchantments.map((enchantment) => {
+              return (
+                <MenuItem key={enchantment} value={enchantment}>
+                  {EnchantmentNames[enchantment]}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      )}
     </React.Fragment>
   );
 }
