@@ -15,8 +15,9 @@ const stanceDescriptions: { [x in HeroStance]?: string } = {
 export function StanceSelector(): JSX.Element {
   const hero = useHero();
 
-  console.log(hero.availableStances);
-
+  if (!hero) {
+    return null;
+  }
   const stances = hero.availableStances.map((stance) => ({
     name: stance,
     tooltip: stanceDescriptions[stance],
