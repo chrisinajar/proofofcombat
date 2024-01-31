@@ -335,7 +335,7 @@ export function Inventory(): JSX.Element | null {
             onChange={setSelectedQuestItem}
           />
         </Grid>
-        {itemAllowsRebirth(selectedQuestItem) && (
+        {hero.level === hero.levelCap && itemAllowsRebirth(selectedQuestItem) && (
           <Grid item xs={6}>
             <RebirthMenu hero={hero} disabled={shouldDisable} />
           </Grid>

@@ -211,6 +211,9 @@ export function getEnchantmentDisplay(enchantment: string): string {
     case "totem-of-rebirth":
       return "Select to show rebirth menu";
       break;
+    case "orb-of-forbidden-power":
+      return "A combination of all you've worked for";
+      break;
     case "crafting-hammer":
       return "Select to show crafting menu";
       break;
@@ -432,6 +435,9 @@ export function itemAllowsRebirth(item: string): boolean {
     return true;
   }
   if (item === "totem-of-champion-rebirth") {
+    return true;
+  }
+  if (item === "orb-of-forbidden-power") {
     return true;
   }
   return false;
