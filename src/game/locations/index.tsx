@@ -91,7 +91,7 @@ export function Locations(): JSX.Element | null {
 
   function handleTeleportChange(
     xInput: string | number,
-    yInput: string | number
+    yInput: string | number,
   ) {
     let x = Number(xInput);
     let y = Number(yInput);
@@ -112,7 +112,10 @@ export function Locations(): JSX.Element | null {
   }
 
   const teleportCost = Math.round(
-    Math.pow(distance2d(hero.location, { x: teleportX, y: teleportY }) * 5, 1.3)
+    Math.pow(
+      distance2d(hero.location, { x: teleportX, y: teleportY }) * 5,
+      1.3,
+    ),
   );
 
   function handleShowSettlement() {
@@ -221,9 +224,10 @@ export function Locations(): JSX.Element | null {
                     shouldDisable
                   }
                 >
+                  Teleport
+                  <br />
                   {teleportCost > 0 &&
-                    `Teleport for ${teleportCost.toLocaleString()} intelligence`}
-                  {teleportCost <= 0 && "Teleport"}
+                    `${teleportCost.toLocaleString()} minimum intelligence`}
                 </Button>
               </Grid>
             )}
