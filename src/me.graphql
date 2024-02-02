@@ -186,6 +186,36 @@ query Me {
             level
             enchantment
           }
+          artifact {
+            id
+            owner
+            name
+            level
+
+            attributes {
+              namePrefix {
+                type
+                magnitude
+              }
+              namePostfix {
+                type
+                magnitude
+              }
+              titlePrefix {
+                type
+                magnitude
+              }
+              titlePostfix {
+                type
+                magnitude
+              }
+
+              bonusAffixes {
+                type
+                magnitude
+              }
+            }
+          }
         }
 
         combat {

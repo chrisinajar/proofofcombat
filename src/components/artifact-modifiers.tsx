@@ -10,7 +10,7 @@ import {
 
 export function getArtifactModifier(
   artifact: ArtifactItem,
-  type: ArtifactAttributeType
+  type: ArtifactAttributeType,
 ): ArtifactAttribute | undefined {
   const modifiers = modifiersForArtifact(artifact);
   const modifier = modifiers.find((mod) => mod.type === type);
@@ -18,7 +18,7 @@ export function getArtifactModifier(
 }
 
 export function modifiersForArtifact(
-  artifact: ArtifactItem
+  artifact: ArtifactItem,
 ): ArtifactAttribute[] {
   const artifactBuffs: ArtifactAttribute[] = [
     artifact.attributes.namePrefix,
@@ -38,7 +38,7 @@ export function modifiersForArtifact(
 }
 
 function modifierText(modifier: ArtifactAttribute): string {
-  const percentage = `${modifier.magnitude * 100 - 100}%`;
+  const percentage = `${Math.round((modifier.magnitude - 1) * 1000) / 10}%`;
   switch (modifier.type) {
     case ArtifactAttributeType.BonusStrength:
       return `${percentage} increased strength`;
@@ -109,18 +109,28 @@ function modifierText(modifier: ArtifactAttribute): string {
 export function ArtifactModifiers({
   artifact,
   sx,
+  children,
 }: {
   artifact: ArtifactItem;
   sx?: any;
+  children?: JSX.Element;
 }): JSX.Element {
   const modifiers = modifiersForArtifact(artifact);
+  let decorator = (text: string, key: string) => (
+    <Typography variant="body1" key={key} sx={sx}>
+      <b>{text}</b>
+    </Typography>
+  );
+
+  if (typeof children === "function") {
+    decorator = children;
+  }
+
   return (
     <React.Fragment>
-      {modifiers.map((modifier) => (
-        <Typography variant="body1" key={modifier.type} sx={sx}>
-          <b>{modifierText(modifier)}</b>
-        </Typography>
-      ))}
+      {modifiers.map((modifier) =>
+        decorator(modifierText(modifier), modifier.type),
+      )}
     </React.Fragment>
   );
 }
