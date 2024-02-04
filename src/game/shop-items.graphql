@@ -4,5 +4,6 @@ query ShopItems {
     name
     cost
     type
+    level
   }
 }

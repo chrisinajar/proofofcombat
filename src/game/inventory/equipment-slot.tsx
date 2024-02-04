@@ -125,24 +125,32 @@ export function EquipmentSlot({
               onEquip(slot, e.target.value);
             }}
           >
-            {items.map((inventoryItem) => (
-              <MenuItem
-                key={inventoryItem.id}
-                value={inventoryItem.id}
-                disabled={otherEquippedItems.indexOf(inventoryItem.id) >= 0}
-              >
-                {inventoryItem.id === equipped ? (
-                  <b>{itemDisplayName(inventoryItem)}</b>
-                ) : (
-                  itemDisplayName(inventoryItem)
-                )}
-                {inventoryItem.enchantment && (
-                  <Typography variant="subtitle2" sx={{ color: "info.main" }}>
-                    &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}
+            {items.map((inventoryItem) => {
+              return (
+                <MenuItem
+                  key={inventoryItem.id}
+                  value={inventoryItem.id}
+                  disabled={otherEquippedItems.indexOf(inventoryItem.id) >= 0}
+                >
+                  {inventoryItem.id === equipped ? (
+                    <b>{itemDisplayName(inventoryItem)}</b>
+                  ) : (
+                    itemDisplayName(inventoryItem)
+                  )}
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "info.secondary" }}
+                  >
+                    &nbsp;Lvl. {inventoryItem.level}
                   </Typography>
-                )}
-              </MenuItem>
-            ))}
+                  {inventoryItem.enchantment && (
+                    <Typography variant="subtitle2" sx={{ color: "info.main" }}>
+                      &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}
+                    </Typography>
+                  )}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
       </div>

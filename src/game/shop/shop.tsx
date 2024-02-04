@@ -84,7 +84,7 @@ export function SellItemShop({
           onChange={(e) => {
             const itemId = e.target.value;
             const inventoryItem = hero.inventory.find(
-              (item) => item.id === itemId
+              (item) => item.id === itemId,
             );
             if (!inventoryItem) {
               return;
@@ -109,10 +109,25 @@ export function SellItemShop({
                   !sellItem || !!item.enchantment || isItemEquipped(hero, item)
                 }
               >
-                {sellItem?.cost &&
-                  `${itemDisplayName(
-                    item
-                  )}: ${sellItem.cost.toLocaleString()} Gold`}
+                {sellItem?.cost && (
+                  <>
+                    <Typography display="inline-block">
+                      {itemDisplayName(item)}
+                    </Typography>
+                    &nbsp;
+                    <Typography variant="caption" display="inline-block">
+                      Lvl. {item.level}
+                    </Typography>
+                    &nbsp;
+                    <Typography
+                      variant="subtitle2"
+                      display="inline-block"
+                      sx={{ color: "info.main" }}
+                    >
+                      {sellItem.cost.toLocaleString()} Gold
+                    </Typography>
+                  </>
+                )}
                 {!sellItem?.cost && item.name}{" "}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
               </MenuItem>
@@ -158,17 +173,36 @@ export function ItemTypeShop({
           }
         }}
       >
-        {items.map((shopItem) => (
-          <MenuItem
-            key={shopItem.id}
-            value={shopItem.id}
-            disabled={!shopItem.cost || shopItem.cost > hero.gold}
-          >
-            {shopItem.cost &&
-              `${shopItem.name}: ${shopItem.cost.toLocaleString()} Gold`}
-            {!shopItem.cost && shopItem.name}
-          </MenuItem>
-        ))}
+        {items.map((shopItem) => {
+          return (
+            <MenuItem
+              key={shopItem.id}
+              value={shopItem.id}
+              disabled={!shopItem.cost || shopItem.cost > hero.gold}
+            >
+              {shopItem.cost && (
+                <>
+                  <Typography display="inline-block">
+                    {itemDisplayName(shopItem)}
+                  </Typography>
+                  &nbsp;
+                  <Typography variant="caption" display="inline-block">
+                    Lvl. {shopItem.level}
+                  </Typography>
+                  &nbsp;
+                  <Typography
+                    variant="subtitle2"
+                    display="inline-block"
+                    sx={{ color: "info.main" }}
+                  >
+                    {shopItem.cost.toLocaleString()} Gold
+                  </Typography>
+                </>
+              )}
+              {!shopItem.cost && shopItem.name}
+            </MenuItem>
+          );
+        })}
       </Select>
     </FormControl>
   );

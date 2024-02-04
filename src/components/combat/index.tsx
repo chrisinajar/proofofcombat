@@ -278,6 +278,10 @@ export function Combat(): JSX.Element {
                       value={challengeOption.id}
                     >
                       {challengeOption.name}
+                      &nbsp;
+                      <Typography variant="caption" display="inline-block">
+                        Tier {challengeOption.level}
+                      </Typography>
                     </MenuItem>
                   ))}
                 </Select>

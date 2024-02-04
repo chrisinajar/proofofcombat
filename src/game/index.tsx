@@ -170,8 +170,8 @@ export default function Home(): JSX.Element {
                     >
                       in the wiki
                     </Link>
-                    . The game is nearly impossible to 100% out without
-                    consulting the wiki.
+                    . The game is nearly impossible to 100% without consulting
+                    the wiki.
                   </Typography>
 
                   <Typography variant="h5" sx={{ mb: 2 }}>
