@@ -77,7 +77,7 @@ export function LevelUpBox(): JSX.Element {
         </Container>
         <br />
         <Grid container columns={14} spacing={2}>
-          <Tooltip title="Strength determains your damage when attacking with melee weapons">
+          <Tooltip title="Strength determines your damage when attacking with melee weapons">
             <Grid item xs={14} sm={7} md={4} lg={2}>
               <Typography align="center">
                 <Button
