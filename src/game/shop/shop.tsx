@@ -183,7 +183,7 @@ export function ItemTypeShop({
               {shopItem.cost && (
                 <>
                   <Typography display="inline-block">
-                    {itemDisplayName(shopItem)}
+                    {shopItem.name}
                   </Typography>
                   &nbsp;
                   <Typography variant="caption" display="inline-block">
