@@ -95,6 +95,28 @@ query Me {
               id
             }
           }
+          tavernChampion {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+          }
+          meetTheQueen {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+          }
           id
         }
         currentQuest {
