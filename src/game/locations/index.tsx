@@ -27,6 +27,7 @@ import { Docks } from "./docks";
 import { NpcShop } from "./npc-shop";
 import { Camp } from "./camp";
 import { SettlementManager } from "./settlement";
+import { MapModal } from "./map-modal";
 
 export function Locations(): JSX.Element | null {
   const hero = useHero();
@@ -42,6 +43,19 @@ export function Locations(): JSX.Element | null {
   const locationDetails = useLocation();
   const specialLocation = useSpecialLocation();
   const playerLocation = usePlayerLocation();
+
+  const northTerrain = locationDetails?.neighborTerrain.north
+    ? locationDetails.neighborTerrain.north.terrain
+    : "blocked";
+  const southTerrain = locationDetails?.neighborTerrain.south
+    ? locationDetails.neighborTerrain.south.terrain
+    : "blocked";
+  const eastTerrain = locationDetails?.neighborTerrain.east
+    ? locationDetails.neighborTerrain.east.terrain
+    : "blocked";
+  const westTerrain = locationDetails?.neighborTerrain.west
+    ? locationDetails.neighborTerrain.west.terrain
+    : "blocked";
 
   useEffect(() => {
     if (hero) {
@@ -131,6 +145,7 @@ export function Locations(): JSX.Element | null {
               <Camp hero={hero} onShowSettlement={handleShowSettlement} />
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={6}>
+              <Typography variant="h5">Travel</Typography>
               {hero.combat.health > 0 && (
                 <Typography>Use buttons to move around the map.</Typography>
               )}
@@ -143,6 +158,7 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
+                aria-label={`North terrain: ${northTerrain}`}
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.North)}
@@ -153,6 +169,7 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
+                aria-label={`West terrain: ${westTerrain}`}
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.West)}
@@ -167,6 +184,7 @@ export function Locations(): JSX.Element | null {
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
+                aria-label={`East terrain: ${eastTerrain}`}
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.East)}
@@ -177,6 +195,7 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
+                aria-label={`South terrain: ${southTerrain}`}
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.South)}
@@ -188,7 +207,7 @@ export function Locations(): JSX.Element | null {
             {hero.stats.intelligence > 100 && (
               <Grid item style={{ textAlign: "center" }} xs={6}>
                 <Divider />
-                <Typography variant="h6" color="secondary" sx={{ margin: 1 }}>
+                <Typography variant="h5" color="secondary" sx={{ margin: 1 }}>
                   Teleport
                 </Typography>
                 <TextField
@@ -269,6 +288,7 @@ export function Locations(): JSX.Element | null {
                 {line}
               </Typography>
             ))}
+          {/*<MapModal />*/}
         </Grid>
         {specialLocation?.type === "dock" && (
           <Grid item style={{ textAlign: "center" }} xs={2}>

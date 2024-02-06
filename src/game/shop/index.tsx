@@ -1,6 +1,7 @@
 import React from "react";
 
 import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 import { useLocation, useSpecialLocation } from "src/hooks/use-location";
 import { useHero } from "src/hooks/use-hero";
@@ -32,6 +33,9 @@ export function Shop(): JSX.Element {
 
   return (
     <React.Fragment>
+      <Typography variant="h3" sx={{ textAlign: "center" }}>
+        Item Shop
+      </Typography>
       <ItemShop />
 
       {locationDetails?.shop && <NpcShop shop={locationDetails?.shop} />}

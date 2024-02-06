@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useHero } from "src/hooks/use-hero";
-
 import { Location } from "src/generated/graphql";
 
 const imageCellSize = 16;
@@ -23,14 +22,14 @@ export function Map({
     Math.round(
       Math.min(
         gridSize[0] - minimapSize[0],
-        Math.max(0, location.x - minimapSize[0] / 2)
-      )
+        Math.max(0, location.x - minimapSize[0] / 2),
+      ),
     ),
     Math.round(
       Math.min(
         gridSize[1] - minimapSize[1],
-        Math.max(0, location.y - minimapSize[1] / 2)
-      )
+        Math.max(0, location.y - minimapSize[1] / 2),
+      ),
     ),
   ];
 

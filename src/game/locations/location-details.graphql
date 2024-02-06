@@ -106,5 +106,20 @@ query LocationDetails($location: LocationInput!) {
         maxHealth
       }
     }
+
+    neighborTerrain {
+      north {
+        terrain
+      }
+      south {
+        terrain
+      }
+      east {
+        terrain
+      }
+      west {
+        terrain
+      }
+    }
   }
 }
