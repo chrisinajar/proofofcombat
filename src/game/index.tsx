@@ -15,6 +15,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
+import { visuallyHidden } from "@mui/utils";
+
 import { Layout } from "src/components/layout";
 import { Chat } from "src/components/chat";
 import { Combat } from "src/components/combat";
@@ -109,6 +111,9 @@ export default function Home(): JSX.Element {
         >
           <TabContext value={selectedTab}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Typography variant="h1" sx={visuallyHidden}>
+                Navigation
+              </Typography>
               <TabList
                 onChange={handleChangeTab}
                 aria-label="navigation tabs"
@@ -137,7 +142,7 @@ export default function Home(): JSX.Element {
             <TabPanel value="play">
               <Grid container columns={12} spacing={4}>
                 <Grid item xs={12} sm={7} md={8}>
-                  <Typography variant="h5" sx={{ mb: 2 }}>
+                  <Typography variant="h2" sx={{ mb: 2, fontSize: "1.8rem" }}>
                     Welcome to <b>Proof of Combat</b>!
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
