@@ -191,7 +191,7 @@ export default function Home(): JSX.Element {
                 </Grid>
                 {leaderboardData?.leaderboard && (
                   <Grid item xs={12} sm={5} md={4}>
-                    <Typography variant="h6">Top levels:</Typography>
+                    <Typography variant="h6">Leaderboard</Typography>
                     <ul id="leaderboard-list">
                       {leaderboardData.leaderboard
                         .slice(0, 20)
@@ -200,8 +200,7 @@ export default function Home(): JSX.Element {
                             <b id={`leaderboard-list-${i}-name`}>
                               {entry.name}
                             </b>{" "}
-                            {entry.level.toLocaleString()} (
-                            {addSpaces(entry.class)})
+                            ({addSpaces(entry.class)})
                           </li>
                         ))}
                     </ul>
