@@ -35,13 +35,11 @@ export function QuestEventDisplay({
       >
         <DialogTitle id="quest-event-title">Quest Event</DialogTitle>
 
-        <DialogContent>
-          <DialogContentText id="quest-event-description">
-            {message &&
-              message.map((str, i) => (
-                <Typography key={`${i}`}>{str}</Typography>
-              ))}
-          </DialogContentText>
+        <DialogContent id="quest-event-description">
+          {message &&
+            message.map((str, i) => (
+              <DialogContentText key={`${i}`}>{str}</DialogContentText>
+            ))}
         </DialogContent>
         <DialogActions>
           <Button
