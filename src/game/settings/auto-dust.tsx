@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 import { useHero } from "src/hooks/use-hero";
 import { useChangeAutoDustMutation, Hero } from "src/generated/graphql";
@@ -30,17 +31,26 @@ export function AutoDustSetting({ hero }: { hero: Hero }): JSX.Element {
 
   return (
     <React.Fragment>
-      <Grid item xs={2}>
-        Auto dust equipment at or below this level:
-      </Grid>
-      <Grid item xs={2}>
-        <TextField
-          value={autoDust}
-          onChange={(e) => handleValueChange(e.target.value)}
-        />
-      </Grid>
-      <Grid item xs={2}>
-        <Button onClick={handleChangeAutoDust}>Save</Button>
+      <Grid container columns={6}>
+        <Grid item xs={6}>
+          <Typography variant="h5">Autodust</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant="subtitle2">
+            Automatically destroy enchanted items as they drop off monsters if
+            they are at or below the following level.
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            label="Gear Level"
+            value={autoDust}
+            onChange={(e) => handleValueChange(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Button onClick={handleChangeAutoDust}>Save</Button>
+        </Grid>
       </Grid>
     </React.Fragment>
   );

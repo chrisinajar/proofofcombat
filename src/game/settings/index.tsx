@@ -31,7 +31,7 @@ function MaximumStatField({
     | "luck";
 }): JSX.Element {
   const [statValue, setStatValue] = useState<number>(
-    hero.settings.minimumStats[stat] ?? 10
+    hero.settings.minimumStats[stat] ?? 10,
   );
   const [changeMinimumStatMutation] = useChangeMinimumStatMutation();
 
@@ -55,17 +55,19 @@ function MaximumStatField({
 
   return (
     <React.Fragment>
-      <Grid item xs={2}>
+      <Grid item md={1} xs={2}>
         {`${stat.substr(0, 1).toUpperCase()}${stat.substr(1)}`}:
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1} sm={2}>
         <TextField
+          fullWidth
+          label={`Minimum ${stat}`}
           value={statValue}
           onChange={(e) => handleValueChange(e.target.value)}
         />
       </Grid>
-      <Grid item xs={2}>
-        <Button onClick={handleChangeMinimumStat}>Save</Button>
+      <Grid item md={3} sm={2} xs={3}>
+        <Button onClick={handleChangeMinimumStat}>Set minimum {stat}</Button>
       </Grid>
     </React.Fragment>
   );
@@ -89,7 +91,7 @@ export function Settings(): JSX.Element {
       <Typography variant="subtitle2">
         Prevents transfering from lowering your stats below these values...
       </Typography>
-      <Grid container columns={6}>
+      <Grid container columns={6} spacing={2}>
         <MaximumStatField hero={hero} stat="strength" />
         <MaximumStatField hero={hero} stat="dexterity" />
         <MaximumStatField hero={hero} stat="constitution" />
