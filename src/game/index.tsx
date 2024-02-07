@@ -210,6 +210,9 @@ export default function Home(): JSX.Element {
               </Grid>
             </TabPanel>
             <TabPanel value="combat">
+              <Typography variant="h3" sx={{ textAlign: "center" }}>
+                Combat
+              </Typography>
               <Typography>
                 Challenge a monster from the list, then fight it to the death.
                 Note that other players in the same location see the same

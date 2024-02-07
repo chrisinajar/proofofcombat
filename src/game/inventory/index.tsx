@@ -64,7 +64,9 @@ export function Inventory(): JSX.Element | null {
     <React.Fragment>
       <Grid container columns={6} spacing={1}>
         <Grid item xs={6}>
-          <Typography>Equipped items</Typography>
+          <Typography variant="h3" sx={{ fontSize: "1.2rem" }}>
+            Equipped items
+          </Typography>
         </Grid>
 
         <Grid item xs={6} sm={3}>

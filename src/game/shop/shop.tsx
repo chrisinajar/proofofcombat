@@ -266,6 +266,8 @@ export function ItemShop(): JSX.Element {
       <Typography align="center">
         Welcome to the shop! You can buy and sell any non-enchanted items here.
         <br />
+        The items purchasable here have a level from 1 to 32 but no enchantments
+        or direct attribute increases.
       </Typography>
 
       <br />
