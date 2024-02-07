@@ -38,7 +38,11 @@ export function modifiersForArtifact(
 }
 
 function modifierText(modifier: ArtifactAttribute): string {
-  const percentage = `${Math.round((modifier.magnitude - 1) * 1000) / 10}%`;
+  const percentage =
+    modifier.magnitude > 1
+      ? `${Math.round((modifier.magnitude - 1) * 1000) / 10}%`
+      : `${Math.round(modifier.magnitude * 1000) / 10}%`;
+
   switch (modifier.type) {
     case ArtifactAttributeType.BonusStrength:
       return `${percentage} increased strength`;
