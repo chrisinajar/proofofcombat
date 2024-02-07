@@ -1,0 +1,9 @@
+mutation BanAccount($id: ID!) {
+  banAccount(id: $id) {
+    success
+    account {
+      id
+      banned
+    }
+  }
+}
