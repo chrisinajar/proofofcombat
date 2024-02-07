@@ -145,6 +145,12 @@ export default function Home(): JSX.Element {
                   <Typography variant="h2" sx={{ mb: 2, fontSize: "1.8rem" }}>
                     Welcome to <b>Proof of Combat</b>!
                   </Typography>
+                  <Typography variant="subtitle1" sx={visuallyHidden}>
+                    This text is only available to screen readers. Thank you for
+                    trying out my game! If you find any parts of the user
+                    interface that are difficult to navigate please let me know
+                    and I would love to improve them.
+                  </Typography>
                   <Typography sx={{ mb: 2 }}>
                     This game is once again being developed actively. It's been
                     a long time coming and there's a lot of major changes to the
@@ -152,6 +158,9 @@ export default function Home(): JSX.Element {
                     interesting mechanics for the game.
                   </Typography>
 
+                  <Typography variant="h4" sx={visuallyHidden}>
+                    Discord Server
+                  </Typography>
                   <Typography sx={{ mb: 2 }}>
                     If you'd like to talk more with other players, report bugs,
                     or discuss upcoming features,{" "}
@@ -163,6 +172,9 @@ export default function Home(): JSX.Element {
                     >
                       join the discord!
                     </Link>
+                  </Typography>
+                  <Typography variant="h4" sx={visuallyHidden}>
+                    Game Wiki
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
                     A great deal of the game is undocumented, but the parts
