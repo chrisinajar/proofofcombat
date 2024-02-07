@@ -62,82 +62,89 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
     <React.Fragment>
       <Grid container columns={6}>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Level:{" "}
+          <label htmlFor="hero-stats-level">Level: </label>
           <span id="hero-stats-level">{hero.level.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
           <Tooltip title={classDescription} leaveTouchDelay={5000}>
             <span>
-              Class: <span id="hero-stats-class">{addSpaces(hero.class)}</span>
+              <label htmlFor="hero-stats-class">Class: </label>
+              <span id="hero-stats-class">{addSpaces(hero.class)}</span>
               <HelpIcon sx={{ fontSize: 10, verticalAlign: "top" }} />
             </span>
           </Tooltip>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Gold: <span id="hero-stats-gold">{hero.gold.toLocaleString()}</span>
+          <label htmlFor="hero-stats-gold">Gold: </label>
+          <span id="hero-stats-gold">{hero.gold.toLocaleString()}</span>
         </Grid>
 
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Location:{" "}
+          <label htmlFor="hero-stats-location">Location: </label>
           <span id="hero-stats-location">
             {hero.location.x}, {hero.location.y}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Experience:{" "}
-          <span id="hero-stats-experience">
-            {hero.experience.toLocaleString()}
-          </span>{" "}
-          /{" "}
-          <span id="hero-stats-experience-needed">
-            {hero.needed.toLocaleString()}
+          <label htmlFor="hero-stats-experience-container">Experience: </label>
+          <span
+            id="hero-stats-experience-container"
+            aria-label={`${hero.experience} out of ${hero.needed}`}
+          >
+            <span id="hero-stats-experience">
+              {hero.experience.toLocaleString()}
+            </span>{" "}
+            /{" "}
+            <span id="hero-stats-experience-needed">
+              {hero.needed.toLocaleString()}
+            </span>
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Health:{" "}
+          <label htmlFor="hero-stats-health">Health: </label>
           <span id="hero-stats-health">
             {hero.combat.health.toLocaleString()} /{" "}
             {hero.combat.maxHealth.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Strength:{" "}
+          <label htmlFor="hero-stats-strength">Strength: </label>
           <span id="hero-stats-strength">
             {hero.stats.strength.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Dexterity:{" "}
+          <label htmlFor="hero-stats-dexterity">Dexterity: </label>
           <span id="hero-stats-dexterity">
             {hero.stats.dexterity.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Constitution:{" "}
+          <label htmlFor="hero-stats-constitution">Constitution: </label>
           <span id="hero-stats-constitution">
             {hero.stats.constitution.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Intelligence:{" "}
+          <label htmlFor="hero-stats-intelligence">Intelligence: </label>
           <span id="hero-stats-intelligence">
             {hero.stats.intelligence.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Wisdom:{" "}
+          <label htmlFor="hero-stats-wisdom">Wisdom: </label>
           <span id="hero-stats-wisdom">
             {hero.stats.wisdom.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Willpower:{" "}
+          <label htmlFor="hero-stats-willpower">Willpower: </label>
           <span id="hero-stats-willpower">
             {hero.stats.willpower.toLocaleString()}
           </span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
-          Luck:{" "}
+          <label htmlFor="hero-stats-luck">Luck: </label>
           <span id="hero-stats-luck">{hero.stats.luck.toLocaleString()}</span>
         </Grid>
       </Grid>
