@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,6 +30,11 @@ export default function AdminPage(): JSX.Element {
     skip: !accountId.length,
   });
 
+  const accounts = useMemo(
+    () => (data?.accounts?.accounts ? [...data?.accounts?.accounts] : []),
+    [data?.accounts?.accounts.length],
+  );
+
   if (loading) {
     return <Box>Loading...</Box>;
   }
@@ -37,8 +42,6 @@ export default function AdminPage(): JSX.Element {
   function handleChange(e: SelectChangeEvent<string>) {
     setAccountId(e.target.value);
   }
-
-  const accounts = data?.accounts?.accounts;
   const account = accountData?.account;
 
   return (
@@ -53,11 +56,13 @@ export default function AdminPage(): JSX.Element {
           onChange={handleChange}
         >
           {accounts &&
-            accounts.map((account) => (
-              <MenuItem key={account.id} value={account.id}>
-                {account.name}
-              </MenuItem>
-            ))}
+            accounts
+              .sort((a, b) => (a.name > b.name ? 1 : -1))
+              .map((account) => (
+                <MenuItem key={account.id} value={account.id}>
+                  {account.name}
+                </MenuItem>
+              ))}
         </Select>
       </FormControl>
       <br />
