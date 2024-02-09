@@ -150,6 +150,14 @@ export default function Home(): JSX.Element {
                     trying out my game! If you find any parts of the user
                     interface that are difficult to navigate please let me know
                     and I would love to improve them.
+                    <br />
+                    <Link
+                      href="https://github.com/chrisinajar/proofofcombat/wiki/Screen-Readers-and-Accessibility"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Check this wiki page for more details on accessibility
+                    </Link>
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
                     This game is once again being developed actively. It's been

@@ -1,21 +1,18 @@
 import React from "react";
-import { useApolloClient } from "@apollo/client";
-import { useRouter } from "next/router";
 
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 
 import type { Hero } from "src/generated/graphql";
 import { useDarkMode } from "src/hooks/use-dark-mode";
-import { useToken } from "src/token";
 import { AppBarHeroStats, AppBarHero } from "./app-bar-hero-stats";
+import { LogoutButton } from "./logout-button";
 
 type AppBarProps = {
   hero?: AppBarHero & Pick<Hero, "name">;
@@ -23,15 +20,6 @@ type AppBarProps = {
 
 export function AppBar({ hero }: AppBarProps): JSX.Element {
   const [darkMode, setDarkMode] = useDarkMode();
-  const router = useRouter();
-  const client = useApolloClient();
-
-  const [token, setToken] = useToken();
-  function handleLogout() {
-    setToken(null);
-    client.clearStore();
-    router.push("/");
-  }
 
   return (
     <MuiAppBar position="static" color="primary" enableColorOnDark>
@@ -41,20 +29,13 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
             <Grid item xs={2}>
               <Typography variant="h4">Proof of Combat</Typography>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={1} aria-hidden="true">
               {hero && (
                 <React.Fragment>
                   <Typography variant="h6" align="right">
                     {hero.name}
                     <br />
-                    <Button
-                      color="error"
-                      variant="contained"
-                      disableElevation
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </Button>
+                    <LogoutButton />
                   </Typography>
                 </React.Fragment>
               )}

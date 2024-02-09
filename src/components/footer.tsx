@@ -4,6 +4,9 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { visuallyHidden } from "@mui/utils";
+
+import { LogoutButton } from "./logout-button";
 
 export function Footer(): JSX.Element {
   return (
@@ -49,6 +52,11 @@ export function Footer(): JSX.Element {
         </Grid>
       </Container>
       <br />
+      <br />
+      <Typography variant="h1" sx={visuallyHidden}>
+        Logout
+      </Typography>
+      <LogoutButton />
     </React.Fragment>
   );
 }
