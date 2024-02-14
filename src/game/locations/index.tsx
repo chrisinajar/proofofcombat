@@ -19,7 +19,9 @@ import { distance2d } from "src/helpers";
 import {
   useMoveLocationMutation,
   MoveDirection,
+  useMonstersQuery,
   useTeleportMutation,
+  MonsterInstance,
 } from "src/generated/graphql";
 
 import { Map } from "./map";
@@ -28,6 +30,15 @@ import { NpcShop } from "./npc-shop";
 import { Camp } from "./camp";
 import { SettlementManager } from "./settlement";
 import { MapModal } from "./map-modal";
+
+const specialMonsterHints: { [x in string]: string } = {
+  "random-aberration-unholy-paladin": "The darkness here isn't natural",
+  "random-aberration-thornbrute": "The overgrowth here is hostile deadly",
+  "domari-aberration-1": "The ash in the air is so thick you can barely breath",
+  "random-aberration-moving-mountain": "The ground itself threatens you",
+};
+
+type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
 export function Locations(): JSX.Element | null {
   const hero = useHero();
@@ -39,6 +50,13 @@ export function Locations(): JSX.Element | null {
   const [moveMutation, { loading }] = useMoveLocationMutation();
   const [teleportMutation, { loading: teleportLoading }] =
     useTeleportMutation();
+  const { data: monsters, refetch: refetchMonsters } = useMonstersQuery();
+
+  const hints =
+    monsters?.monsters?.map?.(
+      (monster: PartialMonsterInstance) =>
+        specialMonsterHints[monster.monster.id] ?? "",
+    ) ?? [];
 
   const locationDetails = useLocation();
   const specialLocation = useSpecialLocation();
@@ -82,6 +100,7 @@ export function Locations(): JSX.Element | null {
           direction,
         },
       });
+      refetchMonsters();
     } catch (e: any) {
       if (e.graphQLErrors && e.graphQLErrors[0]?.extensions?.delay) {
         setDelay(e.graphQLErrors[0].extensions.remaining);
@@ -96,6 +115,7 @@ export function Locations(): JSX.Element | null {
           y: teleportY,
         },
       });
+      refetchMonsters();
     } catch (e: any) {
       if (e.graphQLErrors && e.graphQLErrors[0]?.extensions?.delay) {
         setDelay(e.graphQLErrors[0].extensions.remaining);
@@ -286,6 +306,13 @@ export function Locations(): JSX.Element | null {
             specialLocation.description.map((line, i) => (
               <Typography variant="body1" key={`loc-desc-${i}`}>
                 {line}
+              </Typography>
+            ))}
+          {hints
+            .filter((a) => !!a)
+            .map((hint) => (
+              <Typography variant="body1" key={hint}>
+                {hint}
               </Typography>
             ))}
           {/*<MapModal />*/}
