@@ -33,7 +33,7 @@ import { MapModal } from "./map-modal";
 
 const specialMonsterHints: { [x in string]: string } = {
   "random-aberration-unholy-paladin": "The darkness here isn't natural",
-  "random-aberration-thornbrute": "The overgrowth here is hostile deadly",
+  "random-aberration-thornbrute": "The overgrowth here is hostile and deadly",
   "domari-aberration-1": "The ash in the air is so thick you can barely breath",
   "random-aberration-moving-mountain": "The ground itself threatens you",
 };
