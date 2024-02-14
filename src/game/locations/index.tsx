@@ -311,7 +311,7 @@ export function Locations(): JSX.Element | null {
           {hints
             .filter((a) => !!a)
             .map((hint) => (
-              <Typography variant="body1" key={hint}>
+              <Typography variant="body1" key={hint} role="status">
                 {hint}
               </Typography>
             ))}
