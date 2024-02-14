@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import {
   useAdminAccountsQuery,
   useAdminAccountQuery,
+  useSpawnRandomBossMutation,
 } from "src/generated/graphql";
 
 import { CreateItem } from "./create-item";
@@ -29,6 +30,8 @@ export default function AdminPage(): JSX.Element {
     },
     skip: !accountId.length,
   });
+  const [spawnBossMutation, { loading: spawnLoading }] =
+    useSpawnRandomBossMutation();
 
   const accounts = useMemo(
     () => (data?.accounts?.accounts ? [...data?.accounts?.accounts] : []),
@@ -42,10 +45,19 @@ export default function AdminPage(): JSX.Element {
   function handleChange(e: SelectChangeEvent<string>) {
     setAccountId(e.target.value);
   }
+  function handleAberrationSpawn() {
+    spawnBossMutation();
+  }
   const account = accountData?.account;
 
   return (
     <Box>
+      <br />
+      <Button disabled={spawnLoading} onClick={handleAberrationSpawn}>
+        Spawn Aberration
+      </Button>
+      <br />
+      <br />
       <FormControl fullWidth>
         <InputLabel id="admin-account-select-label">Account</InputLabel>
         <Select

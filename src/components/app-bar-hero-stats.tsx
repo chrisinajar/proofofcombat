@@ -42,18 +42,25 @@ const ClassDescrptions: { [x in HeroClasses]?: string } = {
     "Battle Mage's can attack with both a spell and a weapon at the same time, additionally they receive +100% strength, +30% dexterity, +100% intelligence, +30% wisdom, and +20% willpower",
   [HeroClasses.Paladin]:
     "Paladins can use shields as weapons, additionally they receive +30% willpower",
-  [HeroClasses.Ranger]: "Rangers receive +100% dexterity and double accuracy",
+  [HeroClasses.Ranger]: "Rangers receive double accuracy and +1 weapon level",
   [HeroClasses.BloodMage]:
-    "Blood Mages damage themselves every time they attack",
-  // [HeroClasses.Daredevil]: "???",
-  // [HeroClasses.Gladiator]: "???",
-  // [HeroClasses.EnragedBerserker]: "???",
-  // [HeroClasses.MasterWizard]: "???",
-  // [HeroClasses.MasterWarlock]: "???",
-  // [HeroClasses.DemonHunter]: "???",
-  // [HeroClasses.Zealot]: "???",
-  // [HeroClasses.Archer]: "???",
-  // [HeroClasses.Vampire]: "???",
+    "Blood Mages damage themselves every time they attack but gain +20% Constitution",
+  [HeroClasses.Daredevil]:
+    "+10-110% Strength Constitution Intelligence and Willpower, +20-120% Wisdom Dexterity and Luck, 2x accuracy, and +0-3 weapon levels",
+  [HeroClasses.Gladiator]:
+    "+200% Strength, +160% Dexterity, +20% Willpower, 2x accuracy, and +1 weapon level",
+  [HeroClasses.EnragedBerserker]:
+    "+300% Strength, +160% Dexterity, 2x accuracy, and +1 weapon level",
+  [HeroClasses.MasterWizard]:
+    "+300% Intelligence, +160% Wisdom, 2x accuracy, and +1 weapon level",
+  [HeroClasses.MasterWarlock]:
+    "+200% Intelligence, +160% Wisdom, +20% Willpower, 2x accuracy, and +1 weapon level",
+  [HeroClasses.DemonHunter]:
+    "+500% Strength and Intelligence, +70% Dexterity and Wisdom, +50% Willpower, 2x accuracy, and +1 weapon level",
+  [HeroClasses.Zealot]: "+70% Willpower, +100% Wisdom, double accuracy",
+  [HeroClasses.Archer]: "+200% Dexterity and +2 weapon levels",
+  [HeroClasses.Vampire]:
+    "+80% Constitution, +50% Willpower, Halves enemy base damage, and +1 weapon level",
 };
 
 export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
