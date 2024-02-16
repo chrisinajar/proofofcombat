@@ -23,15 +23,17 @@ export function BuildingDetails({
         <li>
           <KeyValuePair name="Building type" value={location.type} />
         </li>
-        {location.resources.map((resource) => (
-          <li key={resource.name}>
-            <KeyValuePair
-              name={words(resource.name)}
-              aria-label={`${resource.value.toLocaleString()} out of ${resource.maximum.toLocaleString()}`}
-              value={`${resource.value.toLocaleString()} / ${resource.maximum.toLocaleString()}`}
-            />
-          </li>
-        ))}
+        {location.resources.map((resource) =>
+          resource.value > 0 ? (
+            <li key={resource.name}>
+              <KeyValuePair
+                name={words(resource.name)}
+                aria-label={`${resource.value.toLocaleString()} out of ${resource.maximum.toLocaleString()}`}
+                value={`${resource.value.toLocaleString()} / ${resource.maximum.toLocaleString()}`}
+              />
+            </li>
+          ) : null,
+        )}
       </ul>
 
       {location.type === PlayerLocationType.Barracks && (
