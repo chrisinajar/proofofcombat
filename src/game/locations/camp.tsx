@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { words } from "capitalize";
 
-import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -37,6 +41,7 @@ import {
 } from "src/generated/graphql";
 
 import { useSpecialLocation } from "src/hooks/use-location";
+import { useDelay } from "src/hooks/use-delay";
 
 import { CampResourceShop } from "./camp-resource-shop";
 
@@ -193,10 +198,10 @@ function ManageCamp({
   }
 
   const hasTradingPost = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.TradingPost
+    (up) => up === PlayerLocationUpgrades.TradingPost,
   );
   const hasSettlement = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.Settlement
+    (up) => up === PlayerLocationUpgrades.Settlement,
   );
 
   const dialogLabel = hasSettlement ? "Manage Settlement" : "Manage Campsite";
@@ -289,8 +294,8 @@ function CampUpgrades({
   const { data, refetch } = useAvailableUpgradesQuery();
   const upgradeList: PlayerLocationUpgradeDescription[] =
     data?.availableUpgrades ?? [];
-
-  console.log(upgradeList);
+  const [currentDelay] = useDelay();
+  const isInDelay = currentDelay > 0;
 
   if (!upgradeList.length) {
     return null;
@@ -312,7 +317,7 @@ function CampUpgrades({
   }
 
   const hasSettlement = !!camp.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.Settlement
+    (up) => up === PlayerLocationUpgrades.Settlement,
   );
 
   return (
@@ -320,30 +325,41 @@ function CampUpgrades({
       <Typography variant="h6">
         {hasSettlement ? "Settlement" : "Camp"} Upgrades
       </Typography>
-      {upgradeList.map((upgrade) => (
-        <Tooltip
-          key={upgrade.type}
-          title={upgrade.cost
-            .map(
-              (entry: CampResources) =>
-                `${entry.value.toLocaleString()} ${words(entry.name)}`
-            )
-            .join("\n")}
-        >
-          <Box sx={{ m: 1 }}>
-            <LoadingButton
-              loading={loading}
-              sx={{ m: 1 }}
-              variant="outlined"
-              color={goldCost(upgrade.cost) > hero.gold ? "error" : "success"}
-              onClick={() => handleUpgradeCamp(upgrade.type)}
-            >
-              Upgrade
-            </LoadingButton>
-            {upgrade.name}
-          </Box>
-        </Tooltip>
-      ))}
+      <Grid container columns={6} spacing={2}>
+        {upgradeList.map((upgrade) => (
+          <Grid item xs={3} key={upgrade.type}>
+            <Card variant="outlined">
+              <CardHeader title={upgrade.name} />
+              <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                  Cost:{" "}
+                  {upgrade.cost
+                    .map(
+                      (entry: CampResources) =>
+                        `${entry.value.toLocaleString()} ${words(entry.name)}`,
+                    )
+                    .join(", ")}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <LoadingButton
+                  disabled={isInDelay}
+                  focusableWhenDisabled
+                  loading={loading}
+                  sx={{ m: 1 }}
+                  variant="outlined"
+                  color={
+                    goldCost(upgrade.cost) > hero.gold ? "error" : "success"
+                  }
+                  onClick={() => handleUpgradeCamp(upgrade.type)}
+                >
+                  Purchase
+                </LoadingButton>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

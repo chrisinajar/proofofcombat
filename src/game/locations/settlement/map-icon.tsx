@@ -3,6 +3,7 @@ import tc2 from "tinycolor2";
 
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 import { Location } from "src/generated/graphql";
 
@@ -35,16 +36,9 @@ export function MapIcon({
   const xTile = relativeLocation[0] + 2;
   const yTile = relativeLocation[1] + 2;
   return (
-    <Tooltip
-      title={
-        <React.Fragment>
-          {location.x}, {location.y}
-          <br />
-          {tooltip}
-        </React.Fragment>
-      }
-    >
-      <Box
+    <Tooltip describeChild title={`${location.x}, ${location.y}: ${tooltip}`}>
+      <IconButton
+        variant="contained"
         onClick={onClick}
         sx={{
           display: "flex",
@@ -55,7 +49,8 @@ export function MapIcon({
           position: "absolute",
           left: `${xTile * cellSize}px`,
           top: `${yTile * cellSize}px`,
-          backgroundColor: tc2(color).darken(20).setAlpha(0.4).toRgbString(),
+          color: "white",
+          border: "1px solid white",
           "&:hover": hover
             ? {
                 backgroundColor: tc2(color).setAlpha(0.8).toRgbString(),
@@ -64,7 +59,7 @@ export function MapIcon({
         }}
       >
         {icon}
-      </Box>
+      </IconButton>
     </Tooltip>
   );
 }

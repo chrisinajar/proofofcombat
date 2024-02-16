@@ -3,11 +3,16 @@ import { words } from "capitalize";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { visuallyHidden } from "@mui/utils";
 
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
@@ -71,7 +76,7 @@ export function SettlementManager({
   const [selectedBuilding, setSelectedBuilding] =
     useState<PlayerLocation | null>(null);
   const [buildBuilding, setBuildBuilding] = useState<PlayerLocationType | null>(
-    null
+    null,
   );
   const {
     data: managerData,
@@ -121,13 +126,13 @@ export function SettlementManager({
 
   const resources = combineResources(
     capital.resources,
-    ...capital.connections.map((loc) => loc.resources)
+    ...capital.connections.map((loc) => loc.resources),
   );
   const population = resources.find((r) => r.name === "population")?.value ?? 0;
   const food = resources.find((r) => r.name === "food")?.value ?? 0;
 
   const boundingBox = getBoundingBox(
-    [...capital.connections, capital].map((loc) => loc.location)
+    [...capital.connections, capital].map((loc) => loc.location),
   );
 
   // 1 padding on all sides + center point
@@ -137,16 +142,17 @@ export function SettlementManager({
   if (xs) {
     // desiredMapSize = theme.breakpoints.values.xs;
   } else if (sm) {
-    desiredMapSize = theme.breakpoints.values.sm - 110;
+    desiredMapSize = theme.breakpoints.values.sm - 60;
   } else if (md) {
-    desiredMapSize = theme.breakpoints.values.md / 2 - 160;
+    desiredMapSize = theme.breakpoints.values.md / 2 - 40;
   } else if (lg) {
     desiredMapSize = theme.breakpoints.values.lg / 2 - 80;
   }
   const cellResolution = 8;
   const cellSize =
     Math.round(
-      Math.min(desiredMapSize / width, desiredMapSize / height) / cellResolution
+      Math.min(desiredMapSize / width, desiredMapSize / height) /
+        cellResolution,
     ) * cellResolution;
 
   function cancelDestroyBuilding() {
@@ -282,8 +288,11 @@ export function SettlementManager({
               <Tab icon={<StorefrontIcon />} label="Market" value="market" />
             </TabList>
           </Grid>
-          <Grid item xs={6} md={2} lg={3}>
+          <Grid item xs={6} md={3} lg={3}>
             <Box sx={{ position: "relative" }}>
+              <Typography variant="h6" style={visuallyHidden}>
+                Buildings
+              </Typography>
               <Map
                 location={capital.location}
                 indicatorSize={0}
@@ -304,9 +313,7 @@ export function SettlementManager({
                 <MapIcon
                   hover={currentMode === "destroy"}
                   key={connection.id}
-                  onClick={() =>
-                    handleClickLocation({ ...connection, connections: [] })
-                  }
+                  onClick={() => handleClickLocation(connection)}
                   cellSize={cellSize}
                   boundingBox={boundingBox}
                   location={connection.location}
@@ -327,7 +334,7 @@ export function SettlementManager({
               )}
             </Box>
           </Grid>
-          <Grid item xs={6} md={4} lg={3}>
+          <Grid item xs={6} md={3} lg={3}>
             <TabPanel value="build">
               <Typography variant="h6">Construct new buildings</Typography>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -335,34 +342,42 @@ export function SettlementManager({
               </Typography>
               <Stack alignItems="start">
                 {availableBuildings.map((building) => (
-                  <Box sx={{ mb: 3 }}>
-                    <Divider sx={{ mb: 1 }} />
-                    <Typography variant="h5">{building.name}</Typography>
-                    <Typography sx={{ mb: 1 }}>
-                      {building.description}
-                    </Typography>
-                    <Typography variant="h6">Cost to build</Typography>
-                    <Box sx={{ pl: 2 }}>
-                      {building.cost.map((cost) => (
-                        <React.Fragment key={cost.name}>
-                          <li>
-                            <b>{words(cost.name)}:</b>{" "}
-                            {cost.value.toLocaleString()}
-                          </li>
-                        </React.Fragment>
-                      ))}
-                    </Box>
-
-                    <Button
-                      sx={{ mt: 2 }}
-                      key={building.type}
-                      onClick={() => setBuildBuilding(building.type)}
-                      variant="contained"
-                      color="success"
-                    >
-                      Build Building
-                    </Button>
-                  </Box>
+                  <Card sx={{ mb: 3 }} key={building.name}>
+                    <CardHeader title={building.name} />
+                    <CardContent>
+                      <Typography sx={{ mb: 1 }}>
+                        {building.description}
+                      </Typography>
+                      <Typography variant="h6">Cost to build</Typography>
+                      <ul style={{ margin: 2 }}>
+                        {building.cost.map((cost) => (
+                          <React.Fragment key={cost.name}>
+                            <li>
+                              <label
+                                style={{ fontWeight: "bold" }}
+                                htmlFor={`cost-value-${cost.name}`}
+                              >
+                                {words(cost.name)}:
+                              </label>{" "}
+                              <span id={`cost-value-${cost.name}`}>
+                                {cost.value.toLocaleString()}
+                              </span>
+                            </li>
+                          </React.Fragment>
+                        ))}
+                      </ul>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        key={building.type}
+                        onClick={() => setBuildBuilding(building.type)}
+                        variant="contained"
+                        color="success"
+                      >
+                        Build Building
+                      </Button>
+                    </CardActions>
+                  </Card>
                 ))}
               </Stack>
             </TabPanel>
@@ -378,7 +393,13 @@ export function SettlementManager({
               />
             </TabPanel>
             <TabPanel value="info">
-              {!selectedBuilding && <Typography></Typography>}
+              <Typography variant="h5">Building Details</Typography>
+              {!selectedBuilding && (
+                <Typography variant="body1">
+                  Select a building from the map on the left to see details
+                  about it here.
+                </Typography>
+              )}
               {selectedBuilding && (
                 <BuildingDetails location={selectedBuilding} />
               )}
