@@ -190,6 +190,8 @@ export function SettlementManager({
     refetch();
   }
 
+  console.log(capital.upkeep);
+
   return (
     <Box>
       <Dialog
@@ -241,7 +243,7 @@ export function SettlementManager({
             .sort((a, b) => b.value - a.value)
             .map((resource) => {
               if (
-                resource.value < population &&
+                resource.value < population * 2 &&
                 (resource.name === "food" || resource.name === "water")
               ) {
                 return (
@@ -251,6 +253,8 @@ export function SettlementManager({
                       {resource.value.toLocaleString()}
                       {resource.maximum &&
                         ` / ${resource.maximum.toLocaleString()}`}
+                      {capital.upkeep[resource.name] > 0 &&
+                        `(-${capital.upkeep[resource.name]})`}
                     </Typography>
                   </Grid>
                 );
@@ -260,7 +264,9 @@ export function SettlementManager({
                   <b>{words(resource.name)}</b>:{" "}
                   {resource.value.toLocaleString()}
                   {resource.maximum &&
-                    ` / ${resource.maximum.toLocaleString()}`}
+                    ` / ${resource.maximum.toLocaleString()}`}{" "}
+                  {capital.upkeep[resource.name] > 0 &&
+                    `(-${capital.upkeep[resource.name].toLocaleString()})`}
                 </Grid>
               );
             })}

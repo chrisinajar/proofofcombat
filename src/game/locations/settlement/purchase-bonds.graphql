@@ -1,5 +1,5 @@
-mutation Recruit($location: LocationInput!, $amount: Int!) {
-  recruit(location: $location, amount: $amount) {
+mutation PurchaseBonds($location: LocationInput!, $amount: Int!) {
+  purchaseBonds(location: $location, amount: $amount) {
     location {
       id
       location {

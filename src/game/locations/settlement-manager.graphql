@@ -35,6 +35,13 @@ query SettlementManager {
         value
         maximum
       }
+      upkeep {
+        stone
+        wood
+        food
+        water
+      }
+
       owner
       publicOwner {
         id

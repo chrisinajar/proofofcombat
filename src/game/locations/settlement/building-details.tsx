@@ -6,17 +6,26 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+
 import {
   PlayerLocation,
   PlayerLocationType,
   useRecruitMutation,
+  usePurchaseBondsMutation,
 } from "src/generated/graphql";
+import { useIsInDelay } from "src/hooks/use-delay";
 
 export function BuildingDetails({
   location,
 }: {
   location: PlayerLocation;
 }): JSX.Element {
+  const [recruitAction, { loading: recruitLoading }] = useRecruitMutation();
+  const [purchaseBondsAction, { loading: bondsLoading }] =
+    usePurchaseBondsMutation();
+
   return (
     <React.Fragment>
       <ul>
@@ -37,7 +46,49 @@ export function BuildingDetails({
       </ul>
 
       {location.type === PlayerLocationType.Barracks && (
-        <RecruitButton location={location} />
+        <ResourcePurchase
+          location={location}
+          action="Recruit"
+          unit="troops"
+          cost={1000000}
+          loading={recruitLoading}
+          onPurchase={(variables) => {
+            recruitAction({
+              variables,
+            });
+          }}
+        />
+      )}
+      {location.type === PlayerLocationType.Treasury && (
+        <ResourcePurchase
+          location={location}
+          action="Purchase"
+          unit="bonds"
+          cost={1000000}
+          loading={bondsLoading}
+          onPurchase={(variables) => {
+            purchaseBondsAction({
+              variables,
+            });
+          }}
+        />
+      )}
+      {location.type === PlayerLocationType.Treasury && (
+        <ResourcePurchase
+          location={location}
+          action="Sell"
+          unit="bonds"
+          cost={1000000}
+          loading={bondsLoading}
+          onPurchase={(variables) => {
+            purchaseBondsAction({
+              variables: {
+                ...variables,
+                amount: 0 - variables.amount,
+              },
+            });
+          }}
+        />
       )}
     </React.Fragment>
   );
@@ -65,13 +116,24 @@ function KeyValuePair({
   );
 }
 
-function RecruitButton({
+function ResourcePurchase({
   location,
+  action,
+  unit,
+  cost,
+  loading = false,
+  onPurchase,
 }: {
   location: PlayerLocation;
+  action: string;
+  unit: string;
+  cost: number;
+  loading: boolean;
+  onPurchase: (number) => void;
 }): JSX.Element {
   const [amount, setAmount] = useState<number>(0);
   const [recruitAction] = useRecruitMutation();
+  const isInDelay = useIsInDelay();
 
   const validAmount = Number.isFinite(amount) && !isNaN(amount) && amount > 0;
 
@@ -79,35 +141,33 @@ function RecruitButton({
     <FormControl fullWidth>
       <TextField
         onChange={(e, a) => setAmount(parseInt(e.target.value))}
-        id="recruit-input"
-        label="Amount of troops to recruit"
+        id={`${action}-input`}
+        label={`Amount of ${unit} to ${action.toLowerCase()}`}
       />
-      <Button
+      <LoadingButton
+        loading={loading}
         variant="contained"
-        disabled={!validAmount}
-        focusableWhenDisabled
+        disabled={!validAmount || isInDelay}
         onClick={() => {
           if (!Number.isFinite(amount) || isNaN(amount)) {
             return;
           }
-          recruitAction({
-            variables: {
-              location: {
-                x: location.location.x,
-                y: location.location.y,
-                map: location.location.map,
-              },
-              amount,
+          onPurchase({
+            location: {
+              x: location.location.x,
+              y: location.location.y,
+              map: location.location.map,
             },
+            amount,
           });
         }}
       >
-        {!validAmount && "Recruit troops"}
+        {!validAmount && `${action} ${unit}`}
         {validAmount &&
-          `Recruit ${amount.toLocaleString()} soldiers for ${(
-            amount * 1000000
+          `${action} ${amount.toLocaleString()} ${unit} for ${(
+            amount * cost
           ).toLocaleString()} gold`}
-      </Button>
+      </LoadingButton>
     </FormControl>
   );
 }
