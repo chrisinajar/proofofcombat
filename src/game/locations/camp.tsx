@@ -193,10 +193,10 @@ function ManageCamp({
   }
 
   const hasTradingPost = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.TradingPost
+    (up) => up === PlayerLocationUpgrades.TradingPost,
   );
   const hasSettlement = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.Settlement
+    (up) => up === PlayerLocationUpgrades.Settlement,
   );
 
   const dialogLabel = hasSettlement ? "Manage Settlement" : "Manage Campsite";
@@ -312,7 +312,7 @@ function CampUpgrades({
   }
 
   const hasSettlement = !!camp.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.Settlement
+    (up) => up === PlayerLocationUpgrades.Settlement,
   );
 
   return (
@@ -322,11 +322,12 @@ function CampUpgrades({
       </Typography>
       {upgradeList.map((upgrade) => (
         <Tooltip
+          describeChild
           key={upgrade.type}
           title={upgrade.cost
             .map(
               (entry: CampResources) =>
-                `${entry.value.toLocaleString()} ${words(entry.name)}`
+                `${entry.value.toLocaleString()} ${words(entry.name)}`,
             )
             .join("\n")}
         >

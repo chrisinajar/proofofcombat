@@ -90,7 +90,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
         (monsterOrPlayer
           ? monsterOrPlayer.combat.health
           : monster.combat.health)) /
-        monster.combat.maxHealth
+        monster.combat.maxHealth,
     );
   }, [
     monsterOrPlayer?.combat.health,
@@ -182,7 +182,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           {enemyHealth > 0 && (
             <React.Fragment>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your melee weapons, uses strength and dexterity">
+                <Tooltip
+                  title="Attack using your melee weapons, uses strength and dexterity"
+                  describeChild
+                >
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -196,7 +199,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Attack using your ranged weapons, uses dexterity">
+                <Tooltip
+                  title="Attack using your ranged weapons, uses dexterity"
+                  describeChild
+                >
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -210,7 +216,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={3} md={2} xl={2}>
-                <Tooltip title="Cast spells using your wisdom and intelligence">
+                <Tooltip
+                  title="Cast spells using your wisdom and intelligence"
+                  describeChild
+                >
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -224,7 +233,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={3} md={3} xl={3}>
-                <Tooltip title="Smite your foe using wisdom and willpower">
+                <Tooltip
+                  title="Smite your foe using wisdom and willpower"
+                  describeChild
+                >
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -238,7 +250,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
               <Grid item xs={6} sm={6} md={3} xl={3}>
-                <Tooltip title="Damage yourself to damage the enemy, uses constitution">
+                <Tooltip
+                  title="Damage yourself to damage the enemy, uses constitution"
+                  describeChild
+                >
                   <Button
                     sx={{ fontSize: "1rem", padding: 2 }}
                     size="large"
@@ -287,7 +302,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     {` ${getCombatPhrase(
                       entry.attackType,
                       entry.success,
-                      entry.critical
+                      entry.critical,
                     )} `}
                     <b>{entry.to}</b>
                     {entry.success
@@ -363,7 +378,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
 function getCombatPhrase(
   attackType: AttackType,
   success: boolean,
-  critical: boolean
+  critical: boolean,
 ): string {
   switch (attackType) {
     case AttackType.Blood:
