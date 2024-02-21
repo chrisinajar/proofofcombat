@@ -14,6 +14,7 @@ import {
   PlayerLocationType,
   useRecruitMutation,
   usePurchaseBondsMutation,
+  useCraftHoneyEssencesMutation,
 } from "src/generated/graphql";
 import { useIsInDelay } from "src/hooks/use-delay";
 
@@ -25,6 +26,8 @@ export function BuildingDetails({
   const [recruitAction, { loading: recruitLoading }] = useRecruitMutation();
   const [purchaseBondsAction, { loading: bondsLoading }] =
     usePurchaseBondsMutation();
+  const [craftHoneyEssences, { loading: honeyLoading }] =
+    useCraftHoneyEssencesMutation();
 
   return (
     <React.Fragment>
@@ -86,6 +89,20 @@ export function BuildingDetails({
                 ...variables,
                 amount: 0 - variables.amount,
               },
+            });
+          }}
+        />
+      )}
+      {location.type === PlayerLocationType.Apiary && (
+        <ResourcePurchase
+          location={location}
+          action="Craft"
+          unit="honey essences"
+          cost={100000000000}
+          loading={honeyLoading}
+          onPurchase={(variables) => {
+            craftHoneyEssences({
+              variables,
             });
           }}
         />
