@@ -81,7 +81,7 @@ function TradeOffer({ trade }: { trade: NpcShopTrade }): JSX.Element {
 function PriceStatement({ price }: { price: NpcShopItems }): JSX.Element {
   return (
     <Tooltip title={getPriceString(price)} describeChild>
-      <b>{price.description}</b>
+      <b aria-label={getPriceString(price)}>{price.description}</b>
     </Tooltip>
   );
 }
