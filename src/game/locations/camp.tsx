@@ -344,7 +344,6 @@ function CampUpgrades({
               <CardActions>
                 <LoadingButton
                   disabled={isInDelay}
-                  focusableWhenDisabled
                   loading={loading}
                   sx={{ m: 1 }}
                   variant="outlined"

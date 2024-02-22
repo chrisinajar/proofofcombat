@@ -38,7 +38,6 @@ export function MapIcon({
   return (
     <Tooltip describeChild title={`${location.x}, ${location.y}: ${tooltip}`}>
       <IconButton
-        variant="contained"
         onClick={onClick}
         sx={{
           display: "flex",

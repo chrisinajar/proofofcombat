@@ -1,22 +1,37 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 import { useHero } from "src/hooks/use-hero";
 import { Location } from "src/generated/graphql";
 
 const imageCellSize = 16;
 
+type CellProps = { cellSize: number };
+const StyledMapTable = styled.table<CellProps>`
+  border-collapse: collapse;
+
+  tr {
+    td {
+      border: 1px dotted rgba(150, 150, 150, 0.2);
+      width: ${({ cellSize }) => cellSize}px;
+      height: ${({ cellSize }) => cellSize}px;
+      margin: 0;
+    }
+  }
+`;
+
 export function Map({
   location,
   minimapSize = [24, 24],
   gridSize = [128, 96],
   cellSize = 16,
-  indicatorSize = 8,
+  renderCell = () => null,
 }: {
   location: Location;
   minimapSize?: [number, number];
   gridSize?: [number, number];
   cellSize?: number;
-  indicatorSize?: number;
+  renderCell: (loc: { x: number; y: number }) => JSX.Element | null;
 }): JSX.Element | null {
   const centerPoint = [
     Math.round(
@@ -47,25 +62,19 @@ export function Map({
         height: `${minimapSize[1] * cellSize}px`,
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          borderRadius: `${indicatorSize / 2}px`,
-          backgroundColor: "red",
-          border: "2px solid rgba(255,255,255,0.3)",
-
-          left: `${
-            (location.x - centerPoint[0]) * cellSize +
-            (cellSize - indicatorSize) / 2
-          }px`,
-          top: `${
-            (location.y - centerPoint[1]) * cellSize +
-            (cellSize - indicatorSize) / 2
-          }px`,
-          width: `${indicatorSize}px`,
-          height: `${indicatorSize}px`,
-        }}
-      />
+      <StyledMapTable cellSize={cellSize}>
+        <tbody>
+          {[...Array(minimapSize[1])].map((v, i) => (
+            <tr key={`row-${centerPoint[1] + i}`}>
+              {[...Array(minimapSize[0])].map((v2, j) => (
+                <td key={`cell-${centerPoint[0] + j}-${centerPoint[1] + i}`}>
+                  {renderCell({ x: centerPoint[0] + j, y: centerPoint[1] + i })}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </StyledMapTable>
     </div>
   );
 }

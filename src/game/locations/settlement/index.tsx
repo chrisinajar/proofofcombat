@@ -14,7 +14,6 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import Dialog from "@mui/material/Dialog";
@@ -42,6 +41,7 @@ import Tab from "@mui/material/Tab";
 import {
   Hero,
   Location,
+  UpkeepCosts,
   useSettlementManagerQuery,
   useDestroyBuildingMutation,
   PlayerLocationType,
@@ -190,7 +190,16 @@ export function SettlementManager({
     refetch();
   }
 
-  console.log(capital.upkeep);
+  const connectionsByLocation: {
+    [x in number]: { [x in number]: PlayerLocation };
+  } = {};
+  capital.connections.forEach((connection) => {
+    if (!(connection.location.x in connectionsByLocation)) {
+      connectionsByLocation[connection.location.x] = {};
+    }
+    connectionsByLocation[connection.location.x][connection.location.y] =
+      connection;
+  });
 
   return (
     <Box>
@@ -259,14 +268,25 @@ export function SettlementManager({
                   </Grid>
                 );
               }
+              if (resource.name === "stone" || resource.name === "wood") {
+                return (
+                  <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
+                    <b>{words(resource.name)}</b>:{" "}
+                    {resource.value.toLocaleString()}
+                    {resource.maximum &&
+                      ` / ${resource.maximum.toLocaleString()}`}{" "}
+                    {capital.upkeep[resource.name] > 0 &&
+                      `(-${capital.upkeep[resource.name].toLocaleString()})`}
+                  </Grid>
+                );
+              }
+
               return (
                 <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
                   <b>{words(resource.name)}</b>:{" "}
                   {resource.value.toLocaleString()}
                   {resource.maximum &&
-                    ` / ${resource.maximum.toLocaleString()}`}{" "}
-                  {capital.upkeep[resource.name] > 0 &&
-                    `(-${capital.upkeep[resource.name].toLocaleString()})`}
+                    ` / ${resource.maximum.toLocaleString()}`}
                 </Grid>
               );
             })}
@@ -301,32 +321,45 @@ export function SettlementManager({
               </Typography>
               <Map
                 location={capital.location}
-                indicatorSize={0}
                 minimapSize={[width, height]}
                 cellSize={cellSize}
+                renderCell={({ x, y }) => {
+                  if (x === capital.location.x && y === capital.location.y) {
+                    return (
+                      <MapIcon
+                        onClick={() =>
+                          handleClickLocation({ ...capital, connections: [] })
+                        }
+                        cellSize={cellSize}
+                        boundingBox={boundingBox}
+                        location={capital.location}
+                        tooltip="Capital"
+                        icon={<HouseIcon />}
+                      />
+                    );
+                  }
+
+                  if (connectionsByLocation[x] && connectionsByLocation[x][y]) {
+                    const connection = connectionsByLocation[x][y];
+
+                    return (
+                      <MapIcon
+                        hover={currentMode === "destroy"}
+                        key={connection.id}
+                        onClick={() => handleClickLocation(connection)}
+                        cellSize={cellSize}
+                        boundingBox={boundingBox}
+                        location={connection.location}
+                        tooltip={connection.type}
+                        icon={
+                          IconMap[connection.type] ?? <AccountBalanceIcon />
+                        }
+                      />
+                    );
+                  }
+                  return null;
+                }}
               />
-              <MapIcon
-                onClick={() =>
-                  handleClickLocation({ ...capital, connections: [] })
-                }
-                cellSize={cellSize}
-                boundingBox={boundingBox}
-                location={capital.location}
-                tooltip="Capital"
-                icon={<HouseIcon />}
-              />
-              {capital.connections.map((connection) => (
-                <MapIcon
-                  hover={currentMode === "destroy"}
-                  key={connection.id}
-                  onClick={() => handleClickLocation(connection)}
-                  cellSize={cellSize}
-                  boundingBox={boundingBox}
-                  location={connection.location}
-                  tooltip={connection.type}
-                  icon={IconMap[connection.type] ?? <AccountBalanceIcon />}
-                />
-              ))}
               {buildBuilding && (
                 <React.Fragment>
                   <BuildBuildingMapButtons

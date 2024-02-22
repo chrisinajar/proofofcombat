@@ -40,8 +40,12 @@ export function BuildingDetails({
             <li key={resource.name}>
               <KeyValuePair
                 name={words(resource.name)}
-                aria-label={`${resource.value.toLocaleString()} out of ${resource.maximum.toLocaleString()}`}
-                value={`${resource.value.toLocaleString()} / ${resource.maximum.toLocaleString()}`}
+                aria-label={`${resource.value.toLocaleString()} out of ${(
+                  resource.maximum ?? 0
+                ).toLocaleString()}`}
+                value={`${resource.value.toLocaleString()} / ${(
+                  resource.maximum ?? 0
+                ).toLocaleString()}`}
               />
             </li>
           ) : null,
@@ -146,7 +150,10 @@ function ResourcePurchase({
   unit: string;
   cost: number;
   loading: boolean;
-  onPurchase: (number) => void;
+  onPurchase: (variables: {
+    location: { x: number; y: number; map: string };
+    amount: number;
+  }) => void;
 }): JSX.Element {
   const [amount, setAmount] = useState<number>(0);
   const [recruitAction] = useRecruitMutation();
@@ -157,7 +164,7 @@ function ResourcePurchase({
   return (
     <FormControl fullWidth>
       <TextField
-        onChange={(e, a) => setAmount(parseInt(e.target.value))}
+        onChange={(e) => setAmount(parseInt(e.target.value))}
         id={`${action}-input`}
         label={`Amount of ${unit} to ${action.toLowerCase()}`}
       />
