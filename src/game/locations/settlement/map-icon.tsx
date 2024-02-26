@@ -17,9 +17,9 @@ export function MapIcon({
   tooltip,
   hover = false,
   onClick,
-  color = "rgb(33, 5, 33)",
+  color = "white",
 }: {
-  location: Location;
+  location: { x: number; y: number };
   icon: JSX.Element;
   cellSize: number;
   boundingBox: BoundingBox;
@@ -45,11 +45,8 @@ export function MapIcon({
           alignItems: "center",
           width: `${cellSize}px`,
           height: `${cellSize}px`,
-          position: "absolute",
-          left: `${xTile * cellSize}px`,
-          top: `${yTile * cellSize}px`,
-          color: "white",
-          border: "1px solid white",
+          color,
+          border: `1px solid ${color}`,
           "&:hover": hover
             ? {
                 backgroundColor: tc2(color).setAlpha(0.8).toRgbString(),

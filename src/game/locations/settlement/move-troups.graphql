@@ -1,0 +1,35 @@
+mutation MoveTroups($target: LocationInput!, $units: MilitaryUnitInput!) {
+  moveTroups(target: $target, units: $units) {
+    location {
+      id
+      location {
+        x
+        y
+        map
+      }
+      upgrades
+      resources {
+        name
+        value
+        maximum
+      }
+      owner
+      publicOwner {
+        id
+        name
+        level
+        class
+        local
+        combat {
+          health
+          maxHealth
+        }
+      }
+      type
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

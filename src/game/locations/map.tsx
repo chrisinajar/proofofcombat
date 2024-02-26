@@ -11,11 +11,15 @@ const StyledMapTable = styled.table<CellProps>`
   border-collapse: collapse;
 
   tr {
+    margin: 0px;
+    padding: 0px;
     td {
-      border: 1px dotted rgba(150, 150, 150, 0.2);
+      position: relative;
       width: ${({ cellSize }) => cellSize}px;
       height: ${({ cellSize }) => cellSize}px;
-      margin: 0;
+      overflow: visible;
+      margin: 0px;
+      padding: 0px;
     }
   }
 `;

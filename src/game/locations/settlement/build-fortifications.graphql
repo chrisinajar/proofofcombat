@@ -1,0 +1,16 @@
+mutation BuildFortifications($location: LocationInput!, $amount: Int!) {
+  buildFortifications(location: $location, amount: $amount) {
+    location {
+      id
+      resources {
+        name
+        value
+        maximum
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

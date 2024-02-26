@@ -31,6 +31,8 @@ import EmojiNatureIcon from "@mui/icons-material/EmojiNature";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShieldIcon from "@mui/icons-material/Shield";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
+import MilitaryTechOutlinedIcon from "@mui/icons-material/MilitaryTechOutlined";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import TabContext from "@mui/lab/TabContext";
@@ -54,12 +56,15 @@ import { getBoundingBox, combineResources } from "./helpers";
 import { MapIcon } from "./map-icon";
 import { BuildBuildingMapButtons } from "./build-building-map-buttons";
 import { BuildingDetails } from "./building-details";
+import { Military } from "./military";
+import { AttackLocationButtons } from "./attack-location-buttons";
 
 const IconMap: { [x in PlayerLocationType]?: JSX.Element } = {
   [PlayerLocationType.Farm]: <AgricultureIcon />,
   [PlayerLocationType.Shrine]: <AccountBalanceIcon />,
   [PlayerLocationType.Apiary]: <EmojiNatureIcon />,
-  [PlayerLocationType.Barracks]: <ShieldIcon />,
+  [PlayerLocationType.Garrison]: <ShieldIcon />,
+  [PlayerLocationType.Barracks]: <MilitaryTechOutlinedIcon />,
 };
 
 export function SettlementManager({
@@ -120,6 +125,7 @@ export function SettlementManager({
     availableBuildings,
     availableUpgrades,
     range,
+    adjacentTiles,
   } = settlementManager;
 
   const capital = capitalData as PlayerLocation;
@@ -159,10 +165,9 @@ export function SettlementManager({
     setDestroyConfirmation(null);
   }
   function handleClickLocation(location: PlayerLocation) {
-    console.log(currentMode);
     if (currentMode === "destroy") {
       setDestroyConfirmation(location);
-    } else if (currentMode === "info") {
+    } else if (currentMode === "info" || currentMode === "military") {
       setSelectedBuilding(location);
     }
   }
@@ -252,23 +257,27 @@ export function SettlementManager({
             .sort((a, b) => b.value - a.value)
             .map((resource) => {
               if (
-                resource.value < population * 2 &&
-                (resource.name === "food" || resource.name === "water")
+                resource.name === "stone" ||
+                resource.name === "wood" ||
+                resource.name === "food" ||
+                resource.name === "water"
               ) {
-                return (
-                  <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
-                    <Typography color="error">
-                      <b>{words(resource.name)}</b>:{" "}
-                      {resource.value.toLocaleString()}
-                      {resource.maximum &&
-                        ` / ${resource.maximum.toLocaleString()}`}
-                      {capital.upkeep[resource.name] > 0 &&
-                        `(-${capital.upkeep[resource.name]})`}
-                    </Typography>
-                  </Grid>
-                );
-              }
-              if (resource.name === "stone" || resource.name === "wood") {
+                if (resource.value < population * 2) {
+                  return (
+                    <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
+                      <Typography color="error">
+                        <b>{words(resource.name)}</b>:{" "}
+                        {resource.value.toLocaleString()}
+                        {resource.maximum &&
+                          ` / ${resource.maximum.toLocaleString()}`}
+                        {capital.upkeep[resource.name] > 0 &&
+                          `(-${capital.upkeep[
+                            resource.name
+                          ].toLocaleString()})`}
+                      </Typography>
+                    </Grid>
+                  );
+                }
                 return (
                   <Grid key={resource.name} item xs={6} sm={3} md={2} lg={1}>
                     <b>{words(resource.name)}</b>:{" "}
@@ -308,10 +317,36 @@ export function SettlementManager({
                 flexGrow: 1,
               }}
             >
-              <Tab icon={<ApartmentIcon />} label="View" value="info" />
-              <Tab icon={<ConstructionIcon />} label="Build" value="build" />
-              <Tab icon={<DeleteIcon />} label="Destroy" value="destroy" />
-              <Tab icon={<StorefrontIcon />} label="Market" value="market" />
+              <Tab
+                icon={<ApartmentIcon />}
+                label="Building Details"
+                value="info"
+                wrapped
+              />
+              <Tab
+                icon={<ConstructionIcon />}
+                label="Build Buildings"
+                value="build"
+                wrapped
+              />
+              <Tab
+                icon={<DeleteIcon />}
+                label="Destroy Buildings"
+                value="destroy"
+                wrapped
+              />
+              <Tab
+                icon={<StorefrontIcon />}
+                label="Resource Market"
+                value="market"
+                wrapped
+              />
+              <Tab
+                icon={<MilitaryTechIcon />}
+                label="Military"
+                value="military"
+                wrapped
+              />
             </TabList>
           </Grid>
           <Grid item xs={6} md={3} lg={3}>
@@ -357,20 +392,37 @@ export function SettlementManager({
                       />
                     );
                   }
+
+                  if (buildBuilding) {
+                    return (
+                      <BuildBuildingMapButtons
+                        x={x}
+                        y={y}
+                        type={buildBuilding}
+                        cellSize={cellSize}
+                        boundingBox={boundingBox}
+                        capital={capital}
+                        range={range}
+                      />
+                    );
+                  }
+                  if (currentMode === "military") {
+                    return (
+                      <AttackLocationButtons
+                        x={x}
+                        y={y}
+                        onClick={(location) =>
+                          handleClickLocation(location as PlayerLocation)
+                        }
+                        cellSize={cellSize}
+                        boundingBox={boundingBox}
+                        adjacentTiles={adjacentTiles}
+                      />
+                    );
+                  }
                   return null;
                 }}
               />
-              {buildBuilding && (
-                <React.Fragment>
-                  <BuildBuildingMapButtons
-                    type={buildBuilding}
-                    cellSize={cellSize}
-                    boundingBox={boundingBox}
-                    capital={capital}
-                    range={range}
-                  />
-                </React.Fragment>
-              )}
             </Box>
           </Grid>
           <Grid item xs={6} md={3} lg={3}>
@@ -440,8 +492,15 @@ export function SettlementManager({
                 </Typography>
               )}
               {selectedBuilding && (
-                <BuildingDetails location={selectedBuilding} />
+                <BuildingDetails location={selectedBuilding} hero={hero} />
               )}
+            </TabPanel>
+            <TabPanel value="military">
+              <Military
+                location={selectedBuilding}
+                resources={resources}
+                hero={hero}
+              />
             </TabPanel>
           </Grid>
         </Grid>

@@ -100,5 +100,27 @@ query SettlementManager {
         }
       }
     }
+
+    adjacentTiles {
+      id
+      location {
+        x
+        y
+        map
+      }
+      owner
+      publicOwner {
+        id
+        name
+        level
+        class
+        local
+        combat {
+          health
+          maxHealth
+        }
+      }
+      type
+    }
   }
 }

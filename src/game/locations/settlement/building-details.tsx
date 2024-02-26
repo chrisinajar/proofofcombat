@@ -10,24 +10,37 @@ import Tooltip from "@mui/material/Tooltip";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import {
+  Hero,
   PlayerLocation,
   PlayerLocationType,
   useRecruitMutation,
   usePurchaseBondsMutation,
   useCraftHoneyEssencesMutation,
+  useBuildFortificationsMutation,
 } from "src/generated/graphql";
 import { useIsInDelay } from "src/hooks/use-delay";
 
 export function BuildingDetails({
   location,
+  hero,
 }: {
   location: PlayerLocation;
-}): JSX.Element {
+  hero: Hero;
+}): JSX.Element | null {
   const [recruitAction, { loading: recruitLoading }] = useRecruitMutation();
   const [purchaseBondsAction, { loading: bondsLoading }] =
     usePurchaseBondsMutation();
   const [craftHoneyEssences, { loading: honeyLoading }] =
     useCraftHoneyEssencesMutation();
+  const [buildFortifications, { loading: fortificationsLoading }] =
+    useBuildFortificationsMutation();
+
+  if (location.owner !== hero.id) {
+    return <>Select a building that belongs to you.</>;
+  }
+  if (!location.resources) {
+    return null;
+  }
 
   return (
     <React.Fragment>
@@ -97,7 +110,7 @@ export function BuildingDetails({
           }}
         />
       )}
-      {location.type === PlayerLocationType.Apiary && (
+      {/*location.type === PlayerLocationType.Apiary && (
         <ResourcePurchase
           location={location}
           action="Craft"
@@ -106,6 +119,20 @@ export function BuildingDetails({
           loading={honeyLoading}
           onPurchase={(variables) => {
             craftHoneyEssences({
+              variables,
+            });
+          }}
+        />
+      )*/}
+      {location.type === PlayerLocationType.Garrison && (
+        <ResourcePurchase
+          location={location}
+          action="Build"
+          unit="fortifications"
+          cost={1000000}
+          loading={fortificationsLoading}
+          onPurchase={(variables) => {
+            buildFortifications({
               variables,
             });
           }}
