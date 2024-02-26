@@ -263,7 +263,6 @@ function ManageCamp({
 }
 
 function CampResourceDisplay({ camp }: { camp: PlayerLocation }): JSX.Element {
-  console.log(camp.resources);
   return (
     <Grid container columns={8}>
       {camp.resources.map((resource) => (
@@ -296,8 +295,6 @@ export function CampUpgrades({
     data?.availableUpgrades ?? [];
   const [currentDelay] = useDelay();
   const isInDelay = currentDelay > 0;
-
-  console.log(upgradeList);
 
   if (!upgradeList.length) {
     return null;

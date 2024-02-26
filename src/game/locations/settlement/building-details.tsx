@@ -43,8 +43,6 @@ export function BuildingDetails({
     return null;
   }
 
-  console.log(location.availableUpgrades);
-
   return (
     <React.Fragment>
       <ul>
