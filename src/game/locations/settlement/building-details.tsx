@@ -19,6 +19,7 @@ import {
   useBuildFortificationsMutation,
 } from "src/generated/graphql";
 import { useIsInDelay } from "src/hooks/use-delay";
+import { CampUpgrades } from "../camp";
 
 export function BuildingDetails({
   location,
@@ -42,6 +43,8 @@ export function BuildingDetails({
     return null;
   }
 
+  console.log(location.availableUpgrades);
+
   return (
     <React.Fragment>
       <ul>
@@ -64,6 +67,8 @@ export function BuildingDetails({
           ) : null,
         )}
       </ul>
+
+      <CampUpgrades camp={location} hero={hero} />
 
       {location.type === PlayerLocationType.Barracks && (
         <ResourcePurchase

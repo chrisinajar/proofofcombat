@@ -334,7 +334,7 @@ export function Military({
             <Button onClick={handleAttackLocation}>Attack target</Button>
           )}
           {!hostileTarget && (
-            <Button onClick={handleMoveTroups}>Move troups</Button>
+            <Button onClick={handleMoveTroups}>Move troops</Button>
           )}
         </>
       )}

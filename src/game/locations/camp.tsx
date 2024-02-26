@@ -283,7 +283,7 @@ function CampResourceDisplay({ camp }: { camp: PlayerLocation }): JSX.Element {
   );
 }
 
-function CampUpgrades({
+export function CampUpgrades({
   hero,
   camp,
 }: {
@@ -296,6 +296,8 @@ function CampUpgrades({
     data?.availableUpgrades ?? [];
   const [currentDelay] = useDelay();
   const isInDelay = currentDelay > 0;
+
+  console.log(upgradeList);
 
   if (!upgradeList.length) {
     return null;

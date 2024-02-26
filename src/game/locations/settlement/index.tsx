@@ -242,15 +242,20 @@ export function SettlementManager({
           <Grid item xs={6}>
             <Typography variant="h4">Settlement Manager</Typography>
           </Grid>
-          <Grid item xs={6} sm={2}>
+          <Grid item xs={6} sm={3} md={2} lg={1}>
             <Typography>
               <b>Capital</b>: {capital.location.x}, {capital.location.y}
             </Typography>
           </Grid>
-          <Grid item xs={6} sm={2}>
+          <Grid item xs={6} sm={3} md={2} lg={1}>
             <Typography>
               <b>Map tiles</b>:{" "}
               {(capital.connections.length + 1).toLocaleString()}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} sm={3} md={2} lg={1}>
+            <Typography>
+              <b>Range</b>: {range.toLocaleString()}
             </Typography>
           </Grid>
           {[...resources]
@@ -493,6 +498,9 @@ export function SettlementManager({
               )}
               {selectedBuilding && (
                 <BuildingDetails location={selectedBuilding} hero={hero} />
+              )}
+              {!selectedBuilding && (
+                <BuildingDetails location={capital} hero={hero} />
               )}
             </TabPanel>
             <TabPanel value="military">
