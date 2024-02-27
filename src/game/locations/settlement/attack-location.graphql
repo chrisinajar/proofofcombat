@@ -1,0 +1,35 @@
+mutation AttackLocation($target: LocationInput!, $units: MilitaryUnitInput!) {
+  attackLocation(target: $target, units: $units) {
+    target {
+      id
+      location {
+        x
+        y
+        map
+      }
+      upgrades
+      resources {
+        name
+        value
+        maximum
+      }
+      owner
+      publicOwner {
+        id
+        name
+        level
+        class
+        local
+        combat {
+          health
+          maxHealth
+        }
+      }
+      type
+    }
+    account {
+      id
+      nextAllowedAction
+    }
+  }
+}

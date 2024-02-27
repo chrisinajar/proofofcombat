@@ -61,7 +61,7 @@ export function CampResourceShop({
   }
 
   const hasTradingPost = !!camp.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.TradingPost
+    (up) => up === PlayerLocationUpgrades.TradingPost,
   );
 
   const isInvalid =

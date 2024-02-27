@@ -23,7 +23,7 @@ export function Layout({
   showHero = false,
 }: LayoutProps): JSX.Element {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const [darkMode, setDarkMode] = useState<boolean | null>(null);
+  const [darkMode, setDarkMode] = useState<boolean | null>(true);
   const [timeDifference, setTimeDifference] = useState<number>(0);
   const [lastMeTime, setLastMeTime] = useState<number>(0);
   const { data } = useMeQuery({
@@ -83,7 +83,7 @@ export function Layout({
           borderRadius: 2,
         },
       }),
-    [actuallyDarkMode]
+    [actuallyDarkMode],
   );
 
   useEffect(() => {

@@ -302,7 +302,27 @@ export function Locations(): JSX.Element | null {
               <Typography variant="subtitle2">loading...</Typography>
             </React.Fragment>
           )}
-          <Map location={hero.location} />
+          <Map
+            location={hero.location}
+            renderCell={({ x, y }) => {
+              if (hero.location.x === x && hero.location.y === y) {
+                return (
+                  <div
+                    style={{
+                      borderRadius: `${8 / 2}px`,
+                      backgroundColor: "red",
+                      border: "2px solid rgba(255,255,255,0.3)",
+
+                      width: `${8}px`,
+                      height: `${8}px`,
+                      margin: "auto",
+                    }}
+                  />
+                );
+              }
+              return null;
+            }}
+          />
           {specialLocation?.description &&
             specialLocation.description.map((line, i) => (
               <Typography variant="body1" key={`loc-desc-${i}`}>
