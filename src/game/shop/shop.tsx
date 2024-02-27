@@ -280,7 +280,6 @@ export function ItemShop(): JSX.Element {
             <Select
               id="shop-type-select"
               labelId="shop-type-select-label"
-              value={shopType}
               label={shopLabel}
               onChange={(e) => {
                 setShopType(e.target.value as InventoryItemType);
@@ -322,7 +321,7 @@ export function ItemShop(): JSX.Element {
         <Grid item xs={6} sm={3}>
           {shopType !== "" && shopType !== "sell" && (
             <ItemTypeShop
-              value={selectedItem ? selectedItem.id : null}
+              value={selectedItem ? selectedItem.id : ""}
               key={shopType}
               type={shopType}
               items={itemsForCategory(shopType)}
@@ -331,7 +330,7 @@ export function ItemShop(): JSX.Element {
           )}
           {shopType === "sell" && (
             <SellItemShop
-              value={selectedItem ? selectedItem.id : null}
+              value={selectedItem ? selectedItem.id : ""}
               sellables={data?.shopItems ?? []}
               onChange={(selectionData) => setSelectedItem(selectionData)}
             />
