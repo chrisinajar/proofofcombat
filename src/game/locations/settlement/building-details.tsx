@@ -66,7 +66,9 @@ export function BuildingDetails({
         )}
       </ul>
 
-      <CampUpgrades camp={location} hero={hero} />
+      {location.type === PlayerLocationType.Settlement && (
+        <CampUpgrades camp={location} hero={hero} />
+      )}
 
       {location.type === PlayerLocationType.Barracks && (
         <ResourcePurchase
