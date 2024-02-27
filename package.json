@@ -30,7 +30,7 @@
     "notistack": "~3.0.1",
     "prettier": "^2.5.1",
     "react": "~18.2.0",
-    "react-dom": "17.0.2",
+    "react-dom": "~18.2.0",
     "short-time-ago": "^2.0.0",
     "socket.io-client": "^4.4.1",
     "tinycolor2": "^1.4.2",
