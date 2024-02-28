@@ -154,6 +154,14 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
           <label htmlFor="hero-stats-luck">Luck: </label>
           <span id="hero-stats-luck">{hero.stats.luck.toLocaleString()}</span>
         </Grid>
+        {hero.enchantingDust > 200 && (
+          <Grid item lg={1} md={2} sm={3} xs={6}>
+            <label htmlFor="hero-stats-gold">Dust: </label>
+            <span id="hero-stats-gold">
+              {hero.enchantingDust.toLocaleString()}
+            </span>
+          </Grid>
+        )}
       </Grid>
     </React.Fragment>
   );
