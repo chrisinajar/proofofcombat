@@ -27,6 +27,21 @@ mutation AttackLocation($target: LocationInput!, $units: MilitaryUnitInput!) {
       }
       type
     }
+    damage
+    totalDamage
+    targetCasualties {
+      enlisted
+      soldier
+      veteran
+      ghost
+      fortifications
+    }
+    attackerCasualties {
+      enlisted
+      soldier
+      veteran
+      ghost
+    }
     account {
       id
       nextAllowedAction

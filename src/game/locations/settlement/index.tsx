@@ -508,6 +508,7 @@ export function SettlementManager({
                 location={selectedBuilding}
                 resources={resources}
                 hero={hero}
+                refetch={refetch}
               />
             </TabPanel>
           </Grid>

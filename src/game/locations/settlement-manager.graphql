@@ -55,6 +55,8 @@ query SettlementManager {
         }
       }
       type
+      health
+      maxHealth
       availableUpgrades {
         cost {
           name
@@ -90,6 +92,8 @@ query SettlementManager {
           }
         }
         type
+        health
+        maxHealth
         availableUpgrades {
           cost {
             name
@@ -121,6 +125,8 @@ query SettlementManager {
         }
       }
       type
+      health
+      maxHealth
     }
   }
 }

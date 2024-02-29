@@ -18,21 +18,27 @@ import {
   useAttackLocationMutation,
 } from "src/generated/graphql";
 
+import { AttackResultsModal } from "./attack-results-modal";
+
 export function Military({
   location,
   hero,
   resources,
+  refetch,
 }: {
   location: PlayerLocation | null;
   hero: Hero;
   resources: CampResources[];
+  refetch: () => void;
 }): JSX.Element {
   const [enlistedCount, setEnlistedCount] = useState(0);
   const [soldierCount, setSoldierCount] = useState(0);
   const [veteranCount, setVeteranCount] = useState(0);
   const [ghostCount, setGhostCount] = useState(0);
+  const [isAttackResultsOpen, setAttackResultsOpen] = useState(false);
   const [moveTroupsMutation] = useMoveTroupsMutation();
-  const [attackLocationMutation] = useAttackLocationMutation();
+  const [attackLocationMutation, { data: attackData, loading: attackLoading }] =
+    useAttackLocationMutation();
   const hostileTarget = location?.owner !== hero.id;
 
   const enlistedResource = location?.resources?.find(
@@ -45,14 +51,6 @@ export function Military({
     (r) => r.name === "veteran",
   );
   const ghostResource = location?.resources?.find((r) => r.name === "ghost");
-
-  console.log({
-    hostileTarget,
-    enlistedResource,
-    soldierResource,
-    veteranResource,
-    ghostResource,
-  });
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setEnlistedCount(newValue as number);
@@ -90,11 +88,11 @@ export function Military({
     });
   }
 
-  function handleAttackLocation() {
+  async function handleAttackLocation() {
     if (!location) {
       return;
     }
-    attackLocationMutation({
+    const { data } = await attackLocationMutation({
       variables: {
         target: {
           x: location.location.x,
@@ -109,10 +107,24 @@ export function Military({
         },
       },
     });
+
+    if (data?.attackLocation) {
+      setAttackResultsOpen(true);
+      if (data.attackLocation.target.owner === hero.id) {
+        refetch();
+      }
+    }
   }
 
   return (
     <>
+      <AttackResultsModal
+        open={isAttackResultsOpen}
+        onClose={() => setAttackResultsOpen(false)}
+        attackResults={attackData?.attackLocation}
+        loading={attackLoading}
+        hero={hero}
+      />
       <Typography variant="h4">Military actions</Typography>
       <Typography variant="body1">
         Use this UI to move your tropps or attack adjacent empires. You can only

@@ -17,6 +17,7 @@ export type AppBarHero = Pick<
   | "location"
   | "stats"
   | "needed"
+  | "enchantingDust"
   | "class"
 >;
 
