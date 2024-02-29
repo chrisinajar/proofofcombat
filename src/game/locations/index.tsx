@@ -323,17 +323,21 @@ export function Locations(): JSX.Element | null {
               return null;
             }}
           />
-          <Typography variant="h6">&nbsp;</Typography>
           {specialLocation?.description &&
             specialLocation.description.map((line, i) => (
-              <Typography variant="body1" key={`loc-desc-${i}`}>
+              <Typography component="h6" variant="body1" key={`loc-desc-${i}`}>
                 {line}
               </Typography>
             ))}
           {hints
             .filter((a) => !!a)
             .map((hint) => (
-              <Typography variant="body1" key={hint} role="status">
+              <Typography
+                component="h6"
+                variant="body1"
+                key={hint}
+                role="status"
+              >
                 {hint}
               </Typography>
             ))}
