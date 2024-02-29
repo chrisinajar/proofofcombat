@@ -280,19 +280,23 @@ export function Locations(): JSX.Element | null {
         </Grid>
         <Grid item style={{ textAlign: "center" }} xs={2} sm={1}>
           {specialLocation && (
-            <Typography component="h4" variant="h6">
+            <Typography variant="h6" component="h4">
               {specialLocation.name}
             </Typography>
           )}
           {specialLocation && (
-            <Typography variant="subtitle2">{specialLocation.type}</Typography>
+            <Typography variant="subtitle2" component="p">
+              {specialLocation.type}
+            </Typography>
           )}
           {playerLocation && (
             <React.Fragment>
               <Typography variant="h6" component="h4">
                 {playerLocation.publicOwner?.name ?? "???"}'s Settlement
               </Typography>
-              <Typography variant="subtitle2">{playerLocation.type}</Typography>
+              <Typography variant="subtitle2" component="p">
+                {playerLocation.type}
+              </Typography>
             </React.Fragment>
           )}
           {!specialLocation && !playerLocation && locationDetails && (
@@ -300,7 +304,7 @@ export function Locations(): JSX.Element | null {
               <Typography variant="h6" component="h4">
                 Wilderness
               </Typography>
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" component="p">
                 {locationDetails.terrain.terrain}
               </Typography>
             </React.Fragment>
@@ -310,7 +314,9 @@ export function Locations(): JSX.Element | null {
               <Typography variant="h6" component="h4">
                 &nbsp;
               </Typography>
-              <Typography variant="subtitle2">loading...</Typography>
+              <Typography variant="subtitle2" component="p">
+                loading...
+              </Typography>
             </React.Fragment>
           )}
           <Map
