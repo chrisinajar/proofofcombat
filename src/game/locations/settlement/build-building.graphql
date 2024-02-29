@@ -5,6 +5,7 @@ mutation BuildBuilding($type: PlayerLocationType!, $location: LocationInput!) {
       nextAllowedAction
       hero {
         id
+        gold
         home {
           id
           resources {

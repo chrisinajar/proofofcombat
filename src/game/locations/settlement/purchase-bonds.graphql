@@ -30,6 +30,10 @@ mutation PurchaseBonds($location: LocationInput!, $amount: Int!) {
     account {
       id
       nextAllowedAction
+      hero {
+        id
+        gold
+      }
     }
   }
 }
