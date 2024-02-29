@@ -140,6 +140,13 @@ function ManageCamp({
     return null;
   }
 
+  const hasTradingPost = !!hero.home.upgrades.find(
+    (up) => up === PlayerLocationUpgrades.TradingPost,
+  );
+  const hasSettlement = !!hero.home.upgrades.find(
+    (up) => up === PlayerLocationUpgrades.Settlement,
+  );
+
   if (!isLocal) {
     return (
       <Box>
@@ -150,13 +157,15 @@ function ManageCamp({
           aria-describedby="confirmation-description"
         >
           <DialogTitle id="confirmation-title">
-            Destroy existing campsite?
+            {!hasSettlement && "Destroy existing campsite?"}
+            {hasSettlement && "Destroy settlement capital?"}
           </DialogTitle>
 
           <DialogContent>
             <DialogContentText id="confirmation-description">
-              Settling a new camp here will leave your old camp abandoned. You
-              will lose any upgrades to the camp or anything stored there.
+              Settling a new camp here will leave your old{" "}
+              {hasSettlement ? "settlement" : "campsite"} abandoned. You will
+              lose any upgrades or anything stored there.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -177,11 +186,13 @@ function ManageCamp({
             </LoadingButton>
           </DialogActions>
         </Dialog>
-        <Typography sx={{ mb: 2 }}>
-          You must be at your campsite to interract with it. Your campsite is at{" "}
+        <Typography sx={{ mb: 2 }} component="h5">
+          Your {hasSettlement ? "settlement" : "campsite"} is at{" "}
           <b>
             {hero.home.location.x}, {hero.home.location.y}
           </b>
+          . You must be at your {hasSettlement ? "settlement" : "campsite"} to
+          interract with it.
         </Typography>
 
         <LoadingButton
@@ -196,13 +207,6 @@ function ManageCamp({
       </Box>
     );
   }
-
-  const hasTradingPost = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.TradingPost,
-  );
-  const hasSettlement = !!hero.home.upgrades.find(
-    (up) => up === PlayerLocationUpgrades.Settlement,
-  );
 
   const dialogLabel = hasSettlement ? "Manage Settlement" : "Manage Campsite";
 
