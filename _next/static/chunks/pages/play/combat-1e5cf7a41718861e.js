@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[915],{9583:function(n,u,_){(window.__NEXT_P=window.__NEXT_P||[]).push(["/play/combat",function(){return _(6691)}])},6691:function(n,u,_){"use strict";_.r(u);var t=_(7504);u.default=t.Z}},function(n){n.O(0,[830,135,352,998,504,774,888,179],(function(){return u=9583,n(n.s=u);var u}));var u=n.O();_N_E=u}]);
