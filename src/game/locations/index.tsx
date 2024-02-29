@@ -166,12 +166,12 @@ export function Locations(): JSX.Element | null {
               <Camp hero={hero} onShowSettlement={handleShowSettlement} />
             </Grid>
             <Grid item style={{ textAlign: "center" }} xs={6}>
-              <Typography variant="h5">Travel</Typography>
+              <Typography variant="h3">Travel</Typography>
               {hero.combat.health > 0 && (
                 <Typography>Use buttons to move around the map.</Typography>
               )}
               {hero.combat.health === 0 && (
-                <Typography variant="h6">
+                <Typography component="p" variant="h6">
                   You cannot move while dead. Heal yourself in the Combat tab.
                 </Typography>
               )}
@@ -228,7 +228,12 @@ export function Locations(): JSX.Element | null {
             {hero.stats.intelligence > 100 && (
               <Grid item style={{ textAlign: "center" }} xs={6}>
                 <Divider />
-                <Typography variant="h5" color="secondary" sx={{ margin: 1 }}>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  color="secondary"
+                  sx={{ margin: 1 }}
+                >
                   Teleport
                 </Typography>
                 <TextField
@@ -275,14 +280,16 @@ export function Locations(): JSX.Element | null {
         </Grid>
         <Grid item style={{ textAlign: "center" }} xs={2} sm={1}>
           {specialLocation && (
-            <Typography variant="h6">{specialLocation.name}</Typography>
+            <Typography component="h4" variant="h6">
+              {specialLocation.name}
+            </Typography>
           )}
           {specialLocation && (
             <Typography variant="subtitle2">{specialLocation.type}</Typography>
           )}
           {playerLocation && (
             <React.Fragment>
-              <Typography variant="h6">
+              <Typography variant="h6" component="h4">
                 {playerLocation.publicOwner?.name ?? "???"}'s Settlement
               </Typography>
               <Typography variant="subtitle2">{playerLocation.type}</Typography>
@@ -290,7 +297,9 @@ export function Locations(): JSX.Element | null {
           )}
           {!specialLocation && !playerLocation && locationDetails && (
             <React.Fragment>
-              <Typography variant="h6">Wilderness</Typography>
+              <Typography variant="h6" component="h4">
+                Wilderness
+              </Typography>
               <Typography variant="subtitle2">
                 {locationDetails.terrain.terrain}
               </Typography>
@@ -298,7 +307,9 @@ export function Locations(): JSX.Element | null {
           )}
           {!specialLocation && !playerLocation && !locationDetails && (
             <React.Fragment>
-              <Typography variant="h6">&nbsp;</Typography>
+              <Typography variant="h6" component="h4">
+                &nbsp;
+              </Typography>
               <Typography variant="subtitle2">loading...</Typography>
             </React.Fragment>
           )}
@@ -325,7 +336,7 @@ export function Locations(): JSX.Element | null {
           />
           {specialLocation?.description &&
             specialLocation.description.map((line, i) => (
-              <Typography component="h6" variant="body1" key={`loc-desc-${i}`}>
+              <Typography component="h4" variant="body1" key={`loc-desc-${i}`}>
                 {line}
               </Typography>
             ))}
@@ -333,7 +344,7 @@ export function Locations(): JSX.Element | null {
             .filter((a) => !!a)
             .map((hint) => (
               <Typography
-                component="h6"
+                component="h4"
                 variant="body1"
                 key={hint}
                 role="status"

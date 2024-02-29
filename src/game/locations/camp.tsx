@@ -94,7 +94,7 @@ function SettleCamp({ hero }: { hero: Hero }): JSX.Element {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 2 }}>
+      <Typography component="h2" variant="h5" sx={{ mb: 2 }}>
         Settle Camp
       </Typography>
       <Typography sx={{ mb: 2 }}>
@@ -186,7 +186,7 @@ function ManageCamp({
             </LoadingButton>
           </DialogActions>
         </Dialog>
-        <Typography sx={{ mb: 2 }} component="h5">
+        <Typography sx={{ mb: 2 }} component="h2">
           Your {hasSettlement ? "settlement" : "campsite"} is at{" "}
           <b>
             {hero.home.location.x}, {hero.home.location.y}
@@ -243,7 +243,7 @@ function ManageCamp({
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Typography variant="h5" sx={{ mb: 2 }}>
+      <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
         Your {hasSettlement ? "Settlement" : "Campsite"}
       </Typography>
       <Typography sx={{ mb: 2 }}>

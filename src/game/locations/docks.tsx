@@ -43,7 +43,7 @@ export function Docks({
       return;
     }
     const targetDock = docksData.docks.find(
-      (otherDock) => otherDock.name === dock
+      (otherDock) => otherDock.name === dock,
     );
 
     if (!targetDock) {

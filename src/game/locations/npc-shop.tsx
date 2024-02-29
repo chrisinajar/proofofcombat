@@ -36,7 +36,7 @@ export function NpcShop({ shop }: { shop: NpcShopType }): JSX.Element {
   return (
     <React.Fragment>
       <Divider sx={{ mt: 1, mb: 1 }} />
-      <Typography variant="h4" color="info.main">
+      <Typography variant="h4" component="h5" color="info.main">
         {shop.name}
       </Typography>
       <Typography sx={{ mb: 2 }} variant="subtitle2" color="info.main">

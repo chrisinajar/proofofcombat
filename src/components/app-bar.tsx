@@ -26,18 +26,17 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
       createTheme({
         palette: {
           mode: darkMode ? "dark" : "light",
-          primary: darkMode 
-            ?{
-              main: "#0d2b4a" 
-            }
-            :{
-              main: "#1976d2"
-            }
-        }
+          primary: darkMode
+            ? {
+                main: "#0d2b4a",
+              }
+            : {
+                main: "#1976d2",
+              },
+        },
       }),
-    [darkMode]
+    [darkMode],
   );
-  
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,7 +45,9 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
           <Container>
             <Grid container columns={3}>
               <Grid item xs={2}>
-                <Typography variant="h4">Proof of Combat</Typography>
+                <Typography variant="h4" component="p">
+                  Proof of Combat
+                </Typography>
               </Grid>
               <Grid item xs={1} aria-hidden="true">
                 {hero && (
