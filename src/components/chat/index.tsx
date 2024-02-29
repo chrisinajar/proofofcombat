@@ -25,6 +25,8 @@ import MessageIcon from "@mui/icons-material/Message";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+import { visuallyHidden } from "@mui/utils";
+
 import {
   InventoryItem,
   useGetChatTokenQuery,
@@ -111,7 +113,7 @@ export function Chat(): JSX.Element {
     notifications: { type: "built-in" },
   });
   const [alertArtifact, setAlertArtifact] = useState<ArtifactItem | false>(
-    false
+    false,
   );
 
   const socketRef = useRef<Socket>();
@@ -144,7 +146,7 @@ export function Chat(): JSX.Element {
       if (data.item) {
         data.message = data.message.replace(
           "{{item}}",
-          itemDisplayName(data.item)
+          itemDisplayName(data.item),
         );
       }
 
@@ -242,7 +244,7 @@ export function Chat(): JSX.Element {
         (data: ChatMessage) => {
           console.log("Got a confirmation!", data);
           setChat((oldChat) => [data, ...oldChat]);
-        }
+        },
       );
       setMessage("");
       return;
@@ -256,7 +258,7 @@ export function Chat(): JSX.Element {
       (data: ChatMessage) => {
         console.log("Got a reply!", data);
         setChat((oldChat) => [data, ...oldChat]);
-      }
+      },
     );
     setMessage("");
   }
@@ -414,7 +416,7 @@ export function Chat(): JSX.Element {
             }}
           >
             {chatMessage.time && (
-              <Typography variant="caption">
+              <Typography variant="caption" aria-hidden="true">
                 ({timeAgo(new Date(chatMessage.time * 1000))})&nbsp;
               </Typography>
             )}
@@ -439,7 +441,12 @@ export function Chat(): JSX.Element {
               </Button>
             )}
             {!chatMessage.heroId && <b>{chatMessage.from}</b>}{" "}
-            {emojify(chatMessage.message)}
+            {emojify(chatMessage.message)}{" "}
+            {chatMessage.time && (
+              <Typography variant="caption" sx={visuallyHidden}>
+                ({timeAgo(new Date(chatMessage.time * 1000))})&nbsp;
+              </Typography>
+            )}
           </Typography>
         ))}
         {/* <Button variant="contained">Send</Button> */}
