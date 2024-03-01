@@ -18,6 +18,7 @@ export function MapIcon({
   hover = false,
   onClick,
   color = "white",
+  bgcolor,
 }: {
   location: { x: number; y: number };
   icon: JSX.Element;
@@ -27,6 +28,7 @@ export function MapIcon({
   hover?: boolean;
   onClick?: () => void;
   color?: string;
+  bgcolor?: string;
 }): JSX.Element {
   const relativeLocation = [
     location.x - boundingBox.min.x,
@@ -46,12 +48,13 @@ export function MapIcon({
           width: `${cellSize}px`,
           height: `${cellSize}px`,
           color,
+          backgroundColor: bgcolor,
           border: `1px solid ${color}`,
-          "&:hover": hover
-            ? {
-                backgroundColor: tc2(color).setAlpha(0.8).toRgbString(),
-              }
-            : undefined,
+          "&:hover": {
+            backgroundColor: tc2(bgcolor || color)
+              .setAlpha(bgcolor ? (hover ? 0.2 : 0.8) : hover ? 0.7 : 0.1)
+              .toRgbString(),
+          },
         }}
       >
         {icon}

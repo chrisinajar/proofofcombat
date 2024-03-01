@@ -364,6 +364,80 @@ export function SettlementManager({
                 minimapSize={[width, height]}
                 cellSize={cellSize}
                 renderCell={({ x, y }) => {
+                  let isCoveredByGarrison = false;
+                  let isCoveredByBarracks = false;
+                  if (
+                    connectionsByLocation[x]?.[y]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x - 1]?.[y + 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x + 1]?.[y + 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x - 1]?.[y]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x + 1]?.[y]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x - 1]?.[y - 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x + 1]?.[y - 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x]?.[y + 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x]?.[y - 1]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x]?.[y + 2]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x]?.[y - 2]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x + 2]?.[y]?.type ===
+                      PlayerLocationType.Garrison ||
+                    connectionsByLocation[x - 2]?.[y]?.type ===
+                      PlayerLocationType.Garrison
+                  ) {
+                    isCoveredByGarrison = true;
+                  }
+
+                  if (
+                    connectionsByLocation[x]?.[y]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x - 1]?.[y + 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x + 1]?.[y + 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x - 1]?.[y]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x + 1]?.[y]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x - 1]?.[y - 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x + 1]?.[y - 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x]?.[y + 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x]?.[y - 1]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x]?.[y + 2]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x]?.[y - 2]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x + 2]?.[y]?.type ===
+                      PlayerLocationType.Barracks ||
+                    connectionsByLocation[x - 2]?.[y]?.type ===
+                      PlayerLocationType.Barracks
+                  ) {
+                    isCoveredByBarracks = true;
+                  }
+
+                  let color: string | undefined = undefined;
+                  if (isCoveredByGarrison) {
+                    color = "blue";
+                    if (isCoveredByBarracks) {
+                      color = "green";
+                    }
+                  } else if (isCoveredByBarracks) {
+                    color = "rgb(180, 200, 0)";
+                  }
+
                   if (x === capital.location.x && y === capital.location.y) {
                     return (
                       <MapIcon
@@ -374,6 +448,7 @@ export function SettlementManager({
                         boundingBox={boundingBox}
                         location={capital.location}
                         tooltip="Capital"
+                        bgcolor={color}
                         icon={<HouseIcon />}
                       />
                     );
@@ -391,6 +466,7 @@ export function SettlementManager({
                         boundingBox={boundingBox}
                         location={connection.location}
                         tooltip={connection.type}
+                        bgcolor={color}
                         icon={
                           IconMap[connection.type] ?? <AccountBalanceIcon />
                         }
