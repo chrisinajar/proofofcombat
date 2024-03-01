@@ -7,13 +7,13 @@ import Switch from "@mui/material/Switch";
 import {
   useBanAccountMutation,
   useUnbanAccountMutation,
-  BaseAccount,
+  AdminAccountQuery,
 } from "src/generated/graphql";
 
 export function BanToggle({
   account,
 }: {
-  account: Omit<BaseAccount, "password">;
+  account: AdminAccountQuery["account"];
 }): JSX.Element {
   const [banAccount] = useBanAccountMutation();
   const [unbanAccount] = useUnbanAccountMutation();

@@ -22,11 +22,13 @@ import { AttackResultsModal } from "./attack-results-modal";
 
 export function Military({
   location,
+  capital,
   hero,
   resources,
   refetch,
 }: {
   location: PlayerLocation | null;
+  capital: PlayerLocation;
   hero: Hero;
   resources: CampResources[];
   refetch: () => void;
@@ -133,7 +135,11 @@ export function Military({
         your control.
       </Typography>
       <br />
-      <Typography variant="h5">Current target:</Typography>
+      <Typography variant="h6" component="h4">
+        Remaining attacks: {capital.remainingAttacks}
+      </Typography>
+      <br />
+      <Typography variant="h5">Current target</Typography>
       {!location && (
         <Typography variant="body1">Select a target using the map.</Typography>
       )}
@@ -222,7 +228,7 @@ export function Military({
       )}
       {location && (
         <>
-          <Typography variant="h6">Troups in this location</Typography>
+          <Typography variant="h5">Troups in this location</Typography>
           <ul>
             {(enlistedResource?.value ?? 0) > 0 && (
               <li>
@@ -277,11 +283,7 @@ export function Military({
               </li>
             )}
           </ul>
-        </>
-      )}
-      {location && (
-        <>
-          <Typography mb={2} variant="h5">
+          <Typography mb={2} component="h6" variant="h5">
             Troops to send
           </Typography>
           <Grid container columns={6} spacing={2}>

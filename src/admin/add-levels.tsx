@@ -4,12 +4,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import { useAddLevelsMutation, BaseAccount } from "src/generated/graphql";
+import { useAddLevelsMutation, AdminAccountQuery } from "src/generated/graphql";
 
 export function AddLevels({
   account,
 }: {
-  account: Omit<BaseAccount, "password">;
+  account: AdminAccountQuery["account"];
 }): JSX.Element {
   const [levels, setLevels] = useState<string>("");
   const [giveGoldMutation, { data }] = useAddLevelsMutation();

@@ -57,6 +57,7 @@ query SettlementManager {
       type
       health
       maxHealth
+      remainingAttacks
       availableUpgrades {
         cost {
           name

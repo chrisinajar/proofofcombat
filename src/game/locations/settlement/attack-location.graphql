@@ -45,6 +45,14 @@ mutation AttackLocation($target: LocationInput!, $units: MilitaryUnitInput!) {
     account {
       id
       nextAllowedAction
+
+      hero {
+        id
+        home {
+          id
+          remainingAttacks
+        }
+      }
     }
   }
 }

@@ -506,6 +506,7 @@ export function SettlementManager({
             <TabPanel value="military">
               <Military
                 location={selectedBuilding}
+                capital={capital}
                 resources={resources}
                 hero={hero}
                 refetch={refetch}

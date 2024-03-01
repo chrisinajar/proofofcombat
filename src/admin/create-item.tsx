@@ -8,12 +8,13 @@ import {
   useCreateItemMutation,
   BaseAccount,
   EnchantmentType,
+  AdminAccountQuery,
 } from "src/generated/graphql";
 
 export function CreateItem({
   account,
 }: {
-  account: Omit<BaseAccount, "password">;
+  account: AdminAccountQuery["account"];
 }): JSX.Element {
   const [baseItem, setBaseItem] = useState<string>("");
   const [enchantment, setEnchantment] = useState<string>("");

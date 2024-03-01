@@ -4,12 +4,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import { useGiveGoldMutation, BaseAccount } from "src/generated/graphql";
+import { useGiveGoldMutation, AdminAccountQuery } from "src/generated/graphql";
 
 export function GiveGold({
   account,
 }: {
-  account: Omit<BaseAccount, "password">;
+  account: AdminAccountQuery["account"];
 }): JSX.Element {
   const [amount, setAmount] = useState<string>("");
   const [giveGoldMutation, { data }] = useGiveGoldMutation();

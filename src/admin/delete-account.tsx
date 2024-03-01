@@ -6,12 +6,15 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-import { useDeleteAccountMutation, BaseAccount } from "src/generated/graphql";
+import {
+  useDeleteAccountMutation,
+  AdminAccountQuery,
+} from "src/generated/graphql";
 
 export function DeleteAccount({
   account,
 }: {
-  account: Omit<BaseAccount, "password">;
+  account: AdminAccountQuery["account"];
 }): JSX.Element {
   const [deleteAccountMutation] = useDeleteAccountMutation();
   const [isArmed, setIsArmed] = useState<boolean>(false);
