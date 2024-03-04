@@ -573,10 +573,18 @@ export function SettlementManager({
                 </Typography>
               )}
               {selectedBuilding && (
-                <BuildingDetails location={selectedBuilding} hero={hero} />
+                <BuildingDetails
+                  location={selectedBuilding}
+                  hero={hero}
+                  onDestroy={setDestroyConfirmation}
+                />
               )}
               {!selectedBuilding && (
-                <BuildingDetails location={capital} hero={hero} />
+                <BuildingDetails
+                  location={capital}
+                  hero={hero}
+                  onDestroy={setDestroyConfirmation}
+                />
               )}
             </TabPanel>
             <TabPanel value="military">

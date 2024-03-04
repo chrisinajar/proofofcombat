@@ -6,6 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 
@@ -24,9 +25,11 @@ import { CampUpgrades } from "../camp";
 export function BuildingDetails({
   location,
   hero,
+  onDestroy,
 }: {
   location: PlayerLocation;
   hero: Hero;
+  onDestroy: (location: PlayerLocation) => void;
 }): JSX.Element | null {
   const [recruitAction, { loading: recruitLoading }] = useRecruitMutation();
   const [purchaseBondsAction, { loading: bondsLoading }] =
@@ -66,9 +69,25 @@ export function BuildingDetails({
         )}
       </ul>
 
-      {location.type === PlayerLocationType.Settlement && (
+      {location.id === hero.home?.id && (
         <CampUpgrades camp={location} hero={hero} />
       )}
+      {location.type === PlayerLocationType.Settlement &&
+        location.id !== hero.home?.id && (
+          <>
+            <Typography>
+              This settlement is a former capital that has fallen. You can
+              destroy this location and reclaim most of the resources.
+            </Typography>
+            <Button
+              onClick={() => onDestroy(location)}
+              variant="contained"
+              color="error"
+            >
+              Destroy former settlement
+            </Button>
+          </>
+        )}
 
       {location.type === PlayerLocationType.Barracks && (
         <ResourcePurchase
