@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { useTheme } from "@mui/material/styles";
+
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -75,6 +77,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     fightData?.fight?.monster?.monster ||
     duelData?.attackHero?.otherHero ||
     null;
+  const theme = useTheme();
 
   const showAutoBattle = !autoBattle && canAutoBattle;
 
@@ -161,8 +164,18 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     <React.Fragment>
       <Grid
         id="combat-display"
-        style={{
-          minHeight: "110px",
+        sx={{
+          position: "relative",
+          minHeight: "320px",
+          [theme.breakpoints.down("md")]: {
+            minHeight: "450px",
+          },
+          [theme.breakpoints.down("sm")]: {
+            minHeight: "580px",
+          },
+          [theme.breakpoints.down("xs")]: {
+            minHeight: "660px",
+          },
         }}
         item
         xs={6}
