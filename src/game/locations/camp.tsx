@@ -267,21 +267,40 @@ function ManageCamp({
 }
 
 function CampResourceDisplay({ camp }: { camp: PlayerLocation }): JSX.Element {
+  const { upkeep } = camp;
   return (
     <Grid container columns={8}>
-      {camp.resources.map((resource) => (
-        <Grid item xs={8} sm={4} md={2} key={resource.name}>
-          <b>{words(resource.name)}</b>:{" "}
-          {resource.value === 0 ? (
-            <Typography sx={{ display: "inline-block" }} color="error">
-              {resource.value.toLocaleString()}
-            </Typography>
-          ) : (
-            resource.value.toLocaleString()
-          )}{" "}
-          / {resource.maximum && resource.maximum.toLocaleString()}
-        </Grid>
-      ))}
+      {camp.resources.map(({ name, value, maximum }) => {
+        let upkeepValue: false | number = false;
+        if (name in upkeep) {
+          // why is this type so broken?
+          upkeepValue =
+            (upkeep[name as keyof typeof upkeep] as number) ?? false;
+        }
+        return (
+          <Grid item xs={8} sm={4} md={2} key={name}>
+            <b>{words(name)}</b>:{" "}
+            {value === 0 ? (
+              <Typography sx={{ display: "inline-block" }} color="error">
+                {value.toLocaleString()}
+              </Typography>
+            ) : (
+              value.toLocaleString()
+            )}{" "}
+            / {maximum && maximum.toLocaleString()}
+            {upkeepValue && (
+              <Typography
+                color={upkeepValue * 24 > value ? "error" : ""}
+                component="span"
+                aria-label={`Upkeep: ${upkeepValue}`}
+              >
+                {" "}
+                -{upkeepValue.toLocaleString()}
+              </Typography>
+            )}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 }
