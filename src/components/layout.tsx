@@ -22,28 +22,30 @@ export function Layout({
   children,
   showHero = false,
 }: LayoutProps): JSX.Element {
+  const now = Date.now();
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [darkMode, setDarkMode] = useState<boolean | null>(true);
   const [timeDifference, setTimeDifference] = useState<number>(0);
   const [lastMeTime, setLastMeTime] = useState<number>(0);
+
   const { data } = useMeQuery({
     pollInterval: 60000,
     skip: !showHero,
-    onCompleted: (data) => {
-      if (data?.me?.now) {
-        const serverNow = Number(data.me.now);
-        if (serverNow !== lastMeTime) {
-          setTimeDifference(Date.now() - serverNow);
-          setLastMeTime(serverNow);
-        }
-      }
-    },
+    onCompleted: (data) => {},
   });
+  useEffect(() => {
+    if (data?.me?.now) {
+      const serverNow = Number(data.me.now);
+      if (serverNow !== lastMeTime) {
+        setTimeDifference(now - serverNow);
+        setLastMeTime(serverNow);
+      }
+    }
+  }, [data?.me?.now]);
   const [currentDelay, setCurrentDelay] = useDelay();
   const [currentMaxDelay, setCurrentMaxDelay] = useState<number>(0);
   const nextTime =
     Number(data?.me?.account?.nextAllowedAction ?? 0) + timeDifference;
-  const now = Date.now();
 
   const actuallyDarkMode = darkMode === null ? prefersDarkMode : darkMode;
 

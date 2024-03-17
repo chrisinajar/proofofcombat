@@ -1,0 +1,29 @@
+mutation CraftGoldEssences($location: LocationInput!, $greater: Boolean!) {
+  craftGoldEssences(location: $location, greater: $greater) {
+    location {
+      id
+      resources {
+        name
+        value
+        maximum
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+      hero {
+        id
+        gold
+        inventory {
+          id
+          baseItem
+          owner
+          name
+          type
+          level
+          enchantment
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ import {
   PlayerLocationType,
   useRecruitMutation,
   usePurchaseBondsMutation,
+  useCraftGoldEssencesMutation,
   useCraftHoneyEssencesMutation,
   useBuildFortificationsMutation,
 } from "src/generated/graphql";
@@ -38,6 +39,9 @@ export function BuildingDetails({
     useCraftHoneyEssencesMutation();
   const [buildFortifications, { loading: fortificationsLoading }] =
     useBuildFortificationsMutation();
+  const [craftGoldEssence, { loading: goldEssenceLoading }] =
+    useCraftGoldEssencesMutation();
+  const isInDelay = useIsInDelay();
 
   if (location.owner !== hero.id) {
     return <>Select a building that belongs to you.</>;
@@ -133,6 +137,50 @@ export function BuildingDetails({
             });
           }}
         />
+      )}
+      {location.type === PlayerLocationType.Treasury && (
+        <>
+          <LoadingButton
+            sx={{ m: 1 }}
+            loading={goldEssenceLoading}
+            variant="contained"
+            disabled={isInDelay}
+            onClick={() => {
+              craftGoldEssence({
+                variables: {
+                  location: {
+                    x: location.location.x,
+                    y: location.location.y,
+                    map: location.location.map,
+                  },
+                  greater: false,
+                },
+              });
+            }}
+          >
+            Craft Element of Gold (1,000,000 bonds)
+          </LoadingButton>
+          <LoadingButton
+            sx={{ m: 1 }}
+            loading={goldEssenceLoading}
+            variant="contained"
+            disabled={isInDelay}
+            onClick={() => {
+              craftGoldEssence({
+                variables: {
+                  location: {
+                    x: location.location.x,
+                    y: location.location.y,
+                    map: location.location.map,
+                  },
+                  greater: true,
+                },
+              });
+            }}
+          >
+            Craft Greater Element of Gold (250,000,000 bonds)
+          </LoadingButton>
+        </>
       )}
       {/*location.type === PlayerLocationType.Apiary && (
         <ResourcePurchase
