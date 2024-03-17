@@ -11,7 +11,6 @@ export function useLocation(): LocationDetails | null {
   const hero = useHero();
 
   const { data: locationData } = useLocationDetailsQuery({
-    fetchPolicy: "network-only",
     variables: hero?.location
       ? {
           location: {

@@ -78,8 +78,9 @@ export function SettlementManager({
     useDestroyBuildingMutation();
   const [destroyConfirmation, setDestroyConfirmation] =
     useState<PlayerLocation | null>(null);
-  const [selectedBuilding, setSelectedBuilding] =
-    useState<PlayerLocation | null>(null);
+  const [selectedBuildingId, setSelectedBuildingId] = useState<string | null>(
+    null,
+  );
   const [buildBuilding, setBuildBuilding] = useState<PlayerLocationType | null>(
     null,
   );
@@ -105,6 +106,10 @@ export function SettlementManager({
     }
   }, [hero.home, onClose]);
 
+  function setSelectedBuilding(location: PlayerLocation | null) {
+    setSelectedBuildingId(location?.id ?? null);
+  }
+
   // home type narrowing
   if (!hero.home) {
     return null;
@@ -129,6 +134,13 @@ export function SettlementManager({
   } = settlementManager;
 
   const capital = capitalData as PlayerLocation;
+
+  const selectedBuilding: PlayerLocation | null =
+    capital.connections.find((conn) => conn.id === selectedBuildingId) ??
+    (adjacentTiles as PlayerLocation[]).find(
+      (conn) => conn.id === selectedBuildingId,
+    ) ??
+    null;
 
   const resources = combineResources(
     capital.resources,

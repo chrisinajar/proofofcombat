@@ -44,7 +44,9 @@ export default function Home(): JSX.Element {
   const routeParts = router.route.split("/");
   const terminalRoute = routeParts.pop();
   const [token, setToken] = useToken();
-  const { data, loading, error } = useMeQuery();
+  const { data, loading, error } = useMeQuery({
+    fetchPolicy: "cache-only",
+  });
   const [selectedTab, setSelectedTab] = useState<string>(
     terminalRoute ?? "play",
   );

@@ -44,7 +44,7 @@ export function createClient({
         const { message, locations, path, extensions } = error;
         onError?.(message);
         console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
         );
         if (extensions.delay && onDelay) {
           onDelay(extensions.remaining as number);
@@ -59,7 +59,12 @@ export function createClient({
     version: "Browser",
     link: from([errorLink, authLink.concat(httpLink)]),
 
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Location: { merge: true },
+        CampResources: { merge: true },
+      },
+    }),
   });
 
   return client;

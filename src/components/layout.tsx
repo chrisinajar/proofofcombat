@@ -28,20 +28,23 @@ export function Layout({
   const [timeDifference, setTimeDifference] = useState<number>(0);
   const [lastMeTime, setLastMeTime] = useState<number>(0);
 
-  const { data } = useMeQuery({
+  const { data, networkStatus } = useMeQuery({
     pollInterval: 60000,
+    fetchPolicy: "cache-first",
     skip: !showHero,
-    onCompleted: (data) => {},
-  });
-  useEffect(() => {
-    if (data?.me?.now) {
-      const serverNow = Number(data.me.now);
-      if (serverNow !== lastMeTime) {
-        setTimeDifference(now - serverNow);
-        setLastMeTime(serverNow);
+    onCompleted: (data, ...args) => {
+      if (data?.me?.now) {
+        const serverNow = Number(data.me.now);
+        if (serverNow !== lastMeTime) {
+          console.log("Update time drift:", now - serverNow);
+          setTimeDifference(now - serverNow);
+          setLastMeTime(serverNow);
+        }
       }
-    }
-  }, [data?.me?.now]);
+    },
+    returnPartialData: true,
+  });
+
   const [currentDelay, setCurrentDelay] = useDelay();
   const [currentMaxDelay, setCurrentMaxDelay] = useState<number>(0);
   const nextTime =
