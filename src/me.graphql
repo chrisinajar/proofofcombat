@@ -133,6 +133,40 @@ query Me {
           type
           level
           enchantment
+
+          imbue {
+            artifact {
+              id
+              owner
+              name
+              level
+
+              attributes {
+                namePrefix {
+                  type
+                  magnitude
+                }
+                namePostfix {
+                  type
+                  magnitude
+                }
+                titlePrefix {
+                  type
+                  magnitude
+                }
+                titlePostfix {
+                  type
+                  magnitude
+                }
+
+                bonusAffixes {
+                  type
+                  magnitude
+                }
+              }
+            }
+            affixes
+          }
         }
         equipment {
           id
@@ -144,6 +178,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           footArmor {
             id
@@ -153,6 +221,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           headArmor {
             id
@@ -162,6 +264,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           legArmor {
             id
@@ -171,6 +307,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           handArmor {
             id
@@ -180,6 +350,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           bodyArmor {
             id
@@ -189,6 +393,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           rightHand {
             id
@@ -198,6 +436,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           leftHand {
             id
@@ -207,6 +479,40 @@ query Me {
             type
             level
             enchantment
+
+            imbue {
+              artifact {
+                id
+                owner
+                name
+                level
+
+                attributes {
+                  namePrefix {
+                    type
+                    magnitude
+                  }
+                  namePostfix {
+                    type
+                    magnitude
+                  }
+                  titlePrefix {
+                    type
+                    magnitude
+                  }
+                  titlePostfix {
+                    type
+                    magnitude
+                  }
+
+                  bonusAffixes {
+                    type
+                    magnitude
+                  }
+                }
+              }
+              affixes
+            }
           }
           artifact {
             id

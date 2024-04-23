@@ -14,12 +14,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import { visuallyHidden } from "@mui/utils";
 
 import { Hero } from "src/generated/graphql";
 
 import { DestroyItems } from "./destroy-items";
 import { EnchantItems } from "./enchant-items";
 import { DisenchantItems } from "./disenchant-items";
+import { ImbueItem } from "./imbue-item";
 
 export function CreaftingMenu({
   hero,
@@ -30,10 +32,20 @@ export function CreaftingMenu({
 }): JSX.Element {
   const [selectedTab, setSelectedTab] = useState("1");
 
+  // can imbue if they have a pure and void essence
+  const hasPureEssence = hero.inventory.some(
+    (item) => item.baseItem === "pure-essence",
+  );
+  const hasVoidEssence = hero.inventory.some(
+    (item) => item.baseItem === "essence-of-void",
+  );
+  const canImbue =
+    hasPureEssence && hasVoidEssence && hero.equipment.artifact !== null;
+
   return (
     <React.Fragment>
       <Divider sx={{ margin: 2 }} />
-      <Typography variant="h2" color="secondary">
+      <Typography variant="h2" component="h4" color="secondary">
         Crafting
       </Typography>
       <Typography variant="subtitle1" color="secondary">
@@ -74,16 +86,36 @@ export function CreaftingMenu({
             <Tab icon={<DeleteIcon />} label="Destroy" value="1" />
             <Tab icon={<CallSplitIcon />} label="Disenchant" value="2" />
             <Tab icon={<MergeTypeIcon />} label="Enchant" value="3" />
+            {canImbue && (
+              <Tab icon={<MergeTypeIcon />} label="Imbue" value="4" />
+            )}
           </TabList>
           <TabPanel value="1">
+            <Typography variant="h5" sx={visuallyHidden}>
+              Destroy Items
+            </Typography>
             <DestroyItems hero={hero} disabled={disabled} />
           </TabPanel>
           <TabPanel value="2">
+            <Typography variant="h5" sx={visuallyHidden}>
+              Disenchant Items
+            </Typography>
             <DisenchantItems hero={hero} disabled={disabled} />
           </TabPanel>
           <TabPanel value="3">
+            <Typography variant="h5" sx={visuallyHidden}>
+              Enchant Items
+            </Typography>
             <EnchantItems hero={hero} disabled={disabled} />
           </TabPanel>
+          {canImbue && (
+            <TabPanel value="4">
+              <Typography variant="h5" sx={visuallyHidden}>
+                Imbue Items
+              </Typography>
+              <ImbueItem hero={hero} disabled={disabled} />
+            </TabPanel>
+          )}
         </Box>
       </TabContext>
     </React.Fragment>

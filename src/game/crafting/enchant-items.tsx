@@ -45,6 +45,7 @@ export function EnchantItems({
     })
 
     .sort(itemSorter);
+
   const enchantmentsFound = {} as { [x in EnchantmentType]: number };
   const enchantments: EnchantmentType[] = [...hero.enchantments]
     .sort()
@@ -190,10 +191,7 @@ export function EnchantItems({
         {selectedItem && enchantment !== "" && (
           <Box>
             <Typography>
-              Create{" "}
-              <b>
-                {enchantmentDisplayName(selectedItem.baseItem, enchantment)}
-              </b>
+              Create <b>{itemDisplayName(selectedItem, enchantment)}</b>
             </Typography>
             <Typography variant="subtitle2">
               Costs {enchantmentDustCost.toLocaleString()} Enchantment Dust

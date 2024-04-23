@@ -141,19 +141,83 @@ export function Inventory(): JSX.Element | null {
         </Grid>
 
         <Grid item xs={6}>
-          {hero.equipment.artifact && (
-            <React.Fragment>
-              <Typography>Active artifact</Typography>
-              <ArtifactModifiers artifact={hero.equipment.artifact} />
-            </React.Fragment>
-          )}
+          <React.Fragment>
+            <ArtifactModifiers
+              title={hero.equipment.artifact?.name}
+              artifact={hero.equipment.artifact}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.leftHand
+                  ? itemDisplayName(hero.equipment.leftHand, null)
+                  : null
+              }
+              artifact={hero.equipment.leftHand?.imbue?.artifact}
+              affixes={hero.equipment.leftHand?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.rightHand
+                  ? itemDisplayName(hero.equipment.rightHand, null)
+                  : null
+              }
+              artifact={hero.equipment.rightHand?.imbue?.artifact}
+              affixes={hero.equipment.rightHand?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.bodyArmor
+                  ? itemDisplayName(hero.equipment.bodyArmor, null)
+                  : null
+              }
+              artifact={hero.equipment.bodyArmor?.imbue?.artifact}
+              affixes={hero.equipment.bodyArmor?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.handArmor
+                  ? itemDisplayName(hero.equipment.handArmor, null)
+                  : null
+              }
+              artifact={hero.equipment.handArmor?.imbue?.artifact}
+              affixes={hero.equipment.handArmor?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.legArmor
+                  ? itemDisplayName(hero.equipment.legArmor, null)
+                  : null
+              }
+              artifact={hero.equipment.legArmor?.imbue?.artifact}
+              affixes={hero.equipment.legArmor?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.headArmor
+                  ? itemDisplayName(hero.equipment.headArmor, null)
+                  : null
+              }
+              artifact={hero.equipment.headArmor?.imbue?.artifact}
+              affixes={hero.equipment.headArmor?.imbue?.affixes}
+            />
+            <ArtifactModifiers
+              title={
+                hero.equipment.footArmor
+                  ? itemDisplayName(hero.equipment.footArmor, null)
+                  : null
+              }
+              artifact={hero.equipment.footArmor?.imbue?.artifact}
+              affixes={hero.equipment.footArmor?.imbue?.affixes}
+            />
+          </React.Fragment>
         </Grid>
 
-        {hero.level === hero.levelCap && itemAllowsRebirth(selectedQuestItem) && (
-          <Grid item xs={6}>
-            <RebirthMenu hero={hero} disabled={shouldDisable} />
-          </Grid>
-        )}
+        {hero.level === hero.levelCap &&
+          itemAllowsRebirth(selectedQuestItem) && (
+            <Grid item xs={6}>
+              <RebirthMenu hero={hero} disabled={shouldDisable} />
+            </Grid>
+          )}
         {itemAllowsCrafting(selectedQuestItem) && (
           <Grid item xs={6}>
             <CreaftingMenu hero={hero} disabled={shouldDisable} />
