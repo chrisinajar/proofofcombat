@@ -57,7 +57,8 @@ type ChatMessage = {
     | "system"
     | "drop"
     | "quest"
-    | "artifact";
+    | "artifact"
+    | "settlement";
   heroId?: string;
   variant?:
     | "button"
@@ -81,7 +82,7 @@ type SystemMessage = {
 };
 
 type Notification = {
-  type: "drop" | "quest" | "artifact";
+  type: "drop" | "quest" | "artifact" | "settlement";
   message: string;
   item?: InventoryItem;
   artifactItem?: ArtifactItem;
@@ -119,12 +120,34 @@ export function Chat(): JSX.Element {
   const socketRef = useRef<Socket>();
 
   useEffect(() => {
+    if (chat.length > 200) {
+      setChat(chat.slice(0, 200));
+    }
+  }, [chat.length]);
+
+  useEffect(() => {
     if (socketRef.current) {
       return;
     }
     if (!socketUrl || !data?.chat?.token) {
       return;
     }
+
+    const colorMap = {
+      // primary, secondary, error, info, warning, success
+      // primary: blue - not great
+      // secondary: purple - not great
+      // error: red
+      // info: light blue
+      // warning: yellow
+      // success: green
+
+      // drop: "error",
+      drop: "error",
+      artifact: "warning",
+      quest: "success",
+      settlement: "info",
+    };
 
     socketRef.current = io(socketUrl, {
       withCredentials: true,
@@ -134,6 +157,7 @@ export function Chat(): JSX.Element {
     });
 
     socketRef.current.on("hello", (data: Hello) => {
+      console.log(data.chat);
       setChat(data.chat);
     });
 
@@ -165,7 +189,7 @@ export function Chat(): JSX.Element {
             variant: "success",
           });
         }
-      } else {
+      } else if (data.type !== "settlement") {
         enqueueSnackbar(data.message, {
           variant: "info",
         });
@@ -178,7 +202,7 @@ export function Chat(): JSX.Element {
           time: Date.now() / 1000,
           message: "",
           from: data.message,
-          color: data.type === "drop" ? "error" : "secondary",
+          color: colorMap[data.type] ?? "secondary",
           variant: "body1",
         },
         ...oldChat,
