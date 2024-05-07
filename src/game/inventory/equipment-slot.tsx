@@ -126,6 +126,11 @@ export function EquipmentSlot({
     },
   ) as InventoryItem[];
 
+  const equippedItem = items.find((item) => item.id === equipped);
+  if (equippedItem && !uniqueItems.find((item) => item.id === equipped)) {
+    uniqueItems.push(equippedItem);
+  }
+
   return (
     <React.Fragment>
       <div>
