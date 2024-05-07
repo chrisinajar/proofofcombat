@@ -3,6 +3,7 @@ mutation BuildBuilding($type: PlayerLocationType!, $location: LocationInput!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
       hero {
         id
         gold

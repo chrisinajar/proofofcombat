@@ -3,6 +3,7 @@ mutation AttackHero($id: ID!, $attackType: AttackType) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     otherHero {
       id

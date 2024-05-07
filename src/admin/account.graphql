@@ -4,6 +4,7 @@ query AdminAccount($id: ID!) {
     name
     banned
     nextAllowedAction
+    timeRemaining
     access
     hero {
       version

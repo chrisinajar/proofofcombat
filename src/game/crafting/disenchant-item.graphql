@@ -3,6 +3,7 @@ mutation DisenchantItem($item: ID!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

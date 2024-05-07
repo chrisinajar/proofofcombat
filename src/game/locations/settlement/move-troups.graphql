@@ -30,6 +30,7 @@ mutation MoveTroups($target: LocationInput!, $units: MilitaryUnitInput!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

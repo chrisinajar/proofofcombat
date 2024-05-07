@@ -30,20 +30,41 @@ export function Layout({
 
   const { data, networkStatus } = useMeQuery({
     pollInterval: 60000,
-    fetchPolicy: "cache-first",
     skip: !showHero,
-    onCompleted: (data, ...args) => {
-      if (data?.me?.now) {
-        const serverNow = Number(data.me.now);
-        if (serverNow !== lastMeTime) {
-          console.log("Update time drift:", now - serverNow);
-          setTimeDifference(now - serverNow);
-          setLastMeTime(serverNow);
-        }
-      }
-    },
     returnPartialData: true,
   });
+
+  useEffect(() => {
+    if (data?.me?.now) {
+      const serverNow = Number(data.me.now);
+      console.log("Update time drift:", now - serverNow);
+      setTimeDifference(now - serverNow);
+    }
+  }, [data?.me?.now]);
+  useEffect(() => {
+    if (
+      data?.me?.account?.timeRemaining &&
+      data?.me?.account?.nextAllowedAction &&
+      data?.me?.account?.timeRemaining > 0
+    ) {
+      // if we're in delay right now, correct time differences that are too large
+      // the difference between nextAllowedAction and now should be at most timeRemaining
+      // time difference is the clock scew between server and client
+      // timeRemaining might be more than the actual remaining time, but it's never less
+      const nextAllowedAction = Number(data.me.account.nextAllowedAction);
+      const inferredTimeRemaining = nextAllowedAction + timeDifference - now;
+      if (inferredTimeRemaining > data.me.account.timeRemaining) {
+        console.log(
+          "Shortening time difference by",
+          inferredTimeRemaining - data.me.account.timeRemaining,
+        );
+        setTimeDifference(
+          timeDifference -
+            (inferredTimeRemaining - data.me.account.timeRemaining),
+        );
+      }
+    }
+  }, [data?.me?.account?.timeRemaining, timeDifference]);
 
   const [currentDelay, setCurrentDelay] = useDelay();
   const [currentMaxDelay, setCurrentMaxDelay] = useState<number>(0);

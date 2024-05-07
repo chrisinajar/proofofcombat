@@ -20,6 +20,7 @@ mutation LevelUp($attribute: AttributeType!, $amount: Int) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

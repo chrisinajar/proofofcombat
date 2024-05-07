@@ -25,6 +25,7 @@ mutation Sail($x: Int!, $y: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     monsters {
       id

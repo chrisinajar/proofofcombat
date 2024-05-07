@@ -11,6 +11,7 @@ mutation Teleport($x: Int!, $y: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

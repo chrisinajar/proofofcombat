@@ -25,6 +25,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

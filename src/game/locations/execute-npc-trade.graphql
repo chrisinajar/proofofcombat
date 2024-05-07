@@ -25,6 +25,7 @@ mutation ExecuteNpcTrade($trade: ID!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

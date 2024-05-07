@@ -9,6 +9,7 @@ mutation ChangeAutoDust($value: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

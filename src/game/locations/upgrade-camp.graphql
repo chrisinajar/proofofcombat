@@ -16,6 +16,7 @@ mutation UpgradeCamp($upgrade: PlayerLocationUpgrades!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

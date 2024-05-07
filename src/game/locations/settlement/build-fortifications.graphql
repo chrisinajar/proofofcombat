@@ -11,6 +11,7 @@ mutation BuildFortifications($location: LocationInput!, $amount: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
       hero {
         id
         gold

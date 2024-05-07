@@ -3,6 +3,7 @@ mutation Heal {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

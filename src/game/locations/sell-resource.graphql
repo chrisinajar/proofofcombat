@@ -3,6 +3,7 @@ mutation SellResource($resource: String!, $amount: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

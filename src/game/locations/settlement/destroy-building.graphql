@@ -3,6 +3,7 @@ mutation DestroyBuilding($location: LocationInput!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
       hero {
         id
         home {

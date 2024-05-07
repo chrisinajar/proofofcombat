@@ -157,7 +157,6 @@ export function Chat(): JSX.Element {
     });
 
     socketRef.current.on("hello", (data: Hello) => {
-      console.log(data.chat);
       setChat(data.chat);
     });
 

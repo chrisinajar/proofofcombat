@@ -3,6 +3,7 @@ mutation DismissQuest {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

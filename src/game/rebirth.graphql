@@ -3,6 +3,7 @@ mutation Rebirth {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

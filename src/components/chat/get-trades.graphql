@@ -3,6 +3,7 @@ query GetTrades {
     account {
       id
       nextAllowedAction
+      timeRemaining
       hero {
         id
         gold

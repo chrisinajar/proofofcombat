@@ -3,6 +3,7 @@ mutation EnchantItem($item: ID!, $enchantment: EnchantmentType!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

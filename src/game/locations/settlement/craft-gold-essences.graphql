@@ -11,6 +11,7 @@ mutation CraftGoldEssences($location: LocationInput!, $greater: Boolean!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
       hero {
         id
         gold

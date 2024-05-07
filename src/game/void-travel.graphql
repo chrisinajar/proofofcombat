@@ -22,6 +22,7 @@ mutation VoidTravel {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
     hero {
       id

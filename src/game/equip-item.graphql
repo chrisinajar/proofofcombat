@@ -2,6 +2,7 @@ mutation EquipItem($item: ID!, $slot: String!) {
   equip(item: $item, slot: $slot) {
     account {
       nextAllowedAction
+      timeRemaining
       id
     }
     hero {

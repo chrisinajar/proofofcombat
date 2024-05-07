@@ -43,6 +43,7 @@ mutation BuyItem($baseItem: ID!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }

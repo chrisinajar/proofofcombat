@@ -17,6 +17,7 @@ mutation ChangeMinimumStat($name: String!, $value: Int!) {
     account {
       id
       nextAllowedAction
+      timeRemaining
     }
   }
 }
