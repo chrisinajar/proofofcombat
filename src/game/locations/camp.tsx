@@ -62,7 +62,7 @@ export function Camp({
   ) {
     isLocal = true;
   }
-  if (specialLocation) {
+  if (specialLocation && specialLocation.type !== "altar") {
     return null;
   }
   if (!hero.home && hero.gold < 100000) {
