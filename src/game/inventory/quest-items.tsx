@@ -34,6 +34,23 @@ export function QuestItems({
     }
   }, [existingItem, value]);
 
+  const quantityMap: { [x in string]: number } = {};
+  items.forEach((item) => {
+    const displayName = itemDisplayName(item);
+    if (quantityMap[displayName]) {
+      quantityMap[displayName] += 1;
+    } else {
+      quantityMap[displayName] = 1;
+    }
+  });
+
+  const uniqueItems: InventoryItem[] = Object.keys(quantityMap).map(
+    (displayName) => {
+      const item = items.find((i) => itemDisplayName(i) === displayName);
+      return item;
+    },
+  ) as InventoryItem[];
+
   return (
     <React.Fragment>
       <div>
@@ -55,9 +72,14 @@ export function QuestItems({
               }
             }}
           >
-            {items.map((inventoryItem) => (
+            {uniqueItems.map((inventoryItem) => (
               <MenuItem key={inventoryItem.id} value={inventoryItem.id}>
-                {itemDisplayName(inventoryItem)}
+                <>
+                  {itemDisplayName(inventoryItem)}
+                  {quantityMap[itemDisplayName(inventoryItem)] > 1
+                    ? ` x${quantityMap[itemDisplayName(inventoryItem)]}`
+                    : ""}
+                </>
                 {getEnchantmentDisplay(inventoryItem.baseItem) !== "???" && (
                   <Typography
                     variant="subtitle2"

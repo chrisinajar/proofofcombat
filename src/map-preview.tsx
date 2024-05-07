@@ -8,14 +8,16 @@ import { Layout } from "src/components/layout";
 import RawLocationData from "./location-data.json";
 
 type TerrainType = "land" | "water" | "forbidden";
-type MapNames = "default";
+type MapNames = "default" | "void";
 type SpecialLocationType =
   | "dock"
   | "quest"
   | "city"
   | "bridge"
   | "tavern"
-  | "hermit";
+  | "hermit"
+  | "altar"
+  | "fortress";
 
 type LocationData = {
   terrain: TerrainType;
@@ -75,7 +77,7 @@ function SpecialLocationEditor({
 }): JSX.Element {
   const location = LocationData.default.locations[x][y];
   const specialLocation = LocationData.default.specialLocations.find(
-    (sloc) => sloc.x === x && sloc.y === y
+    (sloc) => sloc.x === x && sloc.y === y,
   );
 
   function findTerrainType(
@@ -84,7 +86,7 @@ function SpecialLocationEditor({
     terrain: TerrainType,
     direction: number,
     maxMagnitude: number,
-    magnitude: number
+    magnitude: number,
   ) {
     const checkLocation = LocationData.default.locations[x][y];
     console.log(x, y, checkLocation.terrain, terrain);
@@ -181,14 +183,14 @@ function TerrainEditor({
   function setTerrain(
     terrainX: number,
     terrainY: number,
-    terrain: TerrainType
+    terrain: TerrainType,
   ) {
     LocationData.default.locations[terrainX][terrainY].terrain = terrain;
   }
   function getNextTerrain(terrainX: number, terrainY: number): TerrainType {
     const nextTerrainIndex =
       (terrainTypes.indexOf(
-        LocationData.default.locations[terrainX][terrainY].terrain
+        LocationData.default.locations[terrainX][terrainY].terrain,
       ) +
         1) %
       terrainTypes.length;
@@ -202,7 +204,7 @@ function TerrainEditor({
     terrainX: number,
     terrainY: number,
     terrain: TerrainType,
-    fillTerrain: TerrainType
+    fillTerrain: TerrainType,
   ) {
     if (terrainX >= 128 || terrainY >= 96 || terrainX < 0 || terrainY < 0) {
       return;
@@ -229,7 +231,7 @@ function TerrainEditor({
         x,
         y,
         nextTerrain,
-        LocationData.default.locations[x][y].terrain
+        LocationData.default.locations[x][y].terrain,
       );
       rerender();
     } else {
@@ -285,7 +287,7 @@ export default function MapPreview(): JSX.Element {
                   rerender={rerender}
                 />
               );
-            })
+            }),
           )}
         </NoSsr>
       </div>

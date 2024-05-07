@@ -109,6 +109,23 @@ export function EquipmentSlot({
     .filter((item) => canEquipTo(slot, item))
     .sort(itemSorter);
 
+  const quantityMap: { [x in string]: number } = {};
+  items.forEach((item) => {
+    const displayName = itemDisplayName(item);
+    if (quantityMap[displayName]) {
+      quantityMap[displayName] += 1;
+    } else {
+      quantityMap[displayName] = 1;
+    }
+  });
+
+  const uniqueItems: InventoryItem[] = Object.keys(quantityMap).map(
+    (displayName) => {
+      const item = items.find((i) => itemDisplayName(i) === displayName);
+      return item;
+    },
+  ) as InventoryItem[];
+
   return (
     <React.Fragment>
       <div>
@@ -125,7 +142,7 @@ export function EquipmentSlot({
               onEquip(slot, e.target.value);
             }}
           >
-            {items.map((inventoryItem) => {
+            {uniqueItems.map((inventoryItem) => {
               return (
                 <MenuItem
                   key={inventoryItem.id}
@@ -135,7 +152,12 @@ export function EquipmentSlot({
                   {inventoryItem.id === equipped ? (
                     <b>{itemDisplayName(inventoryItem)}</b>
                   ) : (
-                    itemDisplayName(inventoryItem)
+                    <>
+                      {itemDisplayName(inventoryItem)}
+                      {quantityMap[itemDisplayName(inventoryItem)] > 1
+                        ? ` x${quantityMap[itemDisplayName(inventoryItem)]}`
+                        : ""}
+                    </>
                   )}
                   <Typography
                     variant="caption"
