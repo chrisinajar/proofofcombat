@@ -126,10 +126,32 @@ export function EquipmentSlot({
     },
   ) as InventoryItem[];
 
+  // make sure equipped item is standalone
   const equippedItem = items.find((item) => item.id === equipped);
   if (equippedItem && !uniqueItems.find((item) => item.id === equipped)) {
     uniqueItems.push(equippedItem);
+    quantityMap[itemDisplayName(equippedItem)] -= 1;
   }
+  // check if item is equipped in another slot and duplicate those
+  otherEquippedItems.forEach((id) => {
+    const otherEquippedItem = uniqueItems.find((item) => item.id === id);
+    if (otherEquippedItem) {
+      const name = itemDisplayName(otherEquippedItem);
+      if (quantityMap[name] > 1) {
+        // there's more than one of this item but the one in the unique item list is already equipped
+        // find an unequipped one
+        const unequippedItem = items.find(
+          (item) => itemDisplayName(item) === name && item.id !== id,
+        );
+        if (unequippedItem) {
+          uniqueItems.push(unequippedItem);
+          quantityMap[name] -= 1;
+        }
+      }
+    }
+  });
+
+  uniqueItems.sort(itemSorter);
 
   return (
     <React.Fragment>
@@ -159,7 +181,8 @@ export function EquipmentSlot({
                   ) : (
                     <>
                       {itemDisplayName(inventoryItem)}
-                      {quantityMap[itemDisplayName(inventoryItem)] > 1
+                      {quantityMap[itemDisplayName(inventoryItem)] > 1 &&
+                      otherEquippedItems.indexOf(inventoryItem.id) === -1
                         ? ` x${quantityMap[itemDisplayName(inventoryItem)]}`
                         : ""}
                     </>
