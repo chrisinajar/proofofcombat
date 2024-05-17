@@ -174,6 +174,9 @@ export function ItemTypeShop({
         }}
       >
         {items.map((shopItem) => {
+          if (shopItem.id !== shopItem.alias) {
+            return null;
+          }
           return (
             <MenuItem
               key={shopItem.id}
