@@ -56,7 +56,7 @@ export function SellItemShop({
 
   function sellItemForItem(item: InventoryItem | string): ShopItem | null {
     const itemId = typeof item === "string" ? item : item.baseItem;
-    const sellItem = sellables.find((shopItem) => shopItem.id === itemId);
+    const sellItem = sellables.find((shopItem) => shopItem.alias === itemId);
 
     if (!sellItem || !sellItem.cost) {
       return null;
