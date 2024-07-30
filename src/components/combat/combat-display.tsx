@@ -22,9 +22,13 @@ import {
   useAttackHeroMutation,
   EnchantmentType,
   InventoryItem,
+  HeroStance,
+  Hero,
 } from "src/generated/graphql";
 
 import { itemDisplayName } from "src/helpers";
+
+import { StanceSelector } from "./stance-selector";
 
 type CombatDisplayProps = {
   autoBattle: boolean;
@@ -45,6 +49,7 @@ type CombatDisplayProps = {
   onError?: (e: any) => void;
   onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
   fightMutationRef?: React.MutableRefObject<(attackType: AttackType) => void>;
+  hero: Hero;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
@@ -57,6 +62,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     onAutoBattle,
     fightMutationRef,
     duel,
+    hero,
   } = props;
   const [killedByAnother, setKilledByAnother] = useState<boolean>(false);
   const [fightMutation, { data: fightData, loading: fightLoading }] =
@@ -78,6 +84,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     duelData?.attackHero?.otherHero ||
     null;
   const theme = useTheme();
+
+  const [desiredStance, setDesiredStance] = useState<HeroStance>(
+    hero.activeStance || HeroStance.Normal,
+  );
 
   const showAutoBattle = !autoBattle && canAutoBattle;
 
@@ -110,6 +120,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           variables: {
             id: monsterId,
             attackType,
+            stance: desiredStance,
           },
         });
         if (data.data?.attackHero.victory) {
@@ -122,6 +133,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           variables: {
             monster: monsterId,
             attackType,
+            stance: desiredStance,
           },
         });
         if (data.data?.fight.victory) {
@@ -162,6 +174,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
 
   return (
     <React.Fragment>
+      <StanceSelector onChange={setDesiredStance} />
       <Grid
         id="combat-display"
         sx={{

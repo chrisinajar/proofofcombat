@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -33,8 +33,13 @@ const stanceDescriptions: { [x in HeroStance]: string } = {
   [HeroStance.Focus]: "???",
 };
 
-export function StanceSelector(): JSX.Element | null {
+export function StanceSelector(props: {
+  onChange?: (stance: HeroStance) => void;
+}): JSX.Element | null {
   const hero = useHero();
+  const [selectedStance, setSelectedStance] = useState(
+    hero?.activeStance || HeroStance.Normal,
+  );
 
   if (!hero) {
     return null;
@@ -46,6 +51,10 @@ export function StanceSelector(): JSX.Element | null {
 
   function handleChangeStance(stance: HeroStance) {
     console.log("Setting stance to", stance, hero);
+    setSelectedStance(stance);
+    if (props.onChange) {
+      props.onChange(stance);
+    }
   }
 
   // do not show selector if there aren't enough stances
@@ -66,9 +75,7 @@ export function StanceSelector(): JSX.Element | null {
           <Grid item lg={1} md={2} sm={3} xs={6} key={stance.name}>
             <Tooltip title={stance.tooltip}>
               <Button
-                variant={
-                  hero.activeStance === stance.name ? "outlined" : "text"
-                }
+                variant={selectedStance === stance.name ? "outlined" : "text"}
                 sx={{ fontSize: "1rem", padding: 2 }}
                 size="large"
                 id={`set-stance-${stance.name.toLowerCase()}`}

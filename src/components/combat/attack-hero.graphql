@@ -1,5 +1,5 @@
-mutation AttackHero($id: ID!, $attackType: AttackType) {
-  attackHero(id: $id, attackType: $attackType) {
+mutation AttackHero($id: ID!, $attackType: AttackType, $stance: HeroStance) {
+  attackHero(id: $id, attackType: $attackType, stance: $stance) {
     account {
       id
       nextAllowedAction

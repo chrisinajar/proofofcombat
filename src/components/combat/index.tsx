@@ -21,6 +21,7 @@ import {
   MonsterInstance,
   AttackType,
   PublicHero,
+  HeroStance,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
@@ -28,7 +29,6 @@ import { useDelay } from "src/hooks/use-delay";
 import { useLocation } from "src/hooks/use-location";
 
 import { CombatDisplay } from "./combat-display";
-import { StanceSelector } from "./stance-selector";
 import { itemAllowsAutoBattle, itemImprovesAutoBattle } from "src/helpers";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
@@ -41,7 +41,7 @@ declare global {
   }
 }
 
-export function Combat(): JSX.Element {
+export function Combat(): JSX.Element | null {
   const [autoBattleAttackType, setAutoBattleAttackType] = useState<AttackType>(
     AttackType.Melee,
   );
@@ -241,11 +241,13 @@ export function Combat(): JSX.Element {
     duelPlayer = "";
   }
 
-  if (hero) {
-    const showAll = hero.levelCap > 100;
-    if (!showAll) {
-      challenges = challenges.slice(0, hero.level);
-    }
+  if (!hero) {
+    return null;
+  }
+
+  const showAll = hero.levelCap > 100;
+  if (!showAll) {
+    challenges = challenges.slice(0, hero.level);
   }
 
   playerList = playerList.filter((p) => p.combat.health > 0);
@@ -419,9 +421,9 @@ export function Combat(): JSX.Element {
         )}
         {fightingMonster && (
           <React.Fragment>
-            <StanceSelector />
             <CombatDisplay
               key={`${fightingMonster.id}-${currentFightId}`}
+              hero={hero}
               fight={fightingMonster}
               onError={() => {
                 refetch();
@@ -437,9 +439,9 @@ export function Combat(): JSX.Element {
         )}
         {activeDuelPlayer && (
           <React.Fragment>
-            <StanceSelector />
             <CombatDisplay
               key={`${activeDuelPlayer.id}-${currentFightId}`}
+              hero={hero}
               fight={{
                 id: activeDuelPlayer.id,
                 monster: activeDuelPlayer,
