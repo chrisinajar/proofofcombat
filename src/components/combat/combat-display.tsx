@@ -319,7 +319,9 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     )} `}
                     <b>{entry.to}</b>
                     {entry.success
-                      ? ` for ${entry.damage.toLocaleString()} damage!`
+                      ? ` for ${entry.damage.toLocaleString()} ${
+                          entry.damageType ? entry.damageType.toLowerCase() : ""
+                        } damage!`
                       : "."}
                   </React.Fragment>
                 )}

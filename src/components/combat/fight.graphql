@@ -16,6 +16,7 @@ mutation Fight($monster: ID!, $attackType: AttackType) {
     log {
       damage
       attackType
+      damageType
       success
       isEnchantment
       from
