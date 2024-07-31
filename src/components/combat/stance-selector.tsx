@@ -51,7 +51,6 @@ export function StanceSelector(props: {
   }));
 
   function handleChangeStance(stance: HeroStance) {
-    console.log("Setting stance to", stance, hero);
     setSelectedStance(stance);
     if (props.onChange) {
       props.onChange(stance);

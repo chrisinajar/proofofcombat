@@ -174,7 +174,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
 
   return (
     <React.Fragment>
-      <StanceSelector onChange={setDesiredStance} />
+      {!autoBattle && <StanceSelector onChange={setDesiredStance} />}
       <Grid
         id="combat-display"
         sx={{
