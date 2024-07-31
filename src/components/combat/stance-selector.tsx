@@ -13,7 +13,7 @@ const stanceDescriptions: { [x in HeroStance]: string } = {
   [HeroStance.Normal]: "Normal stance with no pros or cons.",
 
   [HeroStance.Combat]: "???",
-  [HeroStance.Reckless]: "???",
+  [HeroStance.Reckless]: "Double accuracy but makes you twice as easy to hit.",
   [HeroStance.Aggressive]: "???",
   [HeroStance.Defensive]: "???",
   [HeroStance.NecroticBeam]: "???",
