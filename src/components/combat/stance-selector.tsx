@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 import { useHero } from "src/hooks/use-hero";
 import { HeroStance } from "src/generated/graphql";
@@ -64,12 +65,12 @@ export function StanceSelector(props: {
 
   return (
     <Grid item xs={12}>
-      <Grid container sx={{ textAlign: "center" }} columns={6}>
+      <Grid container sx={{ textAlign: "center" }} columns={6} spacing={2}>
         <Grid item xs={6}>
-          <hr />
+          <Divider />
         </Grid>
-        <Grid item lg={1} xs={6}>
-          <Typography variant="h5">Select Stance</Typography>
+        <Grid item xs={6}>
+          <Typography variant="h5">Select Combat Style</Typography>
         </Grid>
         {stances.map((stance) => (
           <Grid item lg={1} md={2} sm={3} xs={6} key={stance.name}>
