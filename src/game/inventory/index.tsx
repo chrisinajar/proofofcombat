@@ -157,6 +157,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.leftHand?.imbue?.artifact}
                 affixes={hero.equipment.leftHand?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.rightHand
@@ -166,6 +168,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.rightHand?.imbue?.artifact}
                 affixes={hero.equipment.rightHand?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.bodyArmor
@@ -175,6 +179,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.bodyArmor?.imbue?.artifact}
                 affixes={hero.equipment.bodyArmor?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.handArmor
@@ -184,6 +190,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.handArmor?.imbue?.artifact}
                 affixes={hero.equipment.handArmor?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.legArmor
@@ -193,6 +201,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.legArmor?.imbue?.artifact}
                 affixes={hero.equipment.legArmor?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.headArmor
@@ -202,6 +212,8 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.headArmor?.imbue?.artifact}
                 affixes={hero.equipment.headArmor?.imbue?.affixes}
               />
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <ArtifactModifiers
                 title={
                   hero.equipment.footArmor
