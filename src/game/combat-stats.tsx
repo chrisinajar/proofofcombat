@@ -52,6 +52,7 @@ export function CombatStats({
 
         <Grid item xs={6}>
           <Divider />
+          <Typography variant="h6">Skills</Typography>
         </Grid>
 
         <Grid item xs={6} sm={3} md={2} lg={2}>
@@ -74,6 +75,26 @@ export function CombatStats({
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Regeneration</b>: {skills.regeneration.toLocaleString()}
+        </Grid>
+
+        <Grid item xs={6}>
+          <Divider />
+          <Typography variant="h6">Resistances</Typography>
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Physical</b>: {formatPercentage(stats.physicalResistance, 1)}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Magical</b>: {formatPercentage(stats.magicalResistance, 1)}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Fire</b>: {formatPercentage(stats.fireResistance, 1)}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Ice</b>: {formatPercentage(stats.iceResistance, 1)}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Lightning</b>: {formatPercentage(stats.lightningResistance, 1)}
         </Grid>
 
         <Grid item xs={6}>

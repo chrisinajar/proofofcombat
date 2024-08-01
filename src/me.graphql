@@ -588,6 +588,12 @@ query Me {
             strength
             wisdom
           }
+
+          physicalResistance
+          magicalResistance
+          fireResistance
+          iceResistance
+          lightningResistance
         }
         outgoingTrades {
           gold
