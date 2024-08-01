@@ -1,25 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Grid from "@mui/material/Grid";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
-import {
-  Hero,
-  InventoryItem,
-  InventoryItemType,
-  useEquipItemMutation,
-  EnchantmentType,
-} from "src/generated/graphql";
+import { useEquipItemMutation } from "src/generated/graphql";
 
 import {
   itemDisplayName,
@@ -142,85 +128,91 @@ export function Inventory(): JSX.Element | null {
         </Grid>
 
         <Grid item xs={6}>
-          {!!hero.buffs.blessing && (
-            <React.Fragment>
-              <Typography>
-                {pureEnchantmentDisplayName(hero.buffs.blessing)}
-              </Typography>
-              <Typography variant="body1">
-                <b>{getEnchantmentDisplay(hero.buffs.blessing)}</b>
-              </Typography>
-              <br />
-            </React.Fragment>
-          )}
-
-          <ArtifactModifiers
-            title={hero.equipment.artifact?.name}
-            artifact={hero.equipment.artifact}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.leftHand
-                ? itemDisplayName(hero.equipment.leftHand, null)
-                : null
-            }
-            artifact={hero.equipment.leftHand?.imbue?.artifact}
-            affixes={hero.equipment.leftHand?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.rightHand
-                ? itemDisplayName(hero.equipment.rightHand, null)
-                : null
-            }
-            artifact={hero.equipment.rightHand?.imbue?.artifact}
-            affixes={hero.equipment.rightHand?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.bodyArmor
-                ? itemDisplayName(hero.equipment.bodyArmor, null)
-                : null
-            }
-            artifact={hero.equipment.bodyArmor?.imbue?.artifact}
-            affixes={hero.equipment.bodyArmor?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.handArmor
-                ? itemDisplayName(hero.equipment.handArmor, null)
-                : null
-            }
-            artifact={hero.equipment.handArmor?.imbue?.artifact}
-            affixes={hero.equipment.handArmor?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.legArmor
-                ? itemDisplayName(hero.equipment.legArmor, null)
-                : null
-            }
-            artifact={hero.equipment.legArmor?.imbue?.artifact}
-            affixes={hero.equipment.legArmor?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.headArmor
-                ? itemDisplayName(hero.equipment.headArmor, null)
-                : null
-            }
-            artifact={hero.equipment.headArmor?.imbue?.artifact}
-            affixes={hero.equipment.headArmor?.imbue?.affixes}
-          />
-          <ArtifactModifiers
-            title={
-              hero.equipment.footArmor
-                ? itemDisplayName(hero.equipment.footArmor, null)
-                : null
-            }
-            artifact={hero.equipment.footArmor?.imbue?.artifact}
-            affixes={hero.equipment.footArmor?.imbue?.affixes}
-          />
+          <Grid container columns={6} spacing={1}>
+            <Grid item xs={6} sm={3}>
+              {!!hero.buffs.blessing && (
+                <React.Fragment>
+                  <Typography>
+                    {pureEnchantmentDisplayName(hero.buffs.blessing)}
+                  </Typography>
+                  <Typography variant="body1">
+                    <b>{getEnchantmentDisplay(hero.buffs.blessing)}</b>
+                  </Typography>
+                </React.Fragment>
+              )}
+            </Grid>
+            <Grid item xs={6} md={3}>
+              <ArtifactModifiers
+                title={hero.equipment.artifact?.name}
+                artifact={hero.equipment.artifact}
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <ArtifactModifiers
+                title={
+                  hero.equipment.leftHand
+                    ? itemDisplayName(hero.equipment.leftHand, null)
+                    : null
+                }
+                artifact={hero.equipment.leftHand?.imbue?.artifact}
+                affixes={hero.equipment.leftHand?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.rightHand
+                    ? itemDisplayName(hero.equipment.rightHand, null)
+                    : null
+                }
+                artifact={hero.equipment.rightHand?.imbue?.artifact}
+                affixes={hero.equipment.rightHand?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.bodyArmor
+                    ? itemDisplayName(hero.equipment.bodyArmor, null)
+                    : null
+                }
+                artifact={hero.equipment.bodyArmor?.imbue?.artifact}
+                affixes={hero.equipment.bodyArmor?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.handArmor
+                    ? itemDisplayName(hero.equipment.handArmor, null)
+                    : null
+                }
+                artifact={hero.equipment.handArmor?.imbue?.artifact}
+                affixes={hero.equipment.handArmor?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.legArmor
+                    ? itemDisplayName(hero.equipment.legArmor, null)
+                    : null
+                }
+                artifact={hero.equipment.legArmor?.imbue?.artifact}
+                affixes={hero.equipment.legArmor?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.headArmor
+                    ? itemDisplayName(hero.equipment.headArmor, null)
+                    : null
+                }
+                artifact={hero.equipment.headArmor?.imbue?.artifact}
+                affixes={hero.equipment.headArmor?.imbue?.affixes}
+              />
+              <ArtifactModifiers
+                title={
+                  hero.equipment.footArmor
+                    ? itemDisplayName(hero.equipment.footArmor, null)
+                    : null
+                }
+                artifact={hero.equipment.footArmor?.imbue?.artifact}
+                affixes={hero.equipment.footArmor?.imbue?.affixes}
+              />
+            </Grid>
+          </Grid>
         </Grid>
 
         {hero.level === hero.levelCap &&
