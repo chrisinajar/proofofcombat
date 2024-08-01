@@ -9,29 +9,20 @@ import Divider from "@mui/material/Divider";
 import { useHero } from "src/hooks/use-hero";
 import { HeroStance } from "src/generated/graphql";
 
+const stanceNameMap: { [x in HeroStance]?: string } = {
+  [HeroStance.Fire]: "Fireball",
+  [HeroStance.Ice]: "Blizzard",
+  [HeroStance.Lightning]: "Lightning Bolt",
+};
+
 const stanceDescriptions: { [x in HeroStance]: string } = {
   [HeroStance.Normal]: "Normal stance with no pros or cons.",
 
-  [HeroStance.Combat]: "???",
   [HeroStance.Reckless]: "Double accuracy but makes you twice as easy to hit.",
-  [HeroStance.Aggressive]: "???",
-  [HeroStance.Defensive]: "???",
-  [HeroStance.NecroticBeam]: "???",
-  [HeroStance.CloudofKnives]: "???",
-  [HeroStance.FrozenOrb]: "???",
-  [HeroStance.MageArmor]: "???",
-  [HeroStance.NormalArrow]: "???",
-  [HeroStance.BarbedArrow]: "???",
-  [HeroStance.BloodHunter]: "???",
-  [HeroStance.DarkPresence]: "???",
-  [HeroStance.AuraoftheLifeless]: "???",
-  [HeroStance.ShieldSmash]: "???",
-  [HeroStance.ShieldSlash]: "???",
-  [HeroStance.HolySmite]: "???",
-  [HeroStance.VengefulSmite]: "???",
-  [HeroStance.WarriorsStance]: "???",
-  [HeroStance.Hexblade]: "???",
-  [HeroStance.Focus]: "???",
+
+  [HeroStance.Fire]: "Converts 20% of magic damage into Fire damage.",
+  [HeroStance.Ice]: "Converts 20% of magic damage into Ice damage.",
+  [HeroStance.Lightning]: "Converts 20% of magic damage into Lightning damage.",
 };
 
 export function StanceSelector(props: {
@@ -46,7 +37,8 @@ export function StanceSelector(props: {
     return null;
   }
   const stances = hero.availableStances.map((stance) => ({
-    name: stance,
+    name: stanceNameMap[stance] ?? stance,
+    stance,
     tooltip: stanceDescriptions[stance],
   }));
 
@@ -79,7 +71,7 @@ export function StanceSelector(props: {
                 sx={{ fontSize: "1rem", padding: 2 }}
                 size="large"
                 id={`set-stance-${stance.name.toLowerCase()}`}
-                onClick={() => handleChangeStance(stance.name)}
+                onClick={() => handleChangeStance(stance.stance)}
                 aria-label={`set stance ${stance.name}`}
                 /* startIcon={<ShieldIcon />} */
               >
