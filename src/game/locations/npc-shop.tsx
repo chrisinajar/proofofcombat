@@ -4,6 +4,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
+import ButtonUnstyled from "@mui/core/ButtonUnstyled";
 
 import {
   NpcShop as NpcShopType,
@@ -81,7 +82,12 @@ function TradeOffer({ trade }: { trade: NpcShopTrade }): JSX.Element {
 function PriceStatement({ price }: { price: NpcShopItems }): JSX.Element {
   return (
     <Tooltip title={getPriceString(price)} describeChild>
-      <b aria-label={getPriceString(price)}>{price.description}</b>
+      <ButtonUnstyled
+        style={{ background: "none", border: "none" }}
+        aria-label={getPriceString(price)}
+      >
+        {price.description}
+      </ButtonUnstyled>
     </Tooltip>
   );
 }
