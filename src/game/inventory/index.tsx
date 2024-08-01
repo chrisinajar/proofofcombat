@@ -148,7 +148,7 @@ export function Inventory(): JSX.Element | null {
                 {pureEnchantmentDisplayName(hero.buffs.blessing)}
               </Typography>
               <Typography variant="body1">
-                {getEnchantmentDisplay(hero.buffs.blessing)}
+                <b>{getEnchantmentDisplay(hero.buffs.blessing)}</b>
               </Typography>
             </React.Fragment>
           )}
