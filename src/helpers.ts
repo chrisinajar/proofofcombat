@@ -484,6 +484,18 @@ export function getEnchantmentDisplay(enchantment: string): string {
     case EnchantmentType.SuperAllStats:
       return "+100% All Stats, Leech 20% Constitution, CounterSpell, Minus Armor, Bonus Armor";
       break;
+    case EnchantmentType.RubyBlessing:
+      return "+20% Physical Resistance";
+      break;
+    case EnchantmentType.EmeraldBlessing:
+      return "+20% Magical Resistance";
+      break;
+    case EnchantmentType.SapphireBlessing:
+      return "+20% Elemental Resistance";
+      break;
+    case EnchantmentType.DiamondBlessing:
+      return "+10% All Resistances";
+      break;
     default:
       return "???";
       break;
