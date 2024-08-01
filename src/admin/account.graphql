@@ -259,6 +259,12 @@ query AdminAccount($id: ID!) {
           strength
           wisdom
         }
+
+        physicalResistance
+        magicalResistance
+        fireResistance
+        iceResistance
+        lightningResistance
       }
       outgoingTrades {
         gold
