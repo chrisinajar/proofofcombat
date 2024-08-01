@@ -23,6 +23,11 @@ query AdminAccount($id: ID!) {
 
       skillPercent
       activeSkill
+
+      buffs {
+        blessing
+      }
+
       skills {
         attackingAccuracy
         castingAccuracy
