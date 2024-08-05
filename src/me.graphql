@@ -594,6 +594,8 @@ query Me {
           fireResistance
           iceResistance
           lightningResistance
+          holyResistance
+          blightResistance
         }
         outgoingTrades {
           gold

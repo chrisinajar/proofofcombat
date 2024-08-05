@@ -96,6 +96,12 @@ export function CombatStats({
         <Grid item xs={6} sm={3} md={2} lg={2}>
           <b>Lightning</b>: {formatPercentage(stats.lightningResistance, 1)}
         </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Holy</b>: {formatPercentage(stats.holyResistance, 1)}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Blight</b>: {formatPercentage(stats.blightResistance, 1)}
+        </Grid>
 
         <Grid item xs={6}>
           <Divider />

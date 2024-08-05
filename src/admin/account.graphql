@@ -265,6 +265,8 @@ query AdminAccount($id: ID!) {
         fireResistance
         iceResistance
         lightningResistance
+        holyResistance
+        blightResistance
       }
       outgoingTrades {
         gold
