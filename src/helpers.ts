@@ -106,6 +106,94 @@ export function modifierText(modifier: ArtifactAttribute): string {
     case ArtifactAttributeType.Focus:
       return `${percentage} chance to resist mesmerizing`;
       break;
+
+    case ArtifactAttributeType.AllResistances:
+      return `${percentage} to all resistances`;
+      break;
+    case ArtifactAttributeType.DamageAsPhysical:
+      return `${percentage} damage converted to physical`;
+      break;
+    case ArtifactAttributeType.DamageAsMagical:
+      return `${percentage} damage converted to magical`;
+      break;
+    case ArtifactAttributeType.DamageAsFire:
+      return `${percentage} damage converted to fire`;
+      break;
+    case ArtifactAttributeType.DamageAsIce:
+      return `${percentage} damage converted to ice`;
+      break;
+    case ArtifactAttributeType.DamageAsLightning:
+      return `${percentage} damage converted to lightning`;
+      break;
+    case ArtifactAttributeType.DamageAsHoly:
+      return `${percentage} damage converted to holy`;
+      break;
+    case ArtifactAttributeType.DamageAsBlight:
+      return `${percentage} damage converted to blight`;
+      break;
+    case ArtifactAttributeType.PhysicalResistance:
+      return `${percentage} to physical resistance`;
+      break;
+    case ArtifactAttributeType.MagicalResistance:
+      return `${percentage} to magical resistance`;
+      break;
+    case ArtifactAttributeType.FireResistance:
+      return `${percentage} to fire resistance`;
+      break;
+    case ArtifactAttributeType.IceResistance:
+      return `${percentage} to ice resistance`;
+      break;
+    case ArtifactAttributeType.LightningResistance:
+      return `${percentage} to lightning resistance`;
+      break;
+    case ArtifactAttributeType.HolyResistance:
+      return `${percentage} to holy resistance`;
+      break;
+    case ArtifactAttributeType.BlightResistance:
+      return `${percentage} to blight resistance`;
+      break;
+    case ArtifactAttributeType.BonusPhysicalDamage:
+      return `${percentage} bonuus physical damage`;
+      break;
+    case ArtifactAttributeType.BonusMagicalDamage:
+      return `${percentage} bonuus magical damage`;
+      break;
+    case ArtifactAttributeType.BonusFireDamage:
+      return `${percentage} bonuus fire damage`;
+      break;
+    case ArtifactAttributeType.BonusIceDamage:
+      return `${percentage} bonuus ice damage`;
+      break;
+    case ArtifactAttributeType.BonusLightningDamage:
+      return `${percentage} bonuus lightning damage`;
+      break;
+    case ArtifactAttributeType.BonusHolyDamage:
+      return `${percentage} bonuus holy damage`;
+      break;
+    case ArtifactAttributeType.BonusBlightDamage:
+      return `${percentage} bonuus blight damage`;
+      break;
+    case ArtifactAttributeType.EnemyPhysicalResistance:
+      return `-${percentage} to enemy physical resistance`;
+      break;
+    case ArtifactAttributeType.EnemyMagicalResistance:
+      return `-${percentage} to enemy magical resistance`;
+      break;
+    case ArtifactAttributeType.EnemyFireResistance:
+      return `-${percentage} to enemy fire resistance`;
+      break;
+    case ArtifactAttributeType.EnemyIceResistance:
+      return `-${percentage} to enemy ice resistance`;
+      break;
+    case ArtifactAttributeType.EnemyLightningResistance:
+      return `-${percentage} to enemy lightning resistance`;
+      break;
+    case ArtifactAttributeType.EnemyHolyResistance:
+      return `-${percentage} to enemy holy resistance`;
+      break;
+    case ArtifactAttributeType.EnemyBlightResistance:
+      return `-${percentage} to enemy blight resistance`;
+      break;
   }
 }
 
