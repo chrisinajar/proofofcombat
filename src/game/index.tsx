@@ -162,10 +162,9 @@ export default function Home(): JSX.Element {
                     </Link>
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
-                    This game is once again being developed actively. It's been
-                    a long time coming and there's a lot of major changes to the
-                    underlying engine in order to unlock cooler and more
-                    interesting mechanics for the game.
+                    This is a text-based RPG where you can fight monsters, level
+                    up, and explore the world. The game is my passion project
+                    and is actively being developed at almost all times.
                   </Typography>
 
                   <Typography variant="h4" sx={visuallyHidden}>
@@ -188,7 +187,7 @@ export default function Home(): JSX.Element {
                   </Typography>
                   <Typography sx={{ mb: 2 }}>
                     A great deal of the game is undocumented, but the parts
-                    which are documented can be found,{" "}
+                    which are documented can be found{" "}
                     <Link
                       underline="hover"
                       href="https://github.com/chrisinajar/proofofcombat/wiki/"
