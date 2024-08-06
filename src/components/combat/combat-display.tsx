@@ -433,8 +433,8 @@ function getCombatPhrase(
     case AttackType.Cast:
       return success
         ? critical
-          ? "carefully casts a spell at"
-          : "blasts a beam of necrotic energy into"
+          ? "carefully casts a powerful spell against"
+          : "shoots a magical bolt at"
         : "attempts to cast a spell against";
       break;
     case AttackType.Ranged:
