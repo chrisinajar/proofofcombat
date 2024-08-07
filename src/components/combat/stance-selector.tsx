@@ -13,6 +13,7 @@ const stanceNameMap: { [x in HeroStance]?: string } = {
   [HeroStance.Fire]: "Fireball",
   [HeroStance.Ice]: "Blizzard",
   [HeroStance.Lightning]: "Lightning Bolt",
+  [HeroStance.Blight]: "Wrathful",
 };
 
 const stanceDescriptions: { [x in HeroStance]: string } = {
@@ -23,6 +24,9 @@ const stanceDescriptions: { [x in HeroStance]: string } = {
   [HeroStance.Fire]: "Converts 20% of magic damage into Fire damage.",
   [HeroStance.Ice]: "Converts 20% of magic damage into Ice damage.",
   [HeroStance.Lightning]: "Converts 20% of magic damage into Lightning damage.",
+
+  [HeroStance.Sunder]: "Converts 50% of damage into Physical damage.",
+  [HeroStance.Blight]: "Changes base damage type of smite from Holy to Blight.",
 };
 
 export function StanceSelector(props: {

@@ -56,7 +56,7 @@ export function Footer(): JSX.Element {
       <Typography variant="h1" sx={visuallyHidden}>
         Logout
       </Typography>
-      <LogoutButton />
+      <LogoutButton sx={visuallyHidden} />
     </React.Fragment>
   );
 }

@@ -165,6 +165,7 @@ export default function Home(): JSX.Element {
                     This is a text-based RPG where you can fight monsters, level
                     up, and explore the world. The game is my passion project
                     and is actively being developed at almost all times.
+                    Sometimes.
                   </Typography>
 
                   <Typography variant="h4" sx={visuallyHidden}>

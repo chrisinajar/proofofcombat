@@ -29,6 +29,11 @@ export function LoginOrSignup(): JSX.Element {
           </Typography>
         </React.Fragment>
       )}
+
+      <Typography>
+        This game is in no way monetized; there are no ads, tracking, cookies,
+        analytics, or transactions. I just like making games.
+      </Typography>
     </Container>
   );
 }

@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import NoSsr from "@mui/material/NoSsr";
 import Button from "@mui/material/Button";
 
+import { SxProps } from "@mui/material";
+
 import { useToken } from "src/token";
 
-export function LogoutButton(): JSX.Element | null {
+export function LogoutButton({ sx }: { sx?: SxProps }): JSX.Element | null {
   const router = useRouter();
   const client = useApolloClient();
 
@@ -30,6 +32,7 @@ export function LogoutButton(): JSX.Element | null {
         variant="contained"
         disableElevation
         onClick={handleLogout}
+        sx={sx}
       >
         Logout
       </Button>
