@@ -552,6 +552,37 @@ query Me {
           }
         }
 
+        pendingArtifact {
+          id
+          owner
+          name
+          level
+
+          attributes {
+            namePrefix {
+              type
+              magnitude
+            }
+            namePostfix {
+              type
+              magnitude
+            }
+            titlePrefix {
+              type
+              magnitude
+            }
+            titlePostfix {
+              type
+              magnitude
+            }
+
+            bonusAffixes {
+              type
+              magnitude
+            }
+          }
+        }
+
         combat {
           health
           maxHealth
@@ -633,16 +664,16 @@ query Me {
         }
 
         settings {
+          autoDust
           minimumStats {
-            strength
+            constitution
             dexterity
             intelligence
-            constitution
-            wisdom
-            willpower
             luck
+            strength
+            willpower
+            wisdom
           }
-          autoDust
         }
         home {
           id

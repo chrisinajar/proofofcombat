@@ -31,6 +31,7 @@ import {
   InventoryItem,
   useGetChatTokenQuery,
   ArtifactItem,
+  useMeQuery,
 } from "src/generated/graphql";
 import { useHero } from "src/hooks/use-hero";
 import { useToken } from "src/token";
@@ -38,6 +39,7 @@ import { itemDisplayName } from "src/helpers";
 
 import { Trade } from "./trade";
 import { ArtifactModal } from "./artifact-modal";
+import { getArtifactNotification } from "src/helpers/artifact-notifications";
 
 const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
 
@@ -76,6 +78,7 @@ type ChatMessage = {
     | "body2"
     | "overline";
 };
+
 type SystemMessage = {
   color: "success" | "primary" | "secondary" | "error";
   message: string;
@@ -102,6 +105,7 @@ type MessageTabsType = {
 export function Chat(): JSX.Element {
   const { enqueueSnackbar } = useSnackbar();
   const hero = useHero();
+  const { data: meData } = useMeQuery();
   const { data } = useGetChatTokenQuery();
   const [tradeMode, setTradeMode] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatMessage[]>([]);
@@ -113,9 +117,6 @@ export function Chat(): JSX.Element {
     chat: { type: "built-in" },
     notifications: { type: "built-in" },
   });
-  const [alertArtifact, setAlertArtifact] = useState<ArtifactItem | false>(
-    false,
-  );
 
   const socketRef = useRef<Socket>();
 
@@ -173,21 +174,21 @@ export function Chat(): JSX.Element {
         );
       }
 
-      if (data.type === "drop" || data.type === "artifact") {
+      if (data.type === "drop") {
         if (data.item) {
           enqueueSnackbar(`You found ${itemDisplayName(data.item)}`, {
             variant: "success",
           });
-        } else if (data.artifactItem) {
-          enqueueSnackbar(`You found ${data.artifactItem.name}`, {
-            variant: "success",
-          });
-          setAlertArtifact(data.artifactItem);
         } else {
           enqueueSnackbar(data.message, {
             variant: "success",
           });
         }
+      } else if (data.type === "artifact") {
+        const notification = getArtifactNotification(data.message, data.artifactItem);
+        enqueueSnackbar(notification.message, {
+          variant: notification.variant,
+        });
       } else if (data.type !== "settlement") {
         enqueueSnackbar(data.message, {
           variant: "info",
@@ -248,51 +249,33 @@ export function Chat(): JSX.Element {
   function checkForEnter(e: React.KeyboardEvent) {
     if (e.key === "Enter") {
       handleSendChat();
-      return;
     }
   }
+
   async function handleSendChat() {
-    if (!socketRef.current) {
+    if (!socketRef.current?.connected) {
+      return;
+    }
+    if (!cleanMessage) {
       return;
     }
     const tabData = messageTabs[currentTab];
-
     if (tabData.type === "private") {
-      socketRef.current.emit(
-        "private-chat",
-        {
-          to: tabData.heroId,
-          message,
-        },
-        (data: ChatMessage) => {
-          console.log("Got a confirmation!", data);
-          setChat((oldChat) => [data, ...oldChat]);
-        },
-      );
-      setMessage("");
-      return;
+      socketRef.current.emit("private", {
+        to: tabData.heroId,
+        message: cleanMessage,
+      });
+    } else {
+      socketRef.current.emit("chat", {
+        message: cleanMessage,
+      });
     }
-
-    socketRef.current.emit(
-      "chat",
-      {
-        message,
-      },
-      (data: ChatMessage) => {
-        console.log("Got a reply!", data);
-        setChat((oldChat) => [data, ...oldChat]);
-      },
-    );
     setMessage("");
   }
 
   function handleWhisper(heroName: string, heroId: string) {
-    if (heroId === hero?.id) {
-      return;
-    }
-    console.log("Trying to whisper", heroName, heroId.substr(0, 4));
-    setMessageTabs((tabs) => ({
-      ...tabs,
+    setMessageTabs((oldTabs) => ({
+      ...oldTabs,
       [heroName]: {
         type: "private",
         heroId,
@@ -345,11 +328,16 @@ export function Chat(): JSX.Element {
     ? `Max message: ${chatLimit - cleanMessage.length}/${chatLimit}`
     : "Type here...";
 
+  const pendingArtifact = meData?.me?.account?.hero?.pendingArtifact;
+
   return (
     <React.Fragment>
       <Modal
-        open={!hero?.currentQuest && !!alertArtifact}
-        onClose={() => setAlertArtifact(false)}
+        open={!hero?.currentQuest && !!pendingArtifact}
+        onClose={() => {
+          // Don't allow closing by clicking outside
+          return;
+        }}
       >
         <Box
           sx={{
@@ -365,7 +353,11 @@ export function Chat(): JSX.Element {
             textAlign: "center",
           }}
         >
-          {alertArtifact && <ArtifactModal artifact={alertArtifact} />}
+          {pendingArtifact && (
+            <ArtifactModal 
+              artifact={pendingArtifact}
+            />
+          )}
         </Box>
       </Modal>
       <TabContext value={currentTab}>
@@ -472,7 +464,6 @@ export function Chat(): JSX.Element {
             )}
           </Typography>
         ))}
-        {/* <Button variant="contained">Send</Button> */}
       </Box>
       <br />
     </React.Fragment>

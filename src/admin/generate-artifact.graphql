@@ -1,0 +1,36 @@
+mutation GenerateArtifact($id: ID!, $level: Float!) {
+  generateArtifact(id: $id, level: $level) {
+    id
+    hero {
+      id
+      pendingArtifact {
+        id
+        owner
+        name
+        level
+        attributes {
+          namePrefix {
+            type
+            magnitude
+          }
+          namePostfix {
+            type
+            magnitude
+          }
+          titlePrefix {
+            type
+            magnitude
+          }
+          titlePostfix {
+            type
+            magnitude
+          }
+          bonusAffixes {
+            type
+            magnitude
+          }
+        }
+      }
+    }
+  }
+} 

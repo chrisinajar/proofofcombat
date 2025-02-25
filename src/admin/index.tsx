@@ -19,6 +19,7 @@ import { SetSkill } from "./set-skill";
 import { AddLevels } from "./add-levels";
 import { BanToggle } from "./ban-toggle";
 import { DeleteAccount } from "./delete-account";
+import { GenerateArtifact } from "./generate-artifact";
 
 export default function AdminPage(): JSX.Element {
   const [showData, setShowData] = useState<boolean>(false);
@@ -80,6 +81,7 @@ export default function AdminPage(): JSX.Element {
       <br />
       <br />
       <br />
+      {account && <GenerateArtifact account={account} />}
       {account && <CreateItem account={account} />}
       {account && <GiveGold account={account} />}
       {account?.hero && <SetSkill hero={account.hero} />}

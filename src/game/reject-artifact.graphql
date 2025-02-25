@@ -1,0 +1,71 @@
+mutation RejectArtifact {
+  rejectArtifact {
+    hero {
+      id
+      equipment {
+        id
+        artifact {
+          id
+          owner
+          name
+          level
+          attributes {
+            namePrefix {
+              type
+              magnitude
+            }
+            namePostfix {
+              type
+              magnitude
+            }
+            titlePrefix {
+              type
+              magnitude
+            }
+            titlePostfix {
+              type
+              magnitude
+            }
+            bonusAffixes {
+              type
+              magnitude
+            }
+          }
+        }
+      }
+      pendingArtifact {
+        id
+        owner
+        name
+        level
+        attributes {
+          namePrefix {
+            type
+            magnitude
+          }
+          namePostfix {
+            type
+            magnitude
+          }
+          titlePrefix {
+            type
+            magnitude
+          }
+          titlePostfix {
+            type
+            magnitude
+          }
+          bonusAffixes {
+            type
+            magnitude
+          }
+        }
+      }
+    }
+    account {
+      id
+      nextAllowedAction
+      timeRemaining
+    }
+  }
+} 
