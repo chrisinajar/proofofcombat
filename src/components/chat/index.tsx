@@ -355,7 +355,8 @@ export function Chat(): JSX.Element {
         >
           {pendingArtifact && (
             <ArtifactModal 
-              artifact={pendingArtifact}
+              currentArtifact={meData?.me?.account?.hero?.equipment?.artifact ?? null}
+              newArtifact={pendingArtifact}
             />
           )}
         </Box>

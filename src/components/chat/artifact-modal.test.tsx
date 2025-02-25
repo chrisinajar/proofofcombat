@@ -1,16 +1,16 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { MockedProvider } from "@apollo/client/testing";
 import { ArtifactModal } from "./artifact-modal";
-import { MeDocument, ArtifactAttributeType } from "src/generated/graphql";
+import { ArtifactAttributeType } from "src/generated/graphql";
 
-const mockArtifact = {
+const equippedArtifact = {
   __typename: "ArtifactItem" as const,
-  id: "test-id",
+  id: "current-id",
   owner: "test-owner",
-  name: "Test Artifact",
+  name: "Super Equipped Test Artifact",
   level: 1,
   attributes: {
     __typename: "ArtifactAttributes" as const,
@@ -22,71 +22,62 @@ const mockArtifact = {
   },
 };
 
-const mocks = [
-  {
-    request: {
-      query: MeDocument,
-    },
-    result: {
-      data: {
-        me: {
-          account: {
-            hero: {
-              equipment: {
-                artifact: {
-                  ...mockArtifact,
-                  id: "current-id",
-                  name: "Current Artifact",
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+const newArtifact = {
+  __typename: "ArtifactItem" as const,
+  id: "test-id",
+  owner: "test-owner",
+  name: "Goofy Test Artifact of Testing",
+  level: 1,
+  attributes: {
+    __typename: "ArtifactAttributes" as const,
+    namePrefix: { __typename: "ArtifactAttribute" as const, type: ArtifactAttributeType.BonusPhysicalDamage, magnitude: 1 },
+    namePostfix: { __typename: "ArtifactAttribute" as const, type: ArtifactAttributeType.BonusHealth, magnitude: 1 },
+    bonusAffixes: [],
+    titlePrefix: null,
+    titlePostfix: null,
   },
-];
+};
 
 describe("ArtifactModal", () => {
-  it("renders both artifacts and allows selection", async () => {
+  it("handles artifact selection and confirmation flow when current artifact exists", async () => {
     const user = userEvent.setup();
-    const { getByText } = render(
-      <MockedProvider mocks={mocks}>
-        <ArtifactModal artifact={mockArtifact} />
+    
+    render(
+      <MockedProvider>
+        <ArtifactModal currentArtifact={equippedArtifact} newArtifact={newArtifact} />
       </MockedProvider>
     );
 
-    // Check that both artifacts are rendered
-    expect(getByText("Current Artifact")).toBeInTheDocument();
-    expect(getByText("Test Artifact")).toBeInTheDocument();
+    // Initial state: both artifacts rendered, button disabled
+    expect(screen.getByText(equippedArtifact.name)).toBeInTheDocument();
+    expect(screen.getByText(newArtifact.name)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /continue with selected/i })).toBeDisabled();
 
-    // Continue button should be disabled initially
-    const continueButton = getByText("Continue with Selected");
-    expect(continueButton).toBeDisabled();
+    // Select new artifact and verify button enables
+    await user.click(screen.getByText(newArtifact.name));
+    expect(screen.getByRole('button', { name: /continue with selected/i })).toBeEnabled();
 
-    // Select new artifact
-    await user.click(getByText("Test Artifact"));
-    expect(continueButton).toBeEnabled();
-
-    // Open confirmation dialog
-    await user.click(continueButton);
-    expect(getByText("Confirm Your Choice")).toBeInTheDocument();
-    expect(getByText(/Are you sure you want to keep the new artifact/)).toBeInTheDocument();
+    // Open and verify confirmation dialog with warning
+    await user.click(screen.getByRole('button', { name: /continue with selected/i }));
+    expect(screen.getByText("Are you sure you want to keep the new artifact?")).toBeInTheDocument();
+    expect(screen.getByText("This action cannot be undone.")).toBeInTheDocument();
   });
 
-  it("shows warning message in confirmation dialog", async () => {
+  it("automatically selects new artifact when no current artifact exists", async () => {
     const user = userEvent.setup();
-    const { getByText } = render(
-      <MockedProvider mocks={mocks}>
-        <ArtifactModal artifact={mockArtifact} />
+    render(
+      <MockedProvider>
+        <ArtifactModal currentArtifact={null} newArtifact={newArtifact} />
       </MockedProvider>
     );
 
-    // Select new artifact and open confirmation
-    await user.click(getByText("Test Artifact"));
-    await user.click(getByText("Continue with Selected"));
+    // Verify initial state
+    expect(screen.getByText("You have no artifact equipped. The new artifact will be automatically equipped.")).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /accept new artifact/i })).toBeEnabled();
 
-    // Check warning message
-    expect(getByText("This action cannot be undone.")).toBeInTheDocument();
+    // Open and verify confirmation dialog
+    await user.click(screen.getByRole('button', { name: /accept new artifact/i }));
+    expect(screen.getByText("Are you sure you want to equip the new artifact?")).toBeInTheDocument();
+    expect(screen.queryByText("This action cannot be undone.")).not.toBeInTheDocument();
   });
 }); 

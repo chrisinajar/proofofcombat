@@ -6,25 +6,28 @@ import Button from "@mui/material/Button";
 
 import {
   ArtifactItem,
-  useMeQuery,
   useAcceptArtifactMutation,
   useRejectArtifactMutation,
 } from "src/generated/graphql";
 import { ArtifactSelectionBox } from "../artifact-selection-box";
 import { ConfirmationDialog } from "../confirmation-dialog";
 
+type ArtifactModalProps = {
+  currentArtifact: ArtifactItem | null;
+  newArtifact: ArtifactItem;
+};
+
 export function ArtifactModal({
-  artifact,
-}: {
-  artifact: ArtifactItem;
-}): JSX.Element {
+  currentArtifact,
+  newArtifact,
+}: ArtifactModalProps): JSX.Element {
   const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedArtifact, setSelectedArtifact] = useState<"current" | "new" | null>(null);
-  const { data } = useMeQuery();
+  const [selectedArtifact, setSelectedArtifact] = useState<"current" | "new" | null>(
+    currentArtifact ? null : "new"
+  );
+  
   const [acceptArtifact] = useAcceptArtifactMutation();
   const [rejectArtifact] = useRejectArtifactMutation();
-
-  const currentArtifact = data?.me?.account?.hero?.equipment?.artifact;
 
   const handleConfirm = async () => {
     if (selectedArtifact === "new") {
@@ -39,20 +42,23 @@ export function ArtifactModal({
       <Box sx={{ textAlign: "center", mb: 4 }}>
         <Typography variant="h4" gutterBottom>Choose Your Artifact</Typography>
         <Typography variant="body1" color="text.secondary" gutterBottom>
-          Select which artifact you want to keep. This choice cannot be undone.
+          {currentArtifact 
+            ? "Select which artifact you want to keep. This choice cannot be undone."
+            : "You have no artifact equipped. The new artifact will be automatically equipped."}
         </Typography>
       </Box>
 
       <Box sx={{ display: "flex", gap: 4, mb: 4 }}>
         <ArtifactSelectionBox
-          artifact={currentArtifact ?? null}
+          artifact={currentArtifact}
           isSelected={selectedArtifact === "current"}
           title="Current Artifact"
-          onSelect={() => setSelectedArtifact("current")}
+          onSelect={() => currentArtifact && setSelectedArtifact("current")}
+          disabled={!currentArtifact}
         />
 
         <ArtifactSelectionBox
-          artifact={artifact}
+          artifact={newArtifact}
           isSelected={selectedArtifact === "new"}
           title="New Artifact"
           onSelect={() => setSelectedArtifact("new")}
@@ -67,15 +73,17 @@ export function ArtifactModal({
           onClick={() => setShowConfirm(true)}
           sx={{ minWidth: 200 }}
         >
-          Continue with Selected
+          {currentArtifact ? "Continue with Selected" : "Accept New Artifact"}
         </Button>
       </Box>
 
       <ConfirmationDialog
         open={showConfirm}
         title="Confirm Your Choice"
-        message={`Are you sure you want to keep the ${selectedArtifact === "new" ? "new" : "current"} artifact?`}
-        warningMessage="This action cannot be undone."
+        message={currentArtifact 
+          ? `Are you sure you want to keep the ${selectedArtifact === "new" ? "new" : "current"} artifact?`
+          : "Are you sure you want to equip the new artifact?"}
+        warningMessage={currentArtifact ? "This action cannot be undone." : undefined}
         onConfirm={handleConfirm}
         onCancel={() => setShowConfirm(false)}
       />
