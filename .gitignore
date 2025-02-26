@@ -38,3 +38,4 @@ yarn-error.log*
 .env
 graphql.schema.json
 src/generated/
+test-results/
