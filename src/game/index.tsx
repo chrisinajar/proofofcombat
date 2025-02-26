@@ -122,12 +122,12 @@ export default function Home(): JSX.Element {
                 variant="scrollable"
               >
                 <Tab label="Welcome" value="play" />
-                <Tab label="Combat" value="combat" />
+                <Tab label="Combat" value="combat" data-testid="combat-nav" />
                 {!!(hero?.inventory.length || hero?.gold) && (
                   <Tab label="Shop" value="shop" />
                 )}
                 {!!hero?.inventory.length && (
-                  <Tab label="Inventory" value="inventory" />
+                  <Tab label="Inventory" value="inventory" data-testid="inventory-nav" />
                 )}
                 <Tab label="Map" value="map" />
                 {hero &&

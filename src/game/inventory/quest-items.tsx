@@ -73,7 +73,11 @@ export function QuestItems({
             }}
           >
             {uniqueItems.map((inventoryItem) => (
-              <MenuItem key={inventoryItem.id} value={inventoryItem.id}>
+              <MenuItem 
+                key={inventoryItem.id} 
+                value={inventoryItem.id}
+                data-testid={inventoryItem.baseItem}
+              >
                 <>
                   {itemDisplayName(inventoryItem)}
                   {quantityMap[itemDisplayName(inventoryItem)] > 1

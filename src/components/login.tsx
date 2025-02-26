@@ -53,6 +53,7 @@ export function Login(): JSX.Element {
         </Typography>
         <br />
         <TextField
+          inputProps={{ 'data-testid': 'login-username-input' }}
           helperText={!!error && error.message}
           error={!!error}
           label="Character Name"
@@ -63,6 +64,7 @@ export function Login(): JSX.Element {
         />
         <br />
         <TextField
+          inputProps={{ 'data-testid': 'login-password-input' }}
           error={!!error}
           label="Password"
           variant="outlined"
@@ -73,6 +75,7 @@ export function Login(): JSX.Element {
         />
         <br />
         <Button
+          data-testid="login-submit-button"
           type="submit"
           variant="contained"
           onClick={handleLogin}

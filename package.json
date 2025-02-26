@@ -8,7 +8,8 @@
     "lint": "next lint",
     "generate": "graphql-codegen --config codegen.yml -r dotenv/config",
     "ts": "tsc --noEmit --incremental",
-    "test": "jest"
+    "test": "jest",
+    "e2e": "playwright test --reporter=list"
   },
   "dependencies": {
     "@apollo/client": "^3.5.9",
@@ -51,6 +52,7 @@
     "@graphql-codegen/typescript": "2.4.5",
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-codegen/typescript-react-apollo": "3.2.8",
+    "@playwright/test": "^1.50.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "14",

@@ -32,14 +32,17 @@ export function QuestEventDisplay({
         onClose={handleDismissQuest}
         aria-labelledby="quest-event-title"
         aria-describedby="quest-event-description"
+        role="dialog"
       >
-        <DialogTitle id="quest-event-title">Quest Event</DialogTitle>
+        <DialogTitle id="quest-event-title" tabIndex={0}>Quest Event</DialogTitle>
 
-        <DialogContent id="quest-event-description">
-          {message &&
-            message.map((str, i) => (
-              <DialogContentText key={`${i}`}>{str}</DialogContentText>
-            ))}
+        <DialogContent>
+          <Box id="quest-event-description" tabIndex={0}>
+            {message &&
+              message.map((str, i) => (
+                <DialogContentText key={`${i}`}>{str}</DialogContentText>
+              ))}
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button
@@ -47,6 +50,8 @@ export function QuestEventDisplay({
             color="error"
             onClick={handleDismissQuest}
             disabled={loading}
+            data-testid="quest-continue-button"
+            aria-label="Continue and dismiss quest dialog"
           >
             Continue
           </Button>

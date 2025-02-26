@@ -44,10 +44,10 @@ export function ConfirmationDialog({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} color="inherit">
+        <Button onClick={onCancel} color="inherit" data-testid="cancel-button">
           Cancel
         </Button>
-        <Button onClick={onConfirm} color="primary" variant="contained" autoFocus>
+        <Button onClick={onConfirm} color="primary" variant="contained" autoFocus data-testid="confirm-button">
           Confirm
         </Button>
       </DialogActions>

@@ -72,7 +72,7 @@ export function AppBarHeroStats({ hero }: AppBarHeroStatsProps): JSX.Element {
       <Grid container columns={6}>
         <Grid item lg={1} md={2} sm={3} xs={6}>
           <label htmlFor="hero-stats-level">Level: </label>
-          <span id="hero-stats-level">{hero.level.toLocaleString()}</span>
+          <span id="hero-stats-level" data-testid="character-level">{hero.level.toLocaleString()}</span>
         </Grid>
         <Grid item lg={1} md={2} sm={3} xs={6}>
           <Tooltip title={classDescription} leaveTouchDelay={5000}>

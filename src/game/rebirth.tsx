@@ -48,6 +48,7 @@ export function RebirthMenu({
             variant="outlined"
             color="secondary"
             onClick={handleRebirth}
+            data-testid="rebirth-button"
           >
             Reset Character to Level 1
           </Button>

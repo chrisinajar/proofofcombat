@@ -58,6 +58,8 @@ export function Signup(props: SignupProps): JSX.Element {
         </Typography>
         <br />
         <TextField
+          inputProps={{ 'data-testid': 'signup-username-input' }}
+          FormHelperTextProps={{ 'data-testid': 'signup-error-message' } as any}
           helperText={hasUserError && error.message}
           error={hasUserError}
           label="Character Name"
@@ -69,6 +71,7 @@ export function Signup(props: SignupProps): JSX.Element {
         />
         <br />
         <TextField
+          inputProps={{ 'data-testid': 'signup-password-input' }}
           label="Password"
           variant="outlined"
           type="password"
@@ -79,6 +82,7 @@ export function Signup(props: SignupProps): JSX.Element {
         />
         <br />
         <Button
+          data-testid="signup-submit-button"
           type="submit"
           variant="contained"
           onClick={handleSignup}

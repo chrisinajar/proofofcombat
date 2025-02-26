@@ -16,7 +16,7 @@ export function LoginOrSignup(): JSX.Element {
           <Signup onSignup={() => setShowSignup(false)} />
           <Typography>
             Already have an account?
-            <Button onClick={() => setShowSignup(false)}>Login here</Button>
+            <Button data-testid="show-login-button" onClick={() => setShowSignup(false)}>Login here</Button>
           </Typography>
         </React.Fragment>
       )}
@@ -25,7 +25,7 @@ export function LoginOrSignup(): JSX.Element {
           <Login />
           <Typography>
             Need an account?
-            <Button onClick={() => setShowSignup(true)}>Create one</Button>
+            <Button data-testid="show-signup-button" onClick={() => setShowSignup(true)}>Create one</Button>
           </Typography>
         </React.Fragment>
       )}
