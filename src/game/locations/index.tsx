@@ -37,6 +37,7 @@ const specialMonsterHints: { [x in string]: string } = {
   "domari-aberration-1":
     "The ash in the air is so thick you can barely breathe",
   "random-aberration-moving-mountain": "The ground itself threatens you",
+  "random-aberration-artificer": "Ancient machinery whirs and clicks around you, filling the air with an otherworldly hum",
 };
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
@@ -131,7 +132,7 @@ export function Locations(): JSX.Element | null {
     let x = Number(xInput);
     let y = Number(yInput);
 
-    if (x === NaN || y === NaN || !Number.isFinite(x) || !Number.isFinite(y)) {
+    if (isNaN(x) || isNaN(y) || !Number.isFinite(x) || !Number.isFinite(y)) {
       return;
     }
 
