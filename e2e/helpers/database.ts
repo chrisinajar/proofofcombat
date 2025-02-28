@@ -70,7 +70,7 @@ export async function startServer() {
 
   // Start the server in a separate process with environment variables
   const serverProcess = exec(
-    'yarn dev',
+    'yarn run ts-node ./index.ts',
     {
       env: {
         ...process.env,
