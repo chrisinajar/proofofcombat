@@ -5,6 +5,7 @@ import util from 'util';
 
 // Use absolute paths
 const SERVER_ROOT = path.resolve(__dirname, '../../../proofofcombat-server');
+const UI_ROOT = path.resolve(__dirname, '../../../proofofcombat-ui');
 const E2E_DB_PATH = path.join(SERVER_ROOT, 'e2e-data');
 const E2E_UI_PORT = '3001';  // Different from default 3000
 const E2E_SERVER_PORT = '4001';  // Different from default 4000
@@ -90,9 +91,12 @@ export async function startServer() {
   return new Promise((resolve, reject) => {
     let isSocketReady = false;
     let isApolloReady = false;
+    let isGenerateDone = false;
+    let isResolved = false;
 
     serverProcess.stdout?.on('data', (data) => {
       console.log(`Server output: ${data}`);
+      if (isResolved) return;
       
       if (data.includes('Socket ready')) {
         console.log('Socket server is ready');
@@ -101,11 +105,34 @@ export async function startServer() {
       if (data.includes('Apollo Server ready')) {
         console.log('Apollo server is ready');
         isApolloReady = true;
+        // kick off the generate script
+        exec('yarn generate', {
+          env: {
+            ...process.env,
+            CI: 'true',
+            NEXT_PUBLIC_BASE_URL: `http://localhost:${E2E_HTTP_PORT}/graphql`,
+          },
+          cwd: UI_ROOT
+        }, (err, stdout, stderr) => {
+          if (err) {
+            console.error('Error generating GraphQL types:', err);
+          } else {
+            console.log('GraphQL types generated successfully');
+            isGenerateDone = true;
+          }
+
+          if (isSocketReady && isApolloReady && isGenerateDone) {
+            console.log('Both servers are ready, resolving...');
+            isResolved = true;
+            resolve(serverProcess);
+          }
+        });
       }
 
       // Resolve when both socket and Apollo are ready
-      if (isSocketReady && isApolloReady) {
+      if (isSocketReady && isApolloReady && isGenerateDone) {
         console.log('Both servers are ready, resolving...');
+        isResolved = true;
         resolve(serverProcess);
       }
     });
