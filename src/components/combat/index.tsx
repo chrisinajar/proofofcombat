@@ -256,6 +256,11 @@ export function Combat(): JSX.Element | null {
   const fightLabel = "Fight an existing monster!";
   const duelLabel = "Duel with a nearby player!";
 
+  const isMonsterInChallengeList = !!(
+    fightingMonster &&
+    challenges.some((c) => c.id === fightingMonster.monster.id)
+  );
+
   return (
     <React.Fragment>
       <Grid container columns={6} spacing={4}>
@@ -432,8 +437,10 @@ export function Combat(): JSX.Element | null {
               autoBattle={autoBattle}
               canAutoBattle={canAutoBattle}
               onAutoBattle={handleAutoBattle}
+              onRematch={challengeTarget}
               fightMutationRef={fightMutationRef}
               onVictory={() => setMobKillCount(mobKillCount + 1)}
+              isChallengable={isMonsterInChallengeList}
             />
           </React.Fragment>
         )}
@@ -453,6 +460,7 @@ export function Combat(): JSX.Element | null {
               duel
               autoBattle={false}
               canAutoBattle={false}
+              isChallengable={isMonsterInChallengeList}
             />
           </React.Fragment>
         )}

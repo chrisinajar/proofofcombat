@@ -14,6 +14,7 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import SchoolIcon from "@mui/icons-material/School";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import BloodtypeIcon from "@mui/icons-material/Bloodtype";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 import {
   CombatEntry,
@@ -46,10 +47,12 @@ type CombatDisplayProps = {
     };
   };
   onVictory?: () => void;
+  onRematch?: (monsterName: string) => void;
   onError?: (e: any) => void;
   onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
   fightMutationRef?: React.MutableRefObject<(attackType: AttackType) => void>;
   hero: Hero;
+  isChallengable: boolean;
 };
 
 export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
@@ -58,11 +61,13 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     canAutoBattle,
     fight: { id: monsterId, monster },
     onVictory,
+    onRematch,
     onError,
     onAutoBattle,
     fightMutationRef,
     duel,
     hero,
+    isChallengable,
   } = props;
   const [killedByAnother, setKilledByAnother] = useState<boolean>(false);
   const [fightMutation, { data: fightData, loading: fightLoading }] =
@@ -89,7 +94,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     hero.activeStance || HeroStance.Normal,
   );
 
-  const showAutoBattle = !autoBattle && canAutoBattle;
+  const showAutoBattle = !autoBattle && canAutoBattle && isChallengable;
 
   useEffect(() => {
     if (killedByAnother) {
@@ -293,6 +298,24 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Tooltip>
               </Grid>
             </React.Fragment>
+          )}
+          {enemyHealth <= 0 && !!onRematch && isChallengable && (
+            <Tooltip
+              title="Summon a new instance of this monster and fight it"
+              describeChild
+            >
+              <Button
+                fullWidth
+                sx={{ fontSize: "1rem", padding: 2 }}
+                size="large"
+                id="respawn-monster"
+                onClick={() => onRematch?.(monster.id)}
+                aria-label="respawn monster"
+                startIcon={<ReplayIcon />}
+              >
+                Spawn new {monster.name}
+              </Button>
+            </Tooltip>
           )}
         </Grid>
         {killedByAnother && "This enemy was killed by another player"}
