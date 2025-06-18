@@ -14,6 +14,7 @@ mutation Fight($monster: ID!, $attackType: AttackType, $stance: HeroStance) {
       enchantment
     }
     log {
+      time
       damage
       attackType
       damageType

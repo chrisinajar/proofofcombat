@@ -177,6 +177,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     };
   }, []);
 
+  const maxTime = fightResult?.log?.[0]?.time ?? 3000;
+
   return (
     <React.Fragment>
       {!autoBattle && <StanceSelector onChange={setDesiredStance} />}
@@ -323,6 +325,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           fightResult.log.map((entry, i) => (
             <React.Fragment key={`${entry.from}-${i}`}>
               <Typography>
+                +{(maxTime - entry.time) / 1000}
+                {"s "}
                 {entry.isEnchantment && (
                   <React.Fragment>
                     {entry.damage < 0 && (
