@@ -94,7 +94,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     hero.activeStance || HeroStance.Normal,
   );
 
-  const showAutoBattle = !autoBattle && canAutoBattle && isChallengable;
+  const showAutoBattle = !autoBattle && canAutoBattle;
 
   useEffect(() => {
     if (killedByAnother) {
@@ -408,22 +408,22 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 </Typography>
               </React.Fragment>
             )}
-            <br />
-            {showAutoBattle && (
-              <Button
-                fullWidth
-                color="secondary"
-                variant="contained"
-                onClick={() => {
-                  if (onAutoBattle) {
-                    onAutoBattle(monster.id, lastAttack);
-                  }
-                }}
-              >
-                Auto-Battle this enemy
-              </Button>
-            )}
           </React.Fragment>
+        )}
+        <br />
+        {showAutoBattle && (
+          <Button
+            fullWidth
+            color="secondary"
+            variant="contained"
+            onClick={() => {
+              if (onAutoBattle) {
+                onAutoBattle(monster.id, lastAttack);
+              }
+            }}
+          >
+            Auto-Battle this enemy
+          </Button>
         )}
       </Grid>
     </React.Fragment>

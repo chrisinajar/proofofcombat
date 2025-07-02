@@ -239,7 +239,7 @@ query AdminAccount($id: ID!) {
 
       combatStats {
         damageAmplification
-        damageReduction
+        armor
         armorReduction
         enemyStats {
           luck
@@ -267,6 +267,13 @@ query AdminAccount($id: ID!) {
         lightningResistance
         holyResistance
         blightResistance
+
+        attackRating
+        physicalEvasionRating
+        magicEvasionRating
+
+        baseDamage
+        secondAttackBaseDamage
       }
       outgoingTrades {
         gold

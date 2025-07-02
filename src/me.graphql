@@ -599,7 +599,7 @@ query Me {
 
         combatStats {
           damageAmplification
-          damageReduction
+          armor
           armorReduction
           enemyStats {
             luck
@@ -627,6 +627,13 @@ query Me {
           lightningResistance
           holyResistance
           blightResistance
+
+          attackRating
+          physicalEvasionRating
+          magicEvasionRating
+
+          baseDamage
+          secondAttackBaseDamage
         }
         outgoingTrades {
           gold

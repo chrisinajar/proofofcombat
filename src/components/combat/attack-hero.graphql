@@ -17,6 +17,7 @@ mutation AttackHero($id: ID!, $attackType: AttackType, $stance: HeroStance) {
       }
     }
     log {
+      time
       damage
       attackType
       isEnchantment

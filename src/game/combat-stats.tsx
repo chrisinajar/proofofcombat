@@ -43,11 +43,25 @@ export function CombatStats({
           <b>Luck</b>: {stats.stats.luck.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Bonus Armor</b>: {formatPercentage(stats.damageReduction - 1, 1)}
+          <b>Armor</b>: {stats.armor.toLocaleString()}
         </Grid>
         <Grid item xs={6} sm={3} md={2} lg={2}>
-          <b>Bonus Damage</b>:{" "}
-          {formatPercentage(stats.damageAmplification - 1, 1)}
+          <b>Damage</b>: {stats.baseDamage.toLocaleString()}
+          {stats.secondAttackBaseDamage > 1 &&
+            stats.secondAttackBaseDamage !== stats.baseDamage &&
+            ` (${stats.secondAttackBaseDamage.toLocaleString()})`}
+          {stats.damageAmplification > 1 &&
+            ` +${formatPercentage(stats.damageAmplification - 1, 1)}`}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Accuracy Rating</b>: {stats.attackRating.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Physical Evasion</b>:{" "}
+          {stats.physicalEvasionRating.toLocaleString()}
+        </Grid>
+        <Grid item xs={6} sm={3} md={2} lg={2}>
+          <b>Magical Evasion</b>: {stats.magicEvasionRating.toLocaleString()}
         </Grid>
 
         <Grid item xs={6}>

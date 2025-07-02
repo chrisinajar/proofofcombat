@@ -80,8 +80,23 @@ mutation Rebirth {
           strength
         }
         armorReduction
-        damageReduction
+        armor
         damageAmplification
+
+        physicalResistance
+        magicalResistance
+        fireResistance
+        iceResistance
+        lightningResistance
+        holyResistance
+        blightResistance
+
+        attackRating
+        physicalEvasionRating
+        magicEvasionRating
+
+        baseDamage
+        secondAttackBaseDamage
       }
     }
   }
