@@ -603,6 +603,7 @@ export function enchantmentDisplayName(
   return `${itemName} of ${EnchantmentNames[enchantment] ?? "The Unknown"}`;
 }
 
+// I always search for getItemName when trying to find this
 export function itemDisplayName(
   item: InventoryItem,
   enchantmentOverride: EnchantmentType | undefined | null = item.enchantment,
