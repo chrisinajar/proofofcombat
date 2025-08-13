@@ -17,8 +17,9 @@ export async function cleanDatabase() {
   if (fs.existsSync(E2E_DB_PATH)) {
     fs.rmSync(E2E_DB_PATH, { recursive: true, force: true });
   }
-  // Ensure the directory exists
-  fs.mkdirSync(E2E_DB_PATH, { recursive: true });
+  // ensure empty directories for expected sub-dbs
+  fs.mkdirSync(path.join(E2E_DB_PATH, 'account'), { recursive: true });
+  fs.mkdirSync(path.join(E2E_DB_PATH, 'hero'), { recursive: true });
 }
 
 export async function seedFixture(fixtureName: string, dbPath: string): Promise<void> {

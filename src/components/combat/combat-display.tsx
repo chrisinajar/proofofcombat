@@ -75,7 +75,9 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   const [duelPlayerMutation, { data: duelData, loading: duelLoading }] =
     useAttackHeroMutation();
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
-  const [lastAttack, setLastAttack] = useState<AttackType>(AttackType.Melee);
+  const [lastAttack, setLastAttack] = useState<AttackType>(
+    hero.availableAttacks?.[0] ?? AttackType.Melee,
+  );
   const fightResult: {
     victory: boolean;
     gold?: number | null;
@@ -95,6 +97,13 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
   );
 
   const showAutoBattle = !autoBattle && canAutoBattle;
+
+  // Ensure lastAttack remains valid if equipment changes
+  useEffect(() => {
+    if (!hero.availableAttacks.includes(lastAttack)) {
+      setLastAttack(hero.availableAttacks?.[0] ?? AttackType.Melee);
+    }
+  }, [hero.availableAttacks.join("|")]);
 
   useEffect(() => {
     if (killedByAnother) {
@@ -214,7 +223,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           </Grid>
           {enemyHealth > 0 && (
             <React.Fragment>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
+              {hero.availableAttacks.includes(AttackType.Melee) && (
+                <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip
                   title="Attack using your melee weapons, uses strength and dexterity"
                   describeChild
@@ -230,8 +240,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     Melee attack
                   </Button>
                 </Tooltip>
-              </Grid>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
+                </Grid>
+              )}
+              {hero.availableAttacks.includes(AttackType.Ranged) && (
+                <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip
                   title="Attack using your ranged weapons, uses dexterity"
                   describeChild
@@ -247,8 +259,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     Ranged attack
                   </Button>
                 </Tooltip>
-              </Grid>
-              <Grid item xs={6} sm={3} md={2} xl={2}>
+                </Grid>
+              )}
+              {hero.availableAttacks.includes(AttackType.Cast) && (
+                <Grid item xs={6} sm={3} md={2} xl={2}>
                 <Tooltip
                   title="Cast spells using your wisdom and intelligence"
                   describeChild
@@ -264,8 +278,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     Cast Spell
                   </Button>
                 </Tooltip>
-              </Grid>
-              <Grid item xs={6} sm={3} md={3} xl={3}>
+                </Grid>
+              )}
+              {hero.availableAttacks.includes(AttackType.Smite) && (
+                <Grid item xs={6} sm={3} md={3} xl={3}>
                 <Tooltip
                   title="Smite your foe using wisdom and willpower"
                   describeChild
@@ -281,8 +297,10 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     Smite
                   </Button>
                 </Tooltip>
-              </Grid>
-              <Grid item xs={6} sm={6} md={3} xl={3}>
+                </Grid>
+              )}
+              {hero.availableAttacks.includes(AttackType.Blood) && (
+                <Grid item xs={6} sm={6} md={3} xl={3}>
                 <Tooltip
                   title="Damage yourself to damage the enemy, uses constitution"
                   describeChild
@@ -298,7 +316,8 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                     Blood magic
                   </Button>
                 </Tooltip>
-              </Grid>
+                </Grid>
+              )}
             </React.Fragment>
           )}
           {enemyHealth <= 0 && !!onRematch && isChallengable && (

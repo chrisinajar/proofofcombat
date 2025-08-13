@@ -16,9 +16,17 @@ export async function waitForDelay(page: Page): Promise<void> {
 export async function waitForCombat(page: Page): Promise<void> {
   // Wait for combat display to be visible
   await page.waitForSelector('#combat-display', { state: 'visible' });
-  
-  // Wait for attack button to be enabled
-  await page.waitForSelector('#attack-with-melee:not([disabled])', { state: 'visible' });
+
+  // Wait for any valid attack button to be enabled (melee may not exist)
+  const anyAttackEnabled = [
+    '#attack-with-melee:not([disabled])',
+    '#attack-with-ranged:not([disabled])',
+    '#attack-with-cast:not([disabled])',
+    '#attack-with-holy:not([disabled])',
+    '#attack-with-blood:not([disabled])',
+  ].join(', ');
+
+  await page.waitForSelector(anyAttackEnabled, { state: 'visible' });
 }
 
 export async function waitForCombatResult(page: Page): Promise<void> {

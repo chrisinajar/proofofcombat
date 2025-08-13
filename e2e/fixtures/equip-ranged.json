@@ -1,0 +1,77 @@
+{
+  "accounts": {
+    "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a": {
+      "id": "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a",
+      "name": "prerebirthtest",
+      "password": "fb8fa3a57c452e88fd49edc69600c63cfdf654da7ea4bdabd8dc641c90876faec192f7e491a579a59b77c6637516d7aaaabc243c210141f3ac184c4a3a48f0b3",
+      "authVersion": 1,
+      "banned": false
+    }
+  },
+  "heroes": {
+    "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a": {
+      "id": "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a",
+      "name": "prerebirthtest",
+      "level": 1,
+      "levelCap": 10,
+      "experience": 0,
+      "needed": 10,
+      "attributePoints": 0,
+      "gold": 0,
+      "class": "Adventurer",
+      "version": 2,
+      "activeStance": "Normal",
+      "questLog": {},
+      "availableStances": ["Normal"],
+      "enchantments": [],
+      "enchantingDust": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "wisdom": 10,
+        "willpower": 10,
+        "luck": 10
+      },
+      "skills": {
+        "attackingAccuracy": 0,
+        "castingAccuracy": 0,
+        "attackingDamage": 0,
+        "castingDamage": 0,
+        "vitality": 0,
+        "resilience": 0,
+        "regeneration": 0
+      },
+      "location": { "x": 0, "y": 0, "map": "default" },
+      "inventory": [
+        {
+          "id": "item-1",
+          "owner": "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a",
+          "baseItem": "ruined-bow",
+          "name": "Ruined Bow",
+          "type": "RangedWeapon",
+          "level": 1
+        }
+      ],
+      "equipment": {
+        "accessories": [],
+        "footArmor": null,
+        "headArmor": null,
+        "legArmor": null,
+        "handArmor": null,
+        "bodyArmor": null,
+        "rightHand": null,
+        "leftHand": {
+          "id": "item-1",
+          "owner": "5ede39e669472889572e6d5e9756f29b2400a8a167326d65fa569a5e9066cc0d0687a97a6f6f44001cae6e58470e4592a3ab8ace5911693ae527e97f1e8c143a",
+          "baseItem": "ruined-bow",
+          "name": "Ruined Bow",
+          "type": "RangedWeapon",
+          "level": 1
+        },
+        "artifact": null
+      }
+    }
+  }
+}
