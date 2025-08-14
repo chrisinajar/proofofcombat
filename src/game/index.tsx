@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
@@ -16,6 +16,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import TabContext from "@mui/lab/TabContext";
@@ -61,6 +62,16 @@ export default function Home(): JSX.Element {
     pollInterval: 30000,
   });
 
+  // Movement tracking hooks must be declared before any early returns
+  const [movedOnce, setMovedOnce] = useState<boolean>(false);
+  const prevLocRef = useRef<{ x: number; y: number; map: string } | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = window.localStorage.getItem("poc_has_moved_once");
+      if (stored === "true") setMovedOnce(true);
+    }
+  }, []);
+
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     if (newValue === "play") {
       router.push("/play", "/play", { scroll: false });
@@ -79,6 +90,26 @@ export default function Home(): JSX.Element {
       return;
     }
   }, [error, token]);
+
+  // Track first movement; must be declared before any early returns
+  useEffect(() => {
+    if (!hero?.location) return;
+    const loc = hero.location;
+    const prev = prevLocRef.current;
+    if (!prev) {
+      prevLocRef.current = { x: loc.x, y: loc.y, map: loc.map };
+      return;
+    }
+    if (prev.x !== loc.x || prev.y !== loc.y || prev.map !== loc.map) {
+      prevLocRef.current = { x: loc.x, y: loc.y, map: loc.map };
+      if (!movedOnce) {
+        setMovedOnce(true);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("poc_has_moved_once", "true");
+        }
+      }
+    }
+  }, [hero?.location?.x, hero?.location?.y, hero?.location?.map]);
 
   if (error || !token) {
     return (
@@ -102,6 +133,15 @@ export default function Home(): JSX.Element {
   const hasUpgradedAutomation = !!hero?.inventory.find((item) =>
     itemUpgradesAutomation(item.baseItem),
   );
+
+  const washedUp = hero?.questLog?.washedUp;
+  // Consider first rebirth complete when level cap increases above the starting cap (10)
+  const hasFirstRebirth = !!hero && hero.levelCap > 10;
+  const atLevelCap = !!hero && hero.level >= hero.levelCap;
+  // Show onboarding until first rebirth is completed (level cap > 10)
+  const showNextSteps = !!hero && !hasFirstRebirth;
+
+  // (effect moved above early returns)
 
   return (
     <Layout showHero>
@@ -208,33 +248,90 @@ export default function Home(): JSX.Element {
                     the wiki.
                   </Typography>
 
-                  <Card variant="outlined" sx={{ mb: 3 }}>
-                    <CardContent>
-                      <Typography variant="h6" sx={{ mb: 1 }}>
-                        Next steps
-                      </Typography>
-                      <List dense>
-                        <ListItem>
-                          <ListItemIcon>
-                            <ArrowForwardIcon fontSize="small" />
-                          </ListItemIcon>
-                          <ListItemText primary="Open the Combat tab and challenge a nearby monster" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <ArrowForwardIcon fontSize="small" />
-                          </ListItemIcon>
-                          <ListItemText primary="Visit the Map tab to move North/East/South/West" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <ArrowForwardIcon fontSize="small" />
-                          </ListItemIcon>
-                          <ListItemText primary="Check the Shop tab after fights to buy or sell gear" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
+                  {showNextSteps && (
+                    <Card variant="outlined" sx={{ mb: 3 }}>
+                      <CardContent>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                          Next steps
+                        </Typography>
+                        <List dense>
+                          {!atLevelCap && (
+                            <ListItem>
+                              <ListItemIcon>
+                                <ArrowForwardIcon fontSize="small" />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary="Open the Combat tab and challenge a nearby monster"
+                                primaryTypographyProps={{
+                                  sx: {
+                                    textDecoration:
+                                      (hero?.experience ?? 0) > 0 ? "line-through" : "none",
+                                  },
+                                }}
+                              />
+                            </ListItem>
+                          )}
+                          {atLevelCap && !hasFirstRebirth && (
+                            <ListItem
+                              secondaryAction={
+                                <Button
+                                  size="small"
+                                  onClick={(e) => handleChangeTab(e as any, "inventory")}
+                                  aria-label="Open Inventory tab"
+                                  variant="text"
+                                >
+                                  Open Inventory
+                                </Button>
+                              }
+                            >
+                              <ListItemIcon>
+                                <ArrowForwardIcon fontSize="small" />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary="Open the Inventory tab to complete your rebirth"
+                                secondary="Select a rebirth totem in Quest items, then confirm"
+                                secondaryTypographyProps={{ sx: { fontStyle: "italic" } }}
+                              />
+                            </ListItem>
+                          )}
+                          <ListItem>
+                            <ListItemIcon>
+                              <ArrowForwardIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary="Visit the Map tab to move North/East/South/West"
+                              secondary={!washedUp?.started ? "Maybe try going for a swim…" : undefined}
+                              primaryTypographyProps={{
+                                sx: {
+                                  textDecoration:
+                                    washedUp?.started || movedOnce ? "line-through" : "none",
+                                },
+                              }}
+                              secondaryTypographyProps={{ sx: { fontStyle: "italic" } }}
+                            />
+                          </ListItem>
+                          <ListItem>
+                            <ListItemIcon>
+                              <ArrowForwardIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary="Check the Shop tab after fights to buy or sell gear"
+                              primaryTypographyProps={{
+                                sx: {
+                                  textDecoration:
+                                    (hero?.inventory.length ?? 0) > 0 || (hero?.gold ?? 0) > 0
+                                      ? "line-through"
+                                      : "none",
+                                },
+                              }}
+                            />
+                          </ListItem>
+                        </List>
+                        {/* Intentionally do not embed the rebirth widget here.
+                            Teach players to complete rebirth from Inventory. */}
+                      </CardContent>
+                    </Card>
+                  )}
 
                   <Typography variant="h5" sx={{ mb: 2 }}>
                     Combat Stats

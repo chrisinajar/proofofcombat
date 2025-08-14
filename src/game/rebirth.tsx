@@ -6,11 +6,13 @@ import Typography from "@mui/material/Typography";
 
 import { Hero, useRebirthMutation } from "src/generated/graphql";
 
+type MinimalHero = Pick<Hero, "level" | "levelCap">;
+
 export function RebirthMenu({
   hero,
   disabled,
 }: {
-  hero: Hero;
+  hero: MinimalHero;
   disabled: boolean;
 }): JSX.Element {
   const [rebirthMutation, { loading }] = useRebirthMutation();
