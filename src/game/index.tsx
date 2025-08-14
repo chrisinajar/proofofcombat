@@ -10,6 +10,13 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import NoSsr from "@mui/material/NoSsr";
 import Link from "@mui/material/Link";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -201,6 +208,34 @@ export default function Home(): JSX.Element {
                     the wiki.
                   </Typography>
 
+                  <Card variant="outlined" sx={{ mb: 3 }}>
+                    <CardContent>
+                      <Typography variant="h6" sx={{ mb: 1 }}>
+                        Next steps
+                      </Typography>
+                      <List dense>
+                        <ListItem>
+                          <ListItemIcon>
+                            <ArrowForwardIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText primary="Open the Combat tab and challenge a nearby monster" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon>
+                            <ArrowForwardIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText primary="Visit the Map tab to move North/East/South/West" />
+                        </ListItem>
+                        <ListItem>
+                          <ListItemIcon>
+                            <ArrowForwardIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText primary="Check the Shop tab after fights to buy or sell gear" />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+
                   <Typography variant="h5" sx={{ mb: 2 }}>
                     Combat Stats
                   </Typography>
@@ -261,9 +296,9 @@ export default function Home(): JSX.Element {
               <DynamicAdmin />
             </TabPanel>
           </TabContext>
-          <br />
-          <Divider />
-          <br />
+          <Box sx={{ my: 2 }}>
+            <Divider />
+          </Box>
           <Chat />
         </Box>
       </NoSsr>

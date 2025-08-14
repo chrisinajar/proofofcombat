@@ -3,9 +3,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 
 import { Layout } from "src/components/layout";
 import { LoginOrSignup } from "src/components/login-or-signup";
@@ -13,10 +12,11 @@ import { LoginOrSignup } from "src/components/login-or-signup";
 const Home: NextPage = () => {
   return (
     <Layout>
-      <br />
-      <LoginOrSignup />
-      <br />
-      <br />
+      <Box sx={{ py: 4 }}>
+        <Stack spacing={3}>
+          <LoginOrSignup />
+        </Stack>
+      </Box>
     </Layout>
   );
 };

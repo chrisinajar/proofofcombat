@@ -7,6 +7,10 @@ import {
   ArtifactAttribute,
 } from "src/generated/graphql";
 
+function assertUnreachable(x: never): never {
+  throw new Error(`Unhandled case: ${String(x)}`);
+}
+
 export function getArtifactModifier(
   artifact: ArtifactItem,
   type: ArtifactAttributeType,
@@ -195,6 +199,8 @@ export function modifierText(modifier: ArtifactAttribute): string {
       return `-${percentage} to enemy blight resistance`;
       break;
   }
+  // Ensure exhaustive handling; fail build when a new type is added but not handled above
+  return assertUnreachable(modifier.type as never);
 }
 
 export const EnchantmentNames: { [x in EnchantmentType]?: string } = {

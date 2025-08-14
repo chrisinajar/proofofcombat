@@ -9,8 +9,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 import { useSetSkillMutation, Hero, HeroSkill } from "src/generated/graphql";
+// Accept only the hero fields this component actually uses to avoid over-constraining
+type MinimalHero = Pick<Hero, "id" | "name" | "activeSkill" | "skills">;
 
-export function SetSkill({ hero }: { hero: Hero }): JSX.Element {
+export function SetSkill({ hero }: { hero: MinimalHero }): JSX.Element {
   const [skill, setSkill] = useState<HeroSkill>(hero.activeSkill);
   const [level, setLevel] = useState<string>("");
   const [setSkillMutation, { data, loading }] = useSetSkillMutation();

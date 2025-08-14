@@ -5,6 +5,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
@@ -94,6 +101,14 @@ export function Locations(): JSX.Element | null {
 
   const shouldDisable =
     loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading;
+  const disableReason = (() => {
+    if (hero.combat.health === 0) return "You are dead. Heal in the Combat tab.";
+    if (currentDelay > 0)
+      return `In delay: available in ${(currentDelay / 1000).toFixed(1)}s`;
+    if (loading) return "Moving...";
+    if (teleportLoading) return "Teleporting...";
+    return "";
+  })();
 
   async function handleMove(direction: MoveDirection) {
     try {
@@ -177,6 +192,13 @@ export function Locations(): JSX.Element | null {
                 </Typography>
               )}
             </Grid>
+            <Grid item style={{ textAlign: "center" }} xs={6}>
+              {disableReason && (
+                <Typography variant="caption" color="text.secondary">
+                  {disableReason}
+                </Typography>
+              )}
+            </Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}></Grid>
             <Grid item style={{ textAlign: "center" }} xs={2}>
               <Button
@@ -184,6 +206,7 @@ export function Locations(): JSX.Element | null {
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.North)}
+                startIcon={<KeyboardArrowUpIcon />}
               >
                 North
               </Button>
@@ -195,6 +218,7 @@ export function Locations(): JSX.Element | null {
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.West)}
+                startIcon={<KeyboardArrowLeftIcon />}
               >
                 West
               </Button>
@@ -210,6 +234,7 @@ export function Locations(): JSX.Element | null {
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.East)}
+                startIcon={<KeyboardArrowRightIcon />}
               >
                 East
               </Button>
@@ -221,6 +246,7 @@ export function Locations(): JSX.Element | null {
                 disabled={shouldDisable}
                 variant="contained"
                 onClick={() => handleMove(MoveDirection.South)}
+                startIcon={<KeyboardArrowDownIcon />}
               >
                 South
               </Button>
@@ -260,21 +286,58 @@ export function Locations(): JSX.Element | null {
                   }}
                 />
                 <br />
-                <Button
-                  color="secondary"
-                  variant="outlined"
-                  onClick={handlTeleport}
-                  disabled={
-                    teleportCost === 0 ||
-                    teleportCost > hero.stats.intelligence ||
-                    shouldDisable
+                <Box sx={{ my: 1 }}>
+                  <Typography
+                    variant="caption"
+                    color={
+                      teleportCost > hero.stats.intelligence
+                        ? "error"
+                        : "text.secondary"
+                    }
+                  >
+                    Cost: {teleportCost.toLocaleString()} INT; You have {" "}
+                    {hero.stats.intelligence.toLocaleString()} INT
+                  </Typography>
+                </Box>
+                <Tooltip
+                  title={
+                    teleportCost === 0
+                      ? "Already at target coordinates"
+                      : teleportCost > hero.stats.intelligence
+                      ? "Insufficient intelligence"
+                      : currentDelay > 0
+                      ? `In delay: available in ${(currentDelay / 1000).toFixed(
+                          1,
+                        )}s`
+                      : hero.combat.health === 0
+                      ? "Cannot teleport while dead"
+                      : shouldDisable
+                      ? "Action temporarily unavailable"
+                      : "Teleport to target coordinates"
+                  }
+                  disableHoverListener={
+                    !(
+                      teleportCost === 0 ||
+                      teleportCost > hero.stats.intelligence ||
+                      shouldDisable
+                    )
                   }
                 >
-                  Teleport
-                  <br />
-                  {teleportCost > 0 &&
-                    `${teleportCost.toLocaleString()} minimum intelligence`}
-                </Button>
+                  <span>
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      onClick={handlTeleport}
+                      disabled={
+                        teleportCost === 0 ||
+                        teleportCost > hero.stats.intelligence ||
+                        shouldDisable
+                      }
+                    >
+                      Teleport
+                    </Button>
+                  </span>
+                </Tooltip>
               </Grid>
             )}
           </Grid>

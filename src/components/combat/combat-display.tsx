@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import LinearProgress from "@mui/material/LinearProgress";
+import Alert from "@mui/material/Alert";
 
 import ShieldIcon from "@mui/icons-material/Shield";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
@@ -340,57 +342,60 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           )}
         </Grid>
         {killedByAnother && "This enemy was killed by another player"}
-        {fightResult &&
-          fightResult.log.map((entry, i) => (
-            <React.Fragment key={`${entry.from}-${i}`}>
-              <Typography>
-                +{(maxTime - entry.time) / 1000}
-                {"s "}
-                {entry.isEnchantment && (
-                  <React.Fragment>
-                    {entry.damage < 0 && (
-                      <React.Fragment>
-                        <b>{entry.from}</b> heals{" "}
-                        <span id={`fight-${entry.from}-enchantment-heal`}>
-                          {(0 - entry.damage).toLocaleString()}
-                        </span>{" "}
-                        health from their enchantments
-                      </React.Fragment>
-                    )}
-                    {entry.damage > 0 && (
-                      <React.Fragment>
-                        <b>{entry.from}</b> dealt{" "}
-                        <span id={`fight-${entry.from}-enchantment-damage`}>
-                          {entry.damage.toLocaleString()}
-                        </span>{" "}
-                        enchantment damage to <b>{entry.to}</b>
-                      </React.Fragment>
-                    )}
-                  </React.Fragment>
-                )}
-                {!entry.isEnchantment && (
-                  <React.Fragment>
-                    <b>{entry.from}</b>
-                    {` ${getCombatPhrase(
-                      entry.attackType,
-                      entry.success,
-                      entry.critical,
-                    )} `}
-                    <b>{entry.to}</b>
-                    {entry.success
-                      ? ` for ${entry.damage.toLocaleString()} ${
-                          entry.damageType ? entry.damageType.toLowerCase() : ""
-                        } damage!`
-                      : "."}
-                  </React.Fragment>
-                )}
-              </Typography>
-            </React.Fragment>
-          ))}
+        {fightResult && (
+          <Box role="log" aria-live="polite" aria-relevant="additions">
+            {fightResult.log.map((entry, i) => (
+              <React.Fragment key={`${entry.from}-${i}`}>
+                <Typography>
+                  +{(maxTime - entry.time) / 1000}
+                  {"s "}
+                  {entry.isEnchantment && (
+                    <React.Fragment>
+                      {entry.damage < 0 && (
+                        <React.Fragment>
+                          <b>{entry.from}</b> heals{" "}
+                          <span id={`fight-${entry.from}-enchantment-heal`}>
+                            {(0 - entry.damage).toLocaleString()}
+                          </span>{" "}
+                          health from their enchantments
+                        </React.Fragment>
+                      )}
+                      {entry.damage > 0 && (
+                        <React.Fragment>
+                          <b>{entry.from}</b> dealt{" "}
+                          <span id={`fight-${entry.from}-enchantment-damage`}>
+                            {entry.damage.toLocaleString()}
+                          </span>{" "}
+                          enchantment damage to <b>{entry.to}</b>
+                        </React.Fragment>
+                      )}
+                    </React.Fragment>
+                  )}
+                  {!entry.isEnchantment && (
+                    <React.Fragment>
+                      <b>{entry.from}</b>
+                      {` ${getCombatPhrase(
+                        entry.attackType,
+                        entry.success,
+                        entry.critical,
+                      )} `}
+                      <b>{entry.to}</b>
+                      {entry.success
+                        ? ` for ${entry.damage.toLocaleString()} ${
+                            entry.damageType ? entry.damageType.toLowerCase() : ""
+                          } damage!`
+                        : "."}
+                    </React.Fragment>
+                  )}
+                </Typography>
+              </React.Fragment>
+            ))}
+          </Box>
+        )}
 
         {fightResult && fightResult.victory && (
           <React.Fragment>
-            <Typography id="fight-did-win">
+            <Alert id="fight-did-win" severity="success" sx={{ mt: 2 }}>
               {monster.name} has been killed!
               {(fightResult.experience || fightResult.gold) && " You gain "}
               {fightResult.gold && (
@@ -416,20 +421,16 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
               {fightResult.didLevel && (
                 <b id="fight-level-up">You leveled up!!</b>
               )}
-            </Typography>
+            </Alert>
             {fightResult.drop && (
-              <React.Fragment>
-                <br />
-                <Typography id="fight-got-drop" variant="h5">
-                  You find an enchanted item on the monster&apos;s corpse!
-                  <br />
-                  {itemDisplayName(fightResult.drop)}
-                </Typography>
-              </React.Fragment>
+              <Alert id="fight-got-drop" severity="info" sx={{ mt: 2 }}>
+                You find an enchanted item on the monster&apos;s corpse! {" "}
+                <b>{itemDisplayName(fightResult.drop)}</b>
+              </Alert>
             )}
           </React.Fragment>
         )}
-        <br />
+        <Box sx={{ mt: 2 }} />
         {showAutoBattle && (
           <Button
             fullWidth

@@ -5,15 +5,17 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
 
 import type { Hero } from "src/generated/graphql";
 import { useDarkMode } from "src/hooks/use-dark-mode";
 import { AppBarHeroStats, AppBarHero } from "./app-bar-hero-stats";
 import { LogoutButton } from "./logout-button";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 type AppBarProps = {
   hero?: AppBarHero & Pick<Hero, "name">;
@@ -49,29 +51,24 @@ export function AppBar({ hero }: AppBarProps): JSX.Element {
                   Proof of Combat
                 </Typography>
               </Grid>
-              <Grid item xs={1} aria-hidden="true">
-                {hero && (
-                  <React.Fragment>
-                    <Typography variant="h6" align="right">
-                      {hero.name}
-                      <br />
-                      <LogoutButton />
+              <Grid item xs={1}>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
+                  {hero && (
+                    <Typography variant="body1" component="p" sx={{ mr: 1 }}>
+                      {hero.name} <LogoutButton />
                     </Typography>
-                  </React.Fragment>
-                )}
-                <FormGroup>
-                  <Typography variant="caption" align="right">
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={darkMode ?? false}
-                          onChange={(e) => setDarkMode(e.target.checked)}
-                        />
-                      }
-                      label={darkMode ? "Dark mode" : "Light mode"}
-                    />
-                  </Typography>
-                </FormGroup>
+                  )}
+                  <Tooltip title={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+                    <IconButton
+                      size="small"
+                      color="inherit"
+                      aria-label={darkMode ? "toggle light mode" : "toggle dark mode"}
+                      onClick={() => setDarkMode(!darkMode)}
+                    >
+                      {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
               </Grid>
             </Grid>
           </Container>
