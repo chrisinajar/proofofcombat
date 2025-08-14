@@ -57,6 +57,11 @@ query Me {
               message
               id
             }
+            eventHistory {
+              id
+              quest
+              message
+            }
           }
           rebirth {
             id
@@ -67,6 +72,11 @@ query Me {
               quest
               message
               id
+            }
+            eventHistory {
+              id
+              quest
+              message
             }
           }
           droop {
@@ -79,6 +89,11 @@ query Me {
               message
               id
             }
+            eventHistory {
+              id
+              quest
+              message
+            }
           }
           clockwork {
             id
@@ -89,6 +104,11 @@ query Me {
               quest
               message
               id
+            }
+            eventHistory {
+              id
+              quest
+              message
             }
           }
           settlements {
@@ -101,6 +121,11 @@ query Me {
               message
               id
             }
+            eventHistory {
+              id
+              quest
+              message
+            }
           }
           tavernChampion {
             id
@@ -112,6 +137,11 @@ query Me {
               message
               id
             }
+            eventHistory {
+              id
+              quest
+              message
+            }
           }
           meetTheQueen {
             id
@@ -122,6 +152,11 @@ query Me {
               quest
               message
               id
+            }
+            eventHistory {
+              id
+              quest
+              message
             }
           }
           id
