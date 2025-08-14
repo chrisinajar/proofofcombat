@@ -109,7 +109,7 @@ export function QuestEntry({ quest }: { quest: QuestProgress }): JSX.Element {
                     aria-hidden={!showPrevious}
                     sx={{ display: showPrevious ? "block" : "none", marginTop: 1 }}
                   >
-                    {previous.map((evt) => (
+                    {[...previous].reverse().map((evt) => (
                       <Box
                         key={evt.id}
                         sx={{
