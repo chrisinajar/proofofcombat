@@ -14,11 +14,9 @@ import {
   EnchantmentType,
 } from "src/generated/graphql";
 
-import {
-  itemSorter,
-  itemDisplayName,
-  getEnchantmentDisplay,
-} from "src/helpers";
+import { itemSorter, itemDisplayName, getEnchantmentDisplay } from "src/helpers";
+import { modifierText } from "src/helpers";
+import { visuallyHidden } from "@mui/utils";
 
 import { Slots } from "./types";
 
@@ -170,12 +168,19 @@ export function EquipmentSlot({
             }}
           >
             {uniqueItems.map((inventoryItem) => {
+              const isSuperior = (inventoryItem.builtIns || []).length > 0;
+              const builtInText = (inventoryItem.builtIns || [])
+                .map((b) => modifierText(b))
+                .join(", ");
               return (
                 <MenuItem
                   key={inventoryItem.id}
                   value={inventoryItem.id}
                   disabled={otherEquippedItems.indexOf(inventoryItem.id) >= 0}
                 >
+                  {isSuperior && (
+                    <span style={visuallyHidden as any}>(Superior base) </span>
+                  )}
                   {inventoryItem.id === equipped ? (
                     <b>{itemDisplayName(inventoryItem)}</b>
                   ) : (
@@ -196,6 +201,11 @@ export function EquipmentSlot({
                   {inventoryItem.enchantment && (
                     <Typography variant="subtitle2" sx={{ color: "info.main" }}>
                       &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}
+                    </Typography>
+                  )}
+                  {isSuperior && builtInText && (
+                    <Typography variant="caption" sx={{ display: "block" }}>
+                      {builtInText}
                     </Typography>
                   )}
                 </MenuItem>

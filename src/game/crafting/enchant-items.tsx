@@ -24,6 +24,8 @@ import {
   itemSorter,
   getEnchantmentDisplay,
 } from "src/helpers";
+import { modifierText } from "src/helpers";
+import { visuallyHidden } from "@mui/utils";
 
 export function EnchantItems({
   hero,
@@ -128,10 +130,22 @@ export function EnchantItems({
           }}
         >
           {enchantableItems.map((item) => {
+            const isSuperior = (item.builtIns || []).length > 0;
+            const builtInText = (item.builtIns || [])
+              .map((b) => modifierText(b))
+              .join(", ");
             return (
               <MenuItem key={item.id} value={item.id}>
+                {isSuperior && (
+                  <span style={visuallyHidden as any}>(Superior base) </span>
+                )}
                 {itemDisplayName(item)}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
+                {isSuperior && builtInText && (
+                  <Typography variant="caption" sx={{ display: "block" }}>
+                    {builtInText}
+                  </Typography>
+                )}
               </MenuItem>
             );
           })}

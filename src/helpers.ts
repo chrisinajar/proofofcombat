@@ -198,6 +198,19 @@ export function modifierText(modifier: ArtifactAttribute): string {
     case ArtifactAttributeType.EnemyBlightResistance:
       return `-${percentage} to enemy blight resistance`;
       break;
+    // Item-specific built-ins (display only; scoped to the item)
+    case ArtifactAttributeType.ItemBonusArmor:
+      return `${percentage} increased armor (this item)`;
+      break;
+    case ArtifactAttributeType.ItemFlatArmor:
+      return `${Math.round(modifier.magnitude)} flat armor (this item)`;
+      break;
+    case ArtifactAttributeType.ItemBonusDamage:
+      return `${percentage} increased base damage (this weapon only)`;
+      break;
+    case ArtifactAttributeType.ItemFlatDamage:
+      return `${Math.round(modifier.magnitude)} flat base damage (this weapon only)`;
+      break;
   }
   // Ensure exhaustive handling; fail build when a new type is added but not handled above
   return assertUnreachable(modifier.type as never);
@@ -614,18 +627,20 @@ export function itemDisplayName(
   item: InventoryItem,
   enchantmentOverride: EnchantmentType | undefined | null = item.enchantment,
 ): string {
+  const isSuperior = (item.builtIns || []).length > 0;
+  const star = isSuperior ? "★ " : "";
   if (item.imbue) {
     if (enchantmentOverride) {
-      return `${item.imbue.artifact.name} ${
+      return `${star}${item.imbue.artifact.name} ${
         item.name
       } *${pureEnchantmentDisplayName(enchantmentOverride)}*`;
     }
-    return `${item.imbue.artifact.name} ${item.name}`;
+    return `${star}${item.imbue.artifact.name} ${item.name}`;
   }
   if (enchantmentOverride) {
-    return enchantmentDisplayName(item.name, enchantmentOverride);
+    return `${star}${enchantmentDisplayName(item.name, enchantmentOverride)}`;
   }
-  return item.name;
+  return `${star}${item.name}`;
 }
 
 type DistanceableLocation = {

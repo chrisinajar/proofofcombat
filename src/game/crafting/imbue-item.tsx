@@ -26,6 +26,7 @@ import {
   itemDisplayName,
   modifiersForArtifact,
 } from "src/helpers";
+import { visuallyHidden } from "@mui/utils";
 
 export function ImbueItem({
   hero,
@@ -103,8 +104,12 @@ export function ImbueItem({
           }}
         >
           {enchantableItems.map((item) => {
+            const isSuperior = (item.builtIns || []).length > 0;
             return (
               <MenuItem key={item.id} value={item.id}>
+                {isSuperior && (
+                  <span style={visuallyHidden as any}>(Superior base) </span>
+                )}
                 {itemDisplayName(item)}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
               </MenuItem>

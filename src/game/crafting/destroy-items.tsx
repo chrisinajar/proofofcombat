@@ -24,6 +24,8 @@ import {
   pureEnchantmentDisplayName,
   getEnchantmentDisplay,
 } from "src/helpers";
+import { modifierText } from "src/helpers";
+import { visuallyHidden } from "@mui/utils";
 
 export function DestroyItems({
   hero,
@@ -117,17 +119,29 @@ export function DestroyItems({
           }}
         >
           {filteredItems.map((item) => {
+            const isSuperior = (item.builtIns || []).length > 0;
+            const builtInText = (item.builtIns || [])
+              .map((b) => modifierText(b))
+              .join(", ");
             return (
               <MenuItem
                 key={item.id}
                 value={item.id}
                 disabled={isItemEquipped(hero, item)}
               >
+                {isSuperior && (
+                  <span style={visuallyHidden as any}>(Superior base) </span>
+                )}
                 {itemDisplayName(item)}{" "}
                 {isItemEquipped(hero, item) && "*EQUIPPED*"}
                 {item.enchantment && (
                   <Typography variant="subtitle2" sx={{ color: "info.main" }}>
                     &nbsp;{getEnchantmentDisplay(item.enchantment)}
+                  </Typography>
+                )}
+                {isSuperior && builtInText && (
+                  <Typography variant="caption" sx={{ display: "block" }}>
+                    {builtInText}
                   </Typography>
                 )}
               </MenuItem>

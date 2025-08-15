@@ -175,6 +175,10 @@ query Me {
           type
           level
           enchantment
+          builtIns {
+            type
+            magnitude
+          }
 
           imbue {
             artifact {
@@ -220,6 +224,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -263,6 +271,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -306,6 +318,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -349,6 +365,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -392,6 +412,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -435,6 +459,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -478,6 +506,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {
@@ -521,6 +553,10 @@ query Me {
             type
             level
             enchantment
+            builtIns {
+              type
+              magnitude
+            }
 
             imbue {
               artifact {

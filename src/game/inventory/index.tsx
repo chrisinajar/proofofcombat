@@ -16,6 +16,7 @@ import {
   pureEnchantmentDisplayName,
 } from "src/helpers";
 import { ArtifactModifiers } from "src/components/artifact-modifiers";
+import { BuiltInModifiers } from "src/components/built-in-modifiers";
 
 import { RebirthMenu } from "../rebirth";
 import { CreaftingMenu } from "../crafting";
@@ -157,6 +158,14 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.leftHand?.imbue?.artifact}
                 affixes={hero.equipment.leftHand?.imbue?.affixes}
               />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.leftHand
+                    ? itemDisplayName(hero.equipment.leftHand, null)
+                    : null
+                }
+                builtIns={hero.equipment.leftHand?.builtIns || []}
+              />
             </Grid>
             <Grid item xs={6} sm={3}>
               <ArtifactModifiers
@@ -167,6 +176,14 @@ export function Inventory(): JSX.Element | null {
                 }
                 artifact={hero.equipment.rightHand?.imbue?.artifact}
                 affixes={hero.equipment.rightHand?.imbue?.affixes}
+              />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.rightHand
+                    ? itemDisplayName(hero.equipment.rightHand, null)
+                    : null
+                }
+                builtIns={hero.equipment.rightHand?.builtIns || []}
               />
             </Grid>
             <Grid item xs={6} sm={3}>
@@ -179,6 +196,14 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.bodyArmor?.imbue?.artifact}
                 affixes={hero.equipment.bodyArmor?.imbue?.affixes}
               />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.bodyArmor
+                    ? itemDisplayName(hero.equipment.bodyArmor, null)
+                    : null
+                }
+                builtIns={hero.equipment.bodyArmor?.builtIns || []}
+              />
             </Grid>
             <Grid item xs={6} sm={3}>
               <ArtifactModifiers
@@ -189,6 +214,14 @@ export function Inventory(): JSX.Element | null {
                 }
                 artifact={hero.equipment.handArmor?.imbue?.artifact}
                 affixes={hero.equipment.handArmor?.imbue?.affixes}
+              />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.handArmor
+                    ? itemDisplayName(hero.equipment.handArmor, null)
+                    : null
+                }
+                builtIns={hero.equipment.handArmor?.builtIns || []}
               />
             </Grid>
             <Grid item xs={6} sm={3}>
@@ -201,6 +234,14 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.legArmor?.imbue?.artifact}
                 affixes={hero.equipment.legArmor?.imbue?.affixes}
               />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.legArmor
+                    ? itemDisplayName(hero.equipment.legArmor, null)
+                    : null
+                }
+                builtIns={hero.equipment.legArmor?.builtIns || []}
+              />
             </Grid>
             <Grid item xs={6} sm={3}>
               <ArtifactModifiers
@@ -212,6 +253,14 @@ export function Inventory(): JSX.Element | null {
                 artifact={hero.equipment.headArmor?.imbue?.artifact}
                 affixes={hero.equipment.headArmor?.imbue?.affixes}
               />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.headArmor
+                    ? itemDisplayName(hero.equipment.headArmor, null)
+                    : null
+                }
+                builtIns={hero.equipment.headArmor?.builtIns || []}
+              />
             </Grid>
             <Grid item xs={6} sm={3}>
               <ArtifactModifiers
@@ -222,6 +271,14 @@ export function Inventory(): JSX.Element | null {
                 }
                 artifact={hero.equipment.footArmor?.imbue?.artifact}
                 affixes={hero.equipment.footArmor?.imbue?.affixes}
+              />
+              <BuiltInModifiers
+                title={
+                  hero.equipment.footArmor
+                    ? itemDisplayName(hero.equipment.footArmor, null)
+                    : null
+                }
+                builtIns={hero.equipment.footArmor?.builtIns || []}
               />
             </Grid>
           </Grid>
