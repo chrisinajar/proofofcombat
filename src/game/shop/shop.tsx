@@ -22,6 +22,7 @@ import { useHero } from "src/hooks/use-hero";
 import { useDelay } from "src/hooks/use-delay";
 
 import { itemDisplayName, addSpaces, isItemEquipped } from "src/helpers";
+import { visuallyHidden } from "@mui/utils";
 
 const friendlyNames = {
   [InventoryItemType.MeleeWeapon]: "Melee Weapon",
@@ -101,6 +102,7 @@ export function SellItemShop({
         >
           {items.map((item) => {
             const sellItem = sellItemForItem(item);
+            const isSuperior = (item.builtIns || []).length > 0;
             return (
               <MenuItem
                 key={item.id}
@@ -112,6 +114,9 @@ export function SellItemShop({
                 {sellItem?.cost && (
                   <>
                     <Typography display="inline-block">
+                      {isSuperior && (
+                        <span style={visuallyHidden as any}>(Superior base) </span>
+                      )}
                       {itemDisplayName(item)}
                     </Typography>
                     &nbsp;
