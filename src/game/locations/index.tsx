@@ -38,6 +38,7 @@ import { Camp } from "./camp";
 import { SettlementManager } from "./settlement";
 import { MapModal } from "./map-modal";
 import { TavernGossip } from "./tavern-gossip";
+import { DuelingStone } from "./dueling-stone";
 
 const specialMonsterHints: { [x in string]: string } = {
   "random-aberration-unholy-paladin": "The darkness here isn't natural",
@@ -428,6 +429,11 @@ export function Locations(): JSX.Element | null {
         {specialLocation?.type === "tavern" && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
             <TavernGossip />
+          </Grid>
+        )}
+        {specialLocation?.type === "tavern" && (
+          <Grid item style={{ textAlign: "center" }} xs={2}>
+            <DuelingStone />
           </Grid>
         )}
 

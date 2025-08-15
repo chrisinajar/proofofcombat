@@ -1,0 +1,28 @@
+mutation challengeGraal {
+  challengeGraal {
+    outcome
+    hint
+    titleUnlocked
+    auraUnlocked
+    trophyAwarded
+    log {
+      time
+      damage
+      attackType
+      isEnchantment
+      success
+      from
+      to
+      critical
+    }
+    ledger {
+      total
+      wins
+      losses
+      bestStreak
+      currentStreak
+      lastChallengedAt
+      lastResult
+    }
+  }
+}

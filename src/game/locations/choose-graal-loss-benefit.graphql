@@ -1,0 +1,12 @@
+mutation chooseGraalLossBenefit($benefit: GraalLossBenefit!) {
+  chooseGraalLossBenefit(benefit: $benefit) {
+    total
+    wins
+    losses
+    bestStreak
+    currentStreak
+    lastChallengedAt
+    lastResult
+  }
+}
+

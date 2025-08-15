@@ -1,0 +1,12 @@
+query graalLedger {
+  graalLedger {
+    total
+    wins
+    losses
+    bestStreak
+    currentStreak
+    lastChallengedAt
+    lastResult
+  }
+}
+
