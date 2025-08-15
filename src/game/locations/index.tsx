@@ -37,6 +37,7 @@ import { NpcShop } from "./npc-shop";
 import { Camp } from "./camp";
 import { SettlementManager } from "./settlement";
 import { MapModal } from "./map-modal";
+import { TavernGossip } from "./tavern-gossip";
 
 const specialMonsterHints: { [x in string]: string } = {
   "random-aberration-unholy-paladin": "The darkness here isn't natural",
@@ -424,11 +425,11 @@ export function Locations(): JSX.Element | null {
             <Docks location={specialLocation} />
           </Grid>
         )}
-        {/*specialLocation?.type === "tavern" && (
+        {specialLocation?.type === "tavern" && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
-            <Button>Talk to the tavern keeper</Button>
+            <TavernGossip />
           </Grid>
-        )*/}
+        )}
 
         {locationDetails?.shop && (
           <Grid item style={{ textAlign: "center" }} xs={2}>

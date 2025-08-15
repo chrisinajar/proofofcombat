@@ -1,0 +1,14 @@
+mutation Talk {
+  talk {
+    account {
+      id
+      nextAllowedAction
+      timeRemaining
+    }
+    hero {
+      id
+    }
+    message
+  }
+}
+
