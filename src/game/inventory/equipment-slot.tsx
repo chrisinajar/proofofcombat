@@ -12,6 +12,7 @@ import {
   InventoryItemType,
   useEquipItemMutation,
   EnchantmentType,
+  ArtifactAttributeType,
 } from "src/generated/graphql";
 
 import { itemSorter, itemDisplayName, getEnchantmentDisplay } from "src/helpers";
@@ -70,6 +71,85 @@ function canEquipTo(slot: Slots, item: InventoryItem): boolean {
       return false;
       break;
   }
+}
+
+function isWeapon(type: InventoryItemType): boolean {
+  return (
+    type === InventoryItemType.MeleeWeapon ||
+    type === InventoryItemType.RangedWeapon ||
+    type === InventoryItemType.SpellFocus
+  );
+}
+
+function isArmor(type: InventoryItemType): boolean {
+  return (
+    type === InventoryItemType.BodyArmor ||
+    type === InventoryItemType.HandArmor ||
+    type === InventoryItemType.LegArmor ||
+    type === InventoryItemType.HeadArmor ||
+    type === InventoryItemType.FootArmor ||
+    type === InventoryItemType.Shield
+  );
+}
+
+function computeBaseWeaponDamage(level: number): number {
+  const increasedBaseDamage = 20;
+  const base = Math.max(1, Math.pow(1.05, level) * level * 8 + increasedBaseDamage);
+  return Math.round(base);
+}
+
+const ArmorSlotPenalty: Record<InventoryItemType, number> = {
+  [InventoryItemType.BodyArmor]: 1,
+  [InventoryItemType.FootArmor]: 3,
+  [InventoryItemType.HandArmor]: 3,
+  [InventoryItemType.HeadArmor]: 2,
+  [InventoryItemType.LegArmor]: 2,
+  [InventoryItemType.Shield]: 1,
+  [InventoryItemType.Accessory]: 0,
+  [InventoryItemType.MeleeWeapon]: 0,
+  [InventoryItemType.Quest]: 0,
+  [InventoryItemType.RangedWeapon]: 0,
+  [InventoryItemType.SpellFocus]: 0,
+};
+
+function armorForTier(level: number, type: InventoryItemType): number {
+  if (level < 1) return 0;
+  const raw = Math.round((level / 2 + Math.log(level)) * Math.pow(level, 1.3));
+  const penalty = ArmorSlotPenalty[type] ?? 1;
+  const adjusted = penalty > 0 ? (raw + penalty) / penalty : 0;
+  return Math.round(adjusted);
+}
+
+function weaponDamageWithBuiltIns(item: InventoryItem): number | undefined {
+  // Prefer server-computed field when available
+  const serverVal = (item as any).baseDamage as number | undefined;
+  if (typeof serverVal === "number") return serverVal;
+  if (!isWeapon(item.type)) return undefined;
+  const base = computeBaseWeaponDamage(item.level);
+  const flat = (item.builtIns || [])
+    .filter((a) => a.type === ArtifactAttributeType.ItemFlatDamage)
+    .reduce((m, a) => m + a.magnitude, 0);
+  const bonusSum = (item.builtIns || [])
+    .filter((a) => a.type === ArtifactAttributeType.ItemBonusDamage)
+    .reduce((m, a) => m + a.magnitude, 0);
+  const multiplier = bonusSum ? (bonusSum >= 1 ? bonusSum : 1 + bonusSum) : 1;
+  return Math.round(base * multiplier + flat);
+}
+
+function armorWithBuiltIns(item: InventoryItem): number | undefined {
+  // Prefer server-computed field when available
+  const serverVal = (item as any).baseArmor as number | undefined;
+  if (typeof serverVal === "number") return serverVal;
+  if (!isArmor(item.type)) return undefined;
+  const base = armorForTier(item.level, item.type);
+  const flat = (item.builtIns || [])
+    .filter((a) => a.type === ArtifactAttributeType.ItemFlatArmor)
+    .reduce((m, a) => m + a.magnitude, 0);
+  const bonusSum = (item.builtIns || [])
+    .filter((a) => a.type === ArtifactAttributeType.ItemBonusArmor)
+    .reduce((m, a) => m + a.magnitude, 0);
+  const multiplier = bonusSum ? (bonusSum >= 1 ? bonusSum : 1 + bonusSum) : 1;
+  return Math.round(base * multiplier + flat);
 }
 
 export function EquipmentSlot({
@@ -192,12 +272,19 @@ export function EquipmentSlot({
                         : ""}
                     </>
                   )}
-                  <Typography
-                    variant="caption"
-                    sx={{ color: "info.secondary" }}
-                  >
-                    &nbsp;Lvl. {inventoryItem.level}
-                  </Typography>
+                  {isWeapon(inventoryItem.type) ? (
+                    <Typography variant="caption" sx={{ color: "info.secondary" }}>
+                      &nbsp;{weaponDamageWithBuiltIns(inventoryItem) ?? "—"} Damage
+                    </Typography>
+                  ) : isArmor(inventoryItem.type) ? (
+                    <Typography variant="caption" sx={{ color: "info.secondary" }}>
+                      &nbsp;{armorWithBuiltIns(inventoryItem) ?? "—"} Armor
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption" sx={{ color: "info.secondary" }}>
+                      &nbsp;Lvl. {inventoryItem.level}
+                    </Typography>
+                  )}
                   {inventoryItem.enchantment && (
                     <Typography variant="subtitle2" sx={{ color: "info.main" }}>
                       &nbsp;{getEnchantmentDisplay(inventoryItem.enchantment)}

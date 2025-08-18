@@ -24,6 +24,7 @@ import { VoidTravelMenu } from "../void-travel";
 import { EquipmentSlot } from "./equipment-slot";
 import { Slots } from "./types";
 import { QuestItems } from "./quest-items";
+import { InventoryBrowser } from "./inventory-browser";
 
 export function Inventory(): JSX.Element | null {
   const [currentDelay] = useDelay();
@@ -300,6 +301,10 @@ export function Inventory(): JSX.Element | null {
             <VoidTravelMenu hero={hero} disabled={shouldDisable} />
           </Grid>
         )}
+
+        <Grid item xs={6}>
+          <InventoryBrowser hero={hero} onEquip={handleEquip} disabled={shouldDisable} />
+        </Grid>
       </Grid>
     </React.Fragment>
   );
