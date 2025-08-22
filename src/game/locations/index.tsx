@@ -46,7 +46,8 @@ const specialMonsterHints: { [x in string]: string } = {
   "domari-aberration-1":
     "The ash in the air is so thick you can barely breathe",
   "random-aberration-moving-mountain": "The ground itself threatens you",
-  "random-aberration-artificer": "Ancient machinery whirs and clicks around you, filling the air with an otherworldly hum",
+  "random-aberration-artificer":
+    "Ancient machinery whirs and clicks around you, filling the air with an otherworldly hum",
 };
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
@@ -104,7 +105,8 @@ export function Locations(): JSX.Element | null {
   const shouldDisable =
     loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading;
   const disableReason = (() => {
-    if (hero.combat.health === 0) return "You are dead. Heal in the Combat tab.";
+    if (hero.combat.health === 0)
+      return "You are dead. Heal in the Combat tab.";
     if (currentDelay > 0)
       return `In delay: available in ${(currentDelay / 1000).toFixed(1)}s`;
     if (loading) return "Moving...";
@@ -297,7 +299,7 @@ export function Locations(): JSX.Element | null {
                         : "text.secondary"
                     }
                   >
-                    Cost: {teleportCost.toLocaleString()} INT; You have {" "}
+                    Cost: {teleportCost.toLocaleString()} INT; You have{" "}
                     {hero.stats.intelligence.toLocaleString()} INT
                   </Typography>
                 </Box>
@@ -426,11 +428,12 @@ export function Locations(): JSX.Element | null {
             <Docks location={specialLocation} />
           </Grid>
         )}
-        {specialLocation?.type === "tavern" && (
-          <Grid item style={{ textAlign: "center" }} xs={2}>
-            <TavernGossip />
-          </Grid>
-        )}
+        {specialLocation?.type === "tavern" &&
+          hero.questLog.tasteForBusiness?.finished && (
+            <Grid item style={{ textAlign: "center" }} xs={2}>
+              <TavernGossip />
+            </Grid>
+          )}
         {specialLocation?.type === "tavern" && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
             <DuelingStone />

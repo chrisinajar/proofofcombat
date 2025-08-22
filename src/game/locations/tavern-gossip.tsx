@@ -14,7 +14,8 @@ export function TavernGossip(): JSX.Element {
 
   const shouldDisable = loading || currentDelay > 0;
   const disableReason = (() => {
-    if (currentDelay > 0) return `In delay: available in ${(currentDelay / 1000).toFixed(1)}s`;
+    if (currentDelay > 0)
+      return `In delay: available in ${(currentDelay / 1000).toFixed(1)}s`;
     if (loading) return "Asking...";
     return "";
   })();
@@ -44,24 +45,37 @@ export function TavernGossip(): JSX.Element {
         disableHoverListener={!(currentDelay > 0 || loading)}
       >
         <span>
-          <Button variant="contained" color="secondary" onClick={handleTalk} disabled={shouldDisable}>
-            Ask Bartender (Gossip)
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleTalk}
+            disabled={shouldDisable}
+          >
+            Ask Bartender about Gossip
           </Button>
         </span>
       </Tooltip>
 
       {disableReason && (
-        <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          display="block"
+          sx={{ mt: 1 }}
+        >
           {disableReason}
         </Typography>
       )}
 
       {message && (
-        <Typography component="div" variant="body1" sx={{ mt: 2, whiteSpace: "pre-line" }}>
+        <Typography
+          component="div"
+          variant="body1"
+          sx={{ mt: 2, whiteSpace: "pre-line" }}
+        >
           {message}
         </Typography>
       )}
     </div>
   );
 }
-

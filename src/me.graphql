@@ -159,6 +159,38 @@ query Me {
               message
             }
           }
+          tasteForBusiness {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+            eventHistory {
+              id
+              quest
+              message
+            }
+          }
+          nagaScale {
+            id
+            progress
+            finished
+            started
+            lastEvent {
+              quest
+              message
+              id
+            }
+            eventHistory {
+              id
+              quest
+              message
+            }
+          }
           id
         }
         currentQuest {
