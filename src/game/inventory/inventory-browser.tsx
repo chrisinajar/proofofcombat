@@ -24,7 +24,7 @@ import {
   InventoryItemType,
   ArtifactAttributeType,
 } from "src/generated/graphql";
-import { itemDisplayName, getEnchantmentDisplay, modifierText } from "src/helpers";
+import { itemDisplayName, getEnchantmentDisplay, modifierText, isItemEquipped } from "src/helpers";
 import { visuallyHidden } from "@mui/utils";
 
 import type { Slots } from "./types";
@@ -326,10 +326,21 @@ export function InventoryBrowser({
               const baseArmor = (item as any).baseArmor ?? armorWithBuiltIns(item);
               const builtInText = (item.builtIns || []).map((b) => modifierText(b)).join(", ");
               const slots = allowedSlotsForItem(item);
+              const equipped = isItemEquipped(hero, item);
               return (
-                <TableRow key={item.id} hover>
+                <TableRow key={item.id} hover selected={equipped} aria-selected={equipped}>
                   <TableCell>
                     <Typography component="span">{name}</Typography>
+                    {equipped && (
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        color="success.main"
+                        sx={{ ml: 1, fontWeight: 700 }}
+                      >
+                        *EQUIPPED*
+                      </Typography>
+                    )}
                   </TableCell>
                   <TableCell>
                     {item.enchantment ? (
