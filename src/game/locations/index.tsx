@@ -434,7 +434,7 @@ export function Locations(): JSX.Element | null {
               <TavernGossip />
             </Grid>
           )}
-        {specialLocation?.type === "tavern" && (
+        {specialLocation?.type === "tavern" && hero.level > 1000 && (
           <Grid item style={{ textAlign: "center" }} xs={2}>
             <DuelingStone />
           </Grid>
