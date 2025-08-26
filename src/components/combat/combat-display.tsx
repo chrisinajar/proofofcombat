@@ -32,6 +32,7 @@ import {
 import { itemDisplayName } from "src/helpers";
 
 import { StanceSelector } from "./stance-selector";
+import { CombatLog } from "./combat-log";
 
 type CombatDisplayProps = {
   autoBattle: boolean;
@@ -188,7 +189,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     };
   }, []);
 
-  const maxTime = fightResult?.log?.[0]?.time ?? 3000;
+  // Log timing handled inside CombatLog component
 
   return (
     <React.Fragment>
@@ -342,56 +343,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
           )}
         </Grid>
         {killedByAnother && "This enemy was killed by another player"}
-        {fightResult && (
-          <Box role="log" aria-live="polite" aria-relevant="additions">
-            {fightResult.log.map((entry, i) => (
-              <React.Fragment key={`${entry.from}-${i}`}>
-                <Typography>
-                  +{(maxTime - entry.time) / 1000}
-                  {"s "}
-                  {entry.isEnchantment && (
-                    <React.Fragment>
-                      {entry.damage < 0 && (
-                        <React.Fragment>
-                          <b>{entry.from}</b> heals{" "}
-                          <span id={`fight-${entry.from}-enchantment-heal`}>
-                            {(0 - entry.damage).toLocaleString()}
-                          </span>{" "}
-                          health from their enchantments
-                        </React.Fragment>
-                      )}
-                      {entry.damage > 0 && (
-                        <React.Fragment>
-                          <b>{entry.from}</b> dealt{" "}
-                          <span id={`fight-${entry.from}-enchantment-damage`}>
-                            {entry.damage.toLocaleString()}
-                          </span>{" "}
-                          enchantment damage to <b>{entry.to}</b>
-                        </React.Fragment>
-                      )}
-                    </React.Fragment>
-                  )}
-                  {!entry.isEnchantment && (
-                    <React.Fragment>
-                      <b>{entry.from}</b>
-                      {` ${getCombatPhrase(
-                        entry.attackType,
-                        entry.success,
-                        entry.critical,
-                      )} `}
-                      <b>{entry.to}</b>
-                      {entry.success
-                        ? ` for ${entry.damage.toLocaleString()} ${
-                            entry.damageType ? entry.damageType.toLowerCase() : ""
-                          } damage!`
-                        : "."}
-                    </React.Fragment>
-                  )}
-                </Typography>
-              </React.Fragment>
-            ))}
-          </Box>
-        )}
+        {fightResult && <CombatLog log={fightResult.log} />}
 
         {fightResult && fightResult.victory && (
           <React.Fragment>
