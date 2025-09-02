@@ -22,6 +22,7 @@ import {
   AttackType,
   PublicHero,
   HeroStance,
+  DungeonSelectionMode,
 } from "src/generated/graphql";
 
 import { useHero } from "src/hooks/use-hero";
@@ -77,6 +78,12 @@ export function Combat(): JSX.Element | null {
   const fightingMonster = monstersData?.monsters?.find(
     (m) => m.id === currentFight,
   );
+  const dungeon = hero?.dungeon ?? null;
+  const isLockedOrder = dungeon?.selection === DungeonSelectionMode.LockedOrder;
+  const isAnyOrder = dungeon?.selection === DungeonSelectionMode.AnyOrder;
+  const expectedNextId = isLockedOrder && dungeon?.remaining?.length
+    ? dungeon.remaining[Math.max(0, Math.min(dungeon.index, dungeon.remaining.length - 1))]
+    : null;
   let canAutoBattle = false;
   let improvedAutoBattleCount = 0;
 
@@ -156,22 +163,23 @@ export function Combat(): JSX.Element | null {
 
   useEffect(() => {
     if (monstersData?.monsters?.length) {
-      const monsterList = monstersData.monsters
+      let list = monstersData.monsters
         .concat()
         .sort((a, b) => a.monster.level - b.monster.level);
+      if (isAnyOrder && dungeon?.remaining?.length) {
+        list = list.filter((mi) => dungeon.remaining.includes(mi.monster.id));
+      }
 
       if (monster === "") {
-        setMonster(monsterList[0].id);
+        setMonster(list[0]?.id ?? "");
       } else {
-        const existingMonster = monstersData.monsters.find(
-          (m) => m.id === monster,
-        );
+        const existingMonster = list.find((m) => m.id === monster);
         if (!existingMonster) {
-          setMonster(monsterList[0].id);
+          setMonster(list[0]?.id ?? "");
         }
       }
     }
-  }, [monster, monstersData?.monsters?.length]);
+  }, [monster, monstersData?.monsters?.length, isAnyOrder, dungeon?.remaining?.join("|")]);
 
   async function handleHeal() {
     try {
@@ -250,6 +258,9 @@ export function Combat(): JSX.Element | null {
   if (!showAll) {
     challenges = challenges.slice(0, hero.level);
   }
+  if (isAnyOrder && dungeon?.remaining?.length) {
+    challenges = challenges.filter((c) => dungeon.remaining.includes(c.id));
+  }
 
   playerList = playerList.filter((p) => p.combat.health > 0);
 
@@ -261,6 +272,14 @@ export function Combat(): JSX.Element | null {
     fightingMonster &&
     challenges.some((c) => c.id === fightingMonster.monster.id)
   );
+  const isChallengableFinal = isLockedOrder ? !!expectedNextId : isMonsterInChallengeList;
+  const fightingCorrectLocked = !!(
+    isLockedOrder &&
+    expectedNextId &&
+    fightingMonster &&
+    fightingMonster.monster.id === expectedNextId
+  );
+  const canChallengeNext = !!(isLockedOrder && expectedNextId && !fightingCorrectLocked);
 
   return (
     <React.Fragment>
@@ -268,6 +287,7 @@ export function Combat(): JSX.Element | null {
       <Grid container columns={6} spacing={4}>
         {!autoBattle && hero && hero.combat.health > 0 && (
           <React.Fragment>
+            {!isLockedOrder && (
             <Grid item md={3} xs={6}>
               <FormControl fullWidth>
                 <InputLabel id="challenge-monster-select-label">
@@ -306,6 +326,8 @@ export function Combat(): JSX.Element | null {
                 </Button>
               </FormControl>
             </Grid>
+            )}
+            {!isLockedOrder && (
             <Grid item md={3} xs={6}>
               <FormControl fullWidth>
                 <InputLabel id="fight-monster-select-label">
@@ -322,6 +344,7 @@ export function Combat(): JSX.Element | null {
                   {monstersData?.monsters &&
                     [...monstersData?.monsters]
                       .sort((a, b) => a.monster.level - b.monster.level)
+                      .filter((mi) => !isAnyOrder || !dungeon?.remaining?.length || dungeon.remaining.includes(mi.monster.id))
                       .map((monsterInstance) => (
                         <MenuItem
                           key={monsterInstance.id}
@@ -351,7 +374,21 @@ export function Combat(): JSX.Element | null {
                 </Button>
               </FormControl>
             </Grid>
-            {playerList.length > 1 && (
+            )}
+            {isLockedOrder && canChallengeNext && (
+              <Grid item md={6} xs={6}>
+                <Button
+                  fullWidth
+                  id="challenge-next-monster"
+                  variant="contained"
+                  disabled={currentDelay > 0 || healLoading || autoBattle}
+                  onClick={() => expectedNextId && challengeTarget(expectedNextId)}
+                >
+                  Challenge Next Monster
+                </Button>
+              </Grid>
+            )}
+            {!dungeon && playerList.length > 1 && (
               <Grid item md={3} xs={6}>
                 <FormControl fullWidth>
                   <InputLabel id="duel-select-label">{duelLabel}</InputLabel>
@@ -439,10 +476,17 @@ export function Combat(): JSX.Element | null {
               autoBattle={autoBattle}
               canAutoBattle={canAutoBattle}
               onAutoBattle={handleAutoBattle}
-              onRematch={challengeTarget}
+              onRematch={(id) => {
+                if (isLockedOrder && expectedNextId) {
+                  challengeTarget(expectedNextId);
+                } else {
+                  challengeTarget(id);
+                }
+              }}
+              rematchLabel={isLockedOrder ? "Challenge Next Monster" : undefined}
               fightMutationRef={fightMutationRef}
               onVictory={() => setMobKillCount(mobKillCount + 1)}
-              isChallengable={isMonsterInChallengeList}
+              isChallengable={isChallengableFinal}
             />
           </React.Fragment>
         )}

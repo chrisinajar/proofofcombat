@@ -1,0 +1,7 @@
+mutation ClearDungeon($id: ID!) {
+  clearDungeon(id: $id) {
+    id
+    name
+  }
+}
+

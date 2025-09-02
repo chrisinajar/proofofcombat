@@ -51,6 +51,7 @@ type CombatDisplayProps = {
   };
   onVictory?: () => void;
   onRematch?: (monsterName: string) => void;
+  rematchLabel?: string;
   onError?: (e: any) => void;
   onAutoBattle?: (monsterId: string, attackType: AttackType) => void;
   fightMutationRef?: React.MutableRefObject<(attackType: AttackType) => void>;
@@ -65,6 +66,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
     fight: { id: monsterId, monster },
     onVictory,
     onRematch,
+    rematchLabel,
     onError,
     onAutoBattle,
     fightMutationRef,
@@ -337,7 +339,7 @@ export function CombatDisplay(props: CombatDisplayProps): JSX.Element | null {
                 aria-label="respawn monster"
                 startIcon={<ReplayIcon />}
               >
-                Spawn new {monster.name}
+                {rematchLabel ?? `Spawn new ${monster.name}`}
               </Button>
             </Tooltip>
           )}

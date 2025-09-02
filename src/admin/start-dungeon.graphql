@@ -1,0 +1,7 @@
+mutation StartDungeon($id: ID!, $sequence: [ID!]!, $selection: DungeonSelectionMode, $dungeonId: ID) {
+  startDungeon(id: $id, sequence: $sequence, selection: $selection, dungeonId: $dungeonId) {
+    id
+    name
+  }
+}
+
