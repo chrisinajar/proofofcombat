@@ -4,13 +4,13 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { useMeQuery, useChallengesQuery } from "src/generated/graphql";
+import { useMeQuery, useChallengesQuery, Hero } from "src/generated/graphql";
 
 export function DungeonStatus(): JSX.Element | null {
   const { data } = useMeQuery({ fetchPolicy: "cache-only" });
   const { data: challengesData } = useChallengesQuery();
 
-  const hero = (data?.me?.account?.hero as any) ?? null;
+  const hero: Hero | null = (data?.me?.account?.hero as Hero) ?? null;
   const dungeon = hero?.dungeon ?? null;
 
   if (!dungeon) return null;
@@ -45,12 +45,18 @@ export function DungeonStatus(): JSX.Element | null {
       </Typography>
     );
   }
+  const lockNote = dungeon.lockedLocation ? (
+    <Typography variant="caption" color="text.secondary">
+      Movement locked at {dungeon.lockedLocation.x}, {dungeon.lockedLocation.y} ({dungeon.lockedLocation.map})
+    </Typography>
+  ) : null;
 
   return (
     <Stack sx={{ mb: 2 }}>
       <Alert severity="info" variant="outlined">
         <AlertTitle>Dungeon Active</AlertTitle>
         {details}
+        {lockNote}
       </Alert>
     </Stack>
   );

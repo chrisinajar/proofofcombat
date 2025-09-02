@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 
 import { useDockListQuery, useSailMutation } from "src/generated/graphql";
+import { useHero } from "src/hooks/use-hero";
 import { distance2d } from "src/helpers";
 
 type Dock = {
@@ -24,10 +25,12 @@ export function Docks({
 }: {
   location: { name: string; location: { x: number; y: number } };
 }): JSX.Element {
+  const hero = useHero();
   const [sailMutation, { loading }] = useSailMutation();
   const { data: docksData } = useDockListQuery();
   const [dock, setDock] = useState<string>("");
   const sailLabel = "Choose a port to sail to";
+  const locked = !!hero?.dungeon?.lockedLocation;
 
   function dockDistance(dock: Dock): number {
     const distance = distance2d(dock.location, location.location);
@@ -59,7 +62,9 @@ export function Docks({
     <Box>
       <Typography variant="h5">{location.name}</Typography>
       <Typography>
-        The wooden docks creak and sway with the water below.
+        {locked
+          ? `Movement locked at ${hero?.dungeon?.lockedLocation?.x}, ${hero?.dungeon?.lockedLocation?.y} (${hero?.dungeon?.lockedLocation?.map}).`
+          : "The wooden docks creak and sway with the water below."}
       </Typography>
       <FormControl fullWidth>
         <InputLabel id="sail-dock-select-label">{sailLabel}</InputLabel>
@@ -69,6 +74,7 @@ export function Docks({
           value={dock}
           label={sailLabel}
           onChange={(e) => setDock(e.target.value)}
+          disabled={locked}
         >
           {docksData?.docks &&
             [...docksData?.docks]
@@ -93,7 +99,7 @@ export function Docks({
           onClick={handleSail}
           variant="outlined"
           color="success"
-          disabled={!dock.length || loading}
+          disabled={locked || !dock.length || loading}
         >
           Sail!
         </Button>

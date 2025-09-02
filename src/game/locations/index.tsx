@@ -103,8 +103,12 @@ export function Locations(): JSX.Element | null {
   }
 
   const shouldDisable =
-    loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading;
+    loading || hero.combat.health === 0 || currentDelay > 0 || teleportLoading || !!hero.dungeon?.lockedLocation;
   const disableReason = (() => {
+    if (hero.dungeon?.lockedLocation) {
+      const ll = hero.dungeon.lockedLocation;
+      return `Movement locked at ${ll.x}, ${ll.y} (${ll.map})`;
+    }
     if (hero.combat.health === 0)
       return "You are dead. Heal in the Combat tab.";
     if (currentDelay > 0)
@@ -188,7 +192,11 @@ export function Locations(): JSX.Element | null {
             <Grid item style={{ textAlign: "center" }} xs={6}>
               <Typography variant="h3">Travel</Typography>
               {hero.combat.health > 0 && (
-                <Typography>Use buttons to move around the map.</Typography>
+                <Typography>
+                  {hero.dungeon?.lockedLocation
+                    ? `Movement locked at ${hero.dungeon.lockedLocation.x}, ${hero.dungeon.lockedLocation.y} (${hero.dungeon.lockedLocation.map}).`
+                    : "Use buttons to move around the map."}
+                </Typography>
               )}
               {hero.combat.health === 0 && (
                 <Typography component="p" variant="h6">
@@ -305,7 +313,9 @@ export function Locations(): JSX.Element | null {
                 </Box>
                 <Tooltip
                   title={
-                    teleportCost === 0
+                    hero.dungeon?.lockedLocation
+                      ? "Cannot teleport while in a locked dungeon"
+                      : teleportCost === 0
                       ? "Already at target coordinates"
                       : teleportCost > hero.stats.intelligence
                       ? "Insufficient intelligence"
@@ -321,6 +331,7 @@ export function Locations(): JSX.Element | null {
                   }
                   disableHoverListener={
                     !(
+                      hero.dungeon?.lockedLocation ||
                       teleportCost === 0 ||
                       teleportCost > hero.stats.intelligence ||
                       shouldDisable
@@ -333,6 +344,7 @@ export function Locations(): JSX.Element | null {
                       variant="outlined"
                       onClick={handlTeleport}
                       disabled={
+                        !!hero.dungeon?.lockedLocation ||
                         teleportCost === 0 ||
                         teleportCost > hero.stats.intelligence ||
                         shouldDisable
