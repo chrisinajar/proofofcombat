@@ -8,6 +8,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 import {
   useStartDungeonMutation,
@@ -24,6 +26,7 @@ export function DungeonTools({ account }: Props): JSX.Element {
   const [mode, setMode] = useState<DungeonSelectionMode>(
     DungeonSelectionMode.LockedOrder,
   );
+  const [lockAtStart, setLockAtStart] = useState<boolean>(true);
 
   const [startDungeon, { loading: startLoading }] = useStartDungeonMutation();
   const [clearDungeon, { loading: clearLoading }] = useClearDungeonMutation();
@@ -40,6 +43,7 @@ export function DungeonTools({ account }: Props): JSX.Element {
         sequence,
         selection: mode,
         dungeonId: "test-dungeon-1",
+        lockAtStart,
       },
     });
   }
@@ -67,6 +71,15 @@ export function DungeonTools({ account }: Props): JSX.Element {
             <MenuItem value={DungeonSelectionMode.AnyOrder}>Any order</MenuItem>
           </Select>
         </FormControl>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={lockAtStart}
+              onChange={(e) => setLockAtStart(e.target.checked)}
+            />
+          }
+          label="Lock at current location"
+        />
         <Button
           variant="contained"
           onClick={handleStart}
@@ -89,4 +102,3 @@ export function DungeonTools({ account }: Props): JSX.Element {
     </Box>
   );
 }
-

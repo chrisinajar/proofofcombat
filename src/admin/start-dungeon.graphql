@@ -1,7 +1,6 @@
-mutation StartDungeon($id: ID!, $sequence: [ID!]!, $selection: DungeonSelectionMode, $dungeonId: ID) {
-  startDungeon(id: $id, sequence: $sequence, selection: $selection, dungeonId: $dungeonId) {
+mutation StartDungeon($id: ID!, $sequence: [ID!]!, $selection: DungeonSelectionMode, $dungeonId: ID, $lockAtStart: Boolean) {
+  startDungeon(id: $id, sequence: $sequence, selection: $selection, dungeonId: $dungeonId, lockAtStart: $lockAtStart) {
     id
     name
   }
 }
-
