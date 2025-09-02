@@ -30,6 +30,7 @@ import { useLocation } from "src/hooks/use-location";
 
 import { CombatDisplay } from "./combat-display";
 import { itemAllowsAutoBattle, itemImprovesAutoBattle } from "src/helpers";
+import { DungeonStatus } from "src/components/dungeon-status";
 
 type PartialMonsterInstance = Pick<MonsterInstance, "monster" | "id">;
 
@@ -263,6 +264,7 @@ export function Combat(): JSX.Element | null {
 
   return (
     <React.Fragment>
+      <DungeonStatus />
       <Grid container columns={6} spacing={4}>
         {!autoBattle && hero && hero.combat.health > 0 && (
           <React.Fragment>

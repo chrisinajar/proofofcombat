@@ -1,0 +1,977 @@
+directive @auth on FIELD_DEFINITION
+
+directive @admin on FIELD_DEFINITION
+
+directive @proof(level: Int!) on FIELD_DEFINITION
+
+directive @delay(delay: Int!) on FIELD_DEFINITION
+
+interface BaseModel {
+  id: ID!
+}
+
+interface ComatStats {
+  health: Float!
+  maxHealth: Float!
+}
+
+interface Attributes {
+  strength: Float!
+  dexterity: Float!
+  constitution: Float!
+  intelligence: Float!
+  wisdom: Float!
+  willpower: Float!
+  luck: Float!
+}
+
+type Query {
+  me: LoginResponse!
+  chat: ChatResponse!
+  leaderboard: [LeadboardEntry!]!
+  monster(id: ID!): Monster!
+  monsters: [MonsterInstance!]!
+  challenges: [Monster!]!
+  quest(quest: Quest!): QuestDescription!
+  locationDetails(location: LocationInput): LocationDetails!
+  docks(map: String): [SpecialLocation!]!
+  availableUpgrades: [PlayerLocationUpgradeDescription!]!
+  settlementManager: SettlementManager!
+  shopItems: [ShopItem!]!
+  baseItem(item: ID!): ShopItem!
+  accounts(filter: String): AccountListResponse!
+  account(id: ID!): BaseAccount!
+  graalAvailable: Boolean!
+  graalLedger: GraalLedger!
+}
+
+type Mutation {
+  login(name: String!, password: String!): LoginResponse!
+  createAccount(name: String!, password: String!): BaseAccount!
+  heal: HealResponse!
+  increaseAttribute(attribute: AttributeType!, spendAll: Boolean, amount: Int): LevelUpResponse!
+  attackHero(id: ID!, attackType: AttackType, stance: HeroStance): HeroFightResult!
+  changeMinimumStat(name: String!, value: Int!): LevelUpResponse!
+  changeAutoDust(value: Int!): LevelUpResponse!
+  changeActiveSkill(skill: HeroSkill!): LevelUpResponse!
+  changeSkillPercent(percent: Int!): LevelUpResponse!
+  acceptArtifact: LevelUpResponse!
+  rejectArtifact: LevelUpResponse!
+  challenge(monster: ID!): MonsterInstance!
+  fight(monster: ID!, attackType: AttackType, stance: HeroStance): MonsterFightResult!
+  dismissQuest: LevelUpResponse!
+  rebirth: LevelUpResponse!
+  talk: TalkResponse!
+  teleport(x: Int!, y: Int!): MoveResponse!
+  sail(x: Int!, y: Int!): MoveResponse!
+  move(direction: MoveDirection!): MoveResponse!
+  moveAStar(x: Int!, y: Int!): MoveResponse!
+  npcTrade(trade: ID!): NpcShopTradeResponse!
+  voidTravel: MoveResponse!
+  settleCamp: ExtendedCampResponse!
+  buyResource(resource: String!, amount: Int!): LevelUpResponse!
+  sellResource(resource: String!, amount: Int!): LevelUpResponse!
+  upgradeCamp(upgrade: PlayerLocationUpgrades!): ExtendedCampResponse!
+  buildBuilding(type: PlayerLocationType!, location: LocationInput!): ExtendedSettlementResponse!
+  destroyBuilding(location: LocationInput!): LevelUpResponse!
+  purchaseBonds(location: LocationInput!, amount: Int!): PlayerLocationResponse!
+  craftHoneyEssences(location: LocationInput!, amount: Int!): PlayerLocationResponse!
+  buildFortifications(location: LocationInput!, amount: Int!): PlayerLocationResponse!
+  craftGoldEssences(location: LocationInput!, greater: Boolean!): PlayerLocationResponse!
+  recruit(location: LocationInput!, amount: Int!): PlayerLocationResponse!
+  attackLocation(target: LocationInput!, units: MilitaryUnitInput!): AttackResponse!
+  moveTroups(target: LocationInput!, units: MilitaryUnitInput!): PlayerLocationResponse!
+  buy(baseItem: ID!): LevelUpResponse!
+  sell(item: ID!): LevelUpResponse!
+  equip(item: ID!, slot: String!): LevelUpResponse!
+  offerTrade(offer: TradeOfferInput!): TradeOfferReply!
+  dismissTrade(offer: ID!): LevelUpResponse
+  acceptTrade(offer: ID!): LevelUpResponse
+  destroyItem(item: ID!): LevelUpResponse!
+  disenchantItem(item: ID!): LevelUpResponse!
+  enchantItem(item: ID!, enchantment: EnchantmentType!): LevelUpResponse!
+  imbueItem(item: String!, artifact: String!, affixes: [ArtifactAttributeType!]!): LevelUpResponse!
+  createItem(id: ID!, baseItem: String!, enchantment: EnchantmentType): BaseAccount!
+  giveGold(id: ID!, amount: Float!): BaseAccount!
+  setSkill(id: ID!, skill: HeroSkill!, level: Int!): BaseAccount!
+  addLevels(id: ID!, levels: Int!): BaseAccount!
+  banAccount(id: ID!): AdminActionResponse!
+  unbanAccount(id: ID!): AdminActionResponse!
+  deleteAccount(id: ID!): AdminActionResponse!
+  spawnRandomBoss: AdminActionResponse!
+  generateArtifact(id: ID!, level: Float!): BaseAccount!
+  startDungeon(id: ID!, sequence: [ID!]!, selection: DungeonSelectionMode = LockedOrder, dungeonId: ID): BaseAccount!
+  clearDungeon(id: ID!): BaseAccount!
+  challengeGraal: GraalDuelResult!
+  chooseGraalLossBenefit(benefit: GraalLossBenefit!): GraalLedger!
+}
+
+type BaseAccount implements BaseModel {
+  id: ID!
+  name: String!
+  password: String!
+  authVersion: Int!
+  banned: Boolean!
+  nextAllowedAction: String
+  timeRemaining: Int
+  hero: Hero
+  access: AccessRole
+}
+
+type LoginResponse {
+  account: BaseAccount!
+  token: String!
+  now: String!
+}
+
+type ChatResponse {
+  token: String!
+}
+
+enum AccessRole {
+  Admin
+}
+
+type Hero implements BaseModel {
+  id: ID!
+  version: Int!
+  name: String!
+  class: HeroClasses!
+  level: Int!
+  levelCap: Int!
+  experience: Int!
+  needed: Int!
+  gold: Float!
+  enchantingDust: Int!
+  location: Location!
+  home: PlayerLocation
+  attributePoints: Int!
+  combat: HeroCombatStats!
+  stats: HeroStats!
+  enchantments: [EnchantmentType!]!
+  inventory: [InventoryItem!]!
+  equipment: EquipmentSlots!
+  currentQuest: QuestEvent
+  questLog: QuestLog!
+  combatStats: ExtendedCombatStats
+  incomingTrades: [TradeOffer!]!
+  outgoingTrades: [TradeOffer!]!
+  settings: HeroSettings!
+  skills: HeroSkills!
+  skillPercent: Int!
+  activeSkill: HeroSkill!
+  activeStance: HeroStance!
+  availableStances: [HeroStance!]!
+  buffs: HeroBuffs!
+  pendingArtifact: ArtifactItem
+  attackSpeedRemainder: Int!
+  availableAttacks: [AttackType!]!
+  monsterKills: [MonsterKillEntry!]!
+  dungeon: DungeonState
+}
+
+type HeroBuffs {
+  blessing: EnchantmentType
+}
+
+enum HeroStance {
+  Normal
+  Reckless
+  Fire
+  Ice
+  Lightning
+  Sunder
+  Blight
+}
+
+enum HeroSkill {
+  attackingAccuracy
+  castingAccuracy
+  attackingDamage
+  castingDamage
+  vitality
+  resilience
+  regeneration
+}
+
+type HeroSkills {
+  attackingAccuracy: Int!
+  castingAccuracy: Int!
+  attackingDamage: Int!
+  castingDamage: Int!
+  vitality: Int!
+  resilience: Int!
+  regeneration: Int!
+}
+
+type PublicHero {
+  id: ID!
+  name: String!
+  level: Int!
+  class: HeroClasses!
+  local: Boolean!
+  combat: HeroCombatStats!
+}
+
+type HeroFightResult {
+  account: BaseAccount!
+  hero: Hero!
+  otherHero: PublicHero!
+  log: [CombatEntry!]!
+  victory: Boolean!
+}
+
+type HeroSettings {
+  minimumStats: HeroStats!
+  autoDust: Int!
+}
+
+type ExtendedCombatStats {
+  damageAmplification: Float!
+  armor: Int!
+  armorReduction: Float!
+  enemyStats: HeroStats!
+  stats: HeroStats!
+  physicalResistance: Float!
+  magicalResistance: Float!
+  fireResistance: Float!
+  iceResistance: Float!
+  lightningResistance: Float!
+  holyResistance: Float!
+  blightResistance: Float!
+  attackRating: Int!
+  physicalEvasionRating: Int!
+  magicEvasionRating: Int!
+  baseDamage: Int!
+  secondAttackBaseDamage: Int!
+}
+
+enum HeroClasses {
+  Monster
+  Adventurer
+  JackOfAllTrades
+  Gambler
+  Fighter
+  Berserker
+  Wizard
+  Warlock
+  BattleMage
+  Paladin
+  Ranger
+  BloodMage
+  Monk
+  Daredevil
+  Gladiator
+  EnragedBerserker
+  MasterWizard
+  MasterWarlock
+  DemonHunter
+  Zealot
+  Archer
+  Vampire
+}
+
+type LeadboardEntry {
+  id: ID!
+  name: String!
+  gold: Float!
+  level: Int!
+  class: String!
+}
+
+type LevelUpResponse {
+  hero: Hero!
+  account: BaseAccount!
+}
+
+enum AttributeType {
+  strength
+  dexterity
+  constitution
+  intelligence
+  wisdom
+  willpower
+  luck
+  all
+}
+
+enum MoveDirection {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+type HealResponse {
+  account: BaseAccount!
+  hero: Hero!
+}
+
+type EquipmentSlots {
+  id: ID
+  leftHand: InventoryItem
+  rightHand: InventoryItem
+  bodyArmor: InventoryItem
+  handArmor: InventoryItem
+  legArmor: InventoryItem
+  headArmor: InventoryItem
+  footArmor: InventoryItem
+  accessories: [InventoryItem!]!
+  artifact: ArtifactItem
+}
+
+type HeroCombatStats implements ComatStats {
+  health: Float!
+  maxHealth: Float!
+}
+
+type HeroStats implements Attributes {
+  strength: Float!
+  dexterity: Float!
+  constitution: Float!
+  intelligence: Float!
+  wisdom: Float!
+  willpower: Float!
+  luck: Float!
+}
+
+type MonsterKillEntry {
+  monsterId: ID!
+  kills: Int!
+}
+
+enum DungeonSelectionMode {
+  AnyOrder
+  LockedOrder
+}
+
+type DungeonState {
+  id: ID
+  remaining: [ID!]!
+  selection: DungeonSelectionMode!
+  index: Int!
+}
+
+type MonsterFightResult {
+  account: BaseAccount!
+  hero: Hero!
+  monster: MonsterInstance!
+  log: [CombatEntry!]!
+  victory: Boolean!
+  experience: Int
+  gold: Float
+  drop: InventoryItem
+  didLevel: Boolean
+}
+
+type MonsterInstance implements BaseModel {
+  id: ID!
+  location: Location!
+  monster: Monster!
+  equipment: MonsterEquipment
+  lastActive: Int!
+  attackSpeedRemainder: Int!
+}
+
+type Monster {
+  id: ID!
+  name: String!
+  level: Float!
+  combat: MonsterCombatStats!
+  attackType: AttackType!
+  terrain: String
+}
+
+type MonsterEquipment {
+  leftHand: MonsterItem!
+  rightHand: MonsterItem!
+  bodyArmor: MonsterItem!
+  handArmor: MonsterItem!
+  legArmor: MonsterItem!
+  headArmor: MonsterItem!
+  footArmor: MonsterItem!
+}
+
+type MonsterItem {
+  level: Float!
+  enchantment: EnchantmentType
+  imbue: InventoryItemImbue
+}
+
+type MonsterCombatStats implements ComatStats {
+  health: Float!
+  maxHealth: Float!
+}
+
+type CombatEntry {
+  time: Int!
+  damage: Float!
+  attackType: AttackType!
+  damageType: DamageType
+  isEnchantment: Boolean!
+  success: Boolean!
+  from: String!
+  to: String!
+  critical: Boolean!
+  isMesmerize: Boolean
+}
+
+enum AttackType {
+  MELEE
+  RANGED
+  CAST
+  SMITE
+  BLOOD
+}
+
+enum DamageType {
+  Physical
+  Magical
+  Enchantment
+  Fire
+  Ice
+  Lightning
+  Holy
+  Blight
+}
+
+enum Quest {
+  TasteForBusiness
+  WashedUp
+  Rebirth
+  DroopsQuest
+  NagaScale
+  MysteriousAutomation
+  TavernChampion
+  MinorClassUpgrades
+  Settlements
+  MeetTheQueen
+  EssencePurification
+}
+
+type QuestLog {
+  id: ID!
+  tasteForBusiness: QuestProgress
+  washedUp: QuestProgress
+  rebirth: QuestProgress
+  droop: QuestProgress
+  nagaScale: QuestProgress
+  clockwork: QuestProgress
+  tavernChampion: QuestProgress
+  minorClassUpgrades: QuestProgress
+  settlements: QuestProgress
+  meetTheQueen: QuestProgress
+  dailyPurification: QuestProgress
+}
+
+type QuestEvent {
+  id: ID!
+  message: [String!]
+  quest: Quest!
+}
+
+type QuestDescription {
+  id: Quest!
+  description: String
+}
+
+type QuestProgress {
+  id: ID!
+  started: Boolean!
+  finished: Boolean!
+  progress: Int!
+  lastEvent: QuestEvent
+  eventHistory: [QuestEvent!]
+}
+
+type TalkResponse {
+  hero: Hero!
+  account: BaseAccount!
+  message: String!
+}
+
+type ExtendedCampResponse {
+  account: BaseAccount!
+  hero: Hero!
+  camp: PlayerLocation
+}
+
+type ExtendedSettlementResponse {
+  account: BaseAccount!
+  hero: Hero!
+  settlement: SettlementManager!
+}
+
+type PlayerLocationUpgradeDescription {
+  type: PlayerLocationUpgrades!
+  name: String!
+  cost: [CampResources!]!
+}
+
+type SettlementManager {
+  id: ID!
+  capital: PlayerLocation!
+  range: Int!
+  availableUpgrades: [PlayerLocationUpgradeDescription!]!
+  availableBuildings: [PlayerLocationBuildingDescription!]!
+  adjacentTiles: [PlayerLocation!]!
+}
+
+type PlayerLocationBuildingDescription {
+  type: PlayerLocationType!
+  name: String!
+  cost: [CampResources!]!
+  description: String!
+}
+
+type PlayerLocation {
+  id: ID!
+  location: Location!
+  owner: ID!
+  publicOwner: PublicHero
+  type: PlayerLocationType!
+  upgrades: [PlayerLocationUpgrades!]!
+  resources: [CampResources!]!
+  upkeep: UpkeepCosts!
+  lastUpkeep: String
+  connections: [PlayerLocation!]!
+  availableUpgrades: [PlayerLocationUpgradeDescription!]!
+  health: Int!
+  maxHealth: Int!
+  remainingAttacks: Int!
+}
+
+type UpkeepCosts {
+  stone: Int!
+  wood: Int!
+  food: Int!
+  water: Int!
+}
+
+type CampResources {
+  name: String!
+  value: Float!
+  maximum: Float
+}
+
+enum PlayerLocationUpgrades {
+  Tent
+  FirePit
+  ChoppingBlock
+  RainCollectionUnit
+  WoodStorage
+  StoneStorage
+  ImprovedCamp
+  Garden
+  HiredHelp
+  TradingPost
+  StorageCache
+  Settlement
+  HasBuiltFarm
+  HasGovernorsTitle
+  GovernorsManor
+}
+
+enum PlayerLocationType {
+  Camp
+  Settlement
+  Treasury
+  Farm
+  Shrine
+  Apiary
+  Barracks
+  Garrison
+}
+
+type LocationDetails {
+  location: Location!
+  specialLocations: [SpecialLocation!]!
+  terrain: TerrainData!
+  shop: NpcShop
+  players: [PublicHero!]
+  playerLocations: [PlayerLocation!]
+  voidTravel: Boolean
+  neighborTerrain: NeighborTerrainData!
+}
+
+type NeighborTerrainData {
+  north: TerrainData
+  south: TerrainData
+  east: TerrainData
+  west: TerrainData
+}
+
+type SpecialLocation {
+  location: Location!
+  name: String!
+  type: String!
+  description: [String!]
+}
+
+type NpcShop {
+  name: String!
+  trades: [NpcShopTrade!]!
+}
+
+type NpcShopTrade {
+  id: ID!
+  price: NpcShopItems!
+  offer: NpcShopItems!
+}
+
+type NpcShopItems {
+  gold: Float
+  dust: Int
+  baseItems: [String!]
+  enchantments: [EnchantmentType!]
+  questItems: [String!]
+  description: String
+}
+
+type NpcShopTradeResponse {
+  success: Boolean!
+  message: String!
+  hero: Hero!
+  account: BaseAccount!
+}
+
+type TerrainData {
+  terrain: String!
+}
+
+type Location {
+  x: Int!
+  y: Int!
+  map: ID!
+}
+
+input LocationInput {
+  x: Int!
+  y: Int!
+  map: ID!
+}
+
+type MoveResponse {
+  hero: Hero!
+  account: BaseAccount!
+  monsters: [MonsterInstance!]!
+}
+
+input MilitaryUnitInput {
+  enlisted: Int
+  soldier: Int
+  veteran: Int
+  ghost: Int
+}
+
+type AttackResponse {
+  account: BaseAccount
+  target: PlayerLocation!
+  totalDamage: Int!
+  damage: Int!
+  targetCasualties: AttackCasualties!
+  attackerCasualties: AttackCasualties!
+}
+
+type AttackCasualties {
+  enlisted: Int
+  soldier: Int
+  veteran: Int
+  ghost: Int
+  fortifications: Int
+}
+
+type PlayerLocationResponse {
+  location: PlayerLocation!
+  account: BaseAccount
+}
+
+type ShopItem {
+  id: ID!
+  alias: String!
+  name: String!
+  type: InventoryItemType!
+  cost: Int
+  level: Int!
+}
+
+type InventoryItem implements BaseModel {
+  id: ID!
+  owner: ID!
+  baseItem: ID!
+  name: String!
+  type: InventoryItemType!
+  level: Int!
+  enchantment: EnchantmentType
+  imbue: InventoryItemImbue
+  builtIns: [ArtifactAttribute!]
+  baseDamage: Int
+  baseArmor: Int
+}
+
+type InventoryItemImbue {
+  artifact: ArtifactItem!
+  affixes: [ArtifactAttributeType!]!
+}
+
+type ArtifactItem implements BaseModel {
+  id: ID!
+  owner: ID!
+  name: String!
+  level: Int!
+  attributes: ArtifactAttributes!
+}
+
+type ArtifactAttributes {
+  namePrefix: ArtifactAttribute!
+  namePostfix: ArtifactAttribute!
+  titlePrefix: ArtifactAttribute
+  titlePostfix: ArtifactAttribute
+  bonusAffixes: [ArtifactAttribute!]!
+}
+
+type ArtifactAttribute {
+  type: ArtifactAttributeType!
+  magnitude: Float!
+}
+
+enum ArtifactAttributeType {
+  BonusStrength
+  BonusDexterity
+  BonusConstitution
+  BonusIntelligence
+  BonusWisdom
+  BonusWillpower
+  BonusLuck
+  DamageReduction
+  EnhancedDamage
+  BonusHealth
+  ReducedDelay
+  BonusExperience
+  BonusSkillChance
+  Lifesteal
+  Mesmerize
+  Focus
+  AllResistances
+  DamageAsPhysical
+  DamageAsMagical
+  DamageAsFire
+  DamageAsIce
+  DamageAsLightning
+  DamageAsHoly
+  DamageAsBlight
+  PhysicalResistance
+  MagicalResistance
+  FireResistance
+  IceResistance
+  LightningResistance
+  HolyResistance
+  BlightResistance
+  BonusPhysicalDamage
+  BonusMagicalDamage
+  BonusFireDamage
+  BonusIceDamage
+  BonusLightningDamage
+  BonusHolyDamage
+  BonusBlightDamage
+  EnemyPhysicalResistance
+  EnemyMagicalResistance
+  EnemyFireResistance
+  EnemyIceResistance
+  EnemyLightningResistance
+  EnemyHolyResistance
+  EnemyBlightResistance
+  ItemBonusArmor
+  ItemFlatArmor
+  ItemBonusDamage
+  ItemFlatDamage
+}
+
+enum EnchantmentType {
+  BonusStrength
+  BonusDexterity
+  BonusConstitution
+  BonusIntelligence
+  BonusWisdom
+  BonusWillpower
+  BonusLuck
+  BonusPhysical
+  BonusMental
+  BonusAllStats
+  LifeHeal
+  LifeDamage
+  LifeSteal
+  MinusEnemyArmor
+  BonusArmor
+  CounterSpell
+  BigCounterSpell
+  SuperCounterSpell
+  Mesmerize
+  Focus
+  MinusEnemyStrength
+  MinusEnemyDexterity
+  MinusEnemyConstitution
+  MinusEnemyIntelligence
+  MinusEnemyWisdom
+  MinusEnemyWillpower
+  StrengthSteal
+  DexteritySteal
+  ConstitutionSteal
+  IntelligenceSteal
+  WisdomSteal
+  WillpowerSteal
+  LuckSteal
+  MinusEnemyPhysical
+  MinusEnemyMental
+  MinusEnemyAllStats
+  WisDexWill
+  AllStatsSteal
+  Vampirism
+  BigMelee
+  BigCaster
+  SuperDexterity
+  SuperWillpower
+  SuperWisdom
+  SuperMelee
+  SuperCaster
+  SuperMeleeVamp
+  SuperSorcVamp
+  SuperVamp
+  SuperVampMelee
+  SuperVampSorc
+  SuperBattleMage
+  SuperAllStats
+  TierFourCommon
+  SuperDexterityStats
+  SuperWillpowerStats
+  SuperWisdomStats
+  SuperVampStats
+  SuperMeleeStats
+  SuperCasterStats
+  SuperVampMeleeStats
+  SuperVampSorcStats
+  SuperMeleeVampStats
+  SuperBattleMageStats
+  SuperSorcVampStats
+  TwentyLifeSteal
+  ThirtyLifeSteal
+  FishermansStrength
+  FishermansDexterity
+  FishermansConstitution
+  FishermansIntelligence
+  FishermansWisdom
+  FishermansWillpower
+  FishermansLuck
+  CanRebirth
+  CanCraft
+  AutoBattle
+  DoubleExperience
+  DoubleLeveling
+  BonusDust
+  IncreasedGoldCap
+  MeleeUpgrade
+  CasterUpgrade
+  ArcherUpgrade
+  VampireUpgrade
+  GamblerUpgrade
+  BattleMageUpgrade
+  SmiterUpgrade
+  DoubleAccuracy
+  DoubleDodge
+  ImprovedAutomation
+  DoubleAllStats
+  BonusWeaponTier
+  BonusArmorTier
+  RangedSecondAttackChance
+  BonusMeleeWeaponTier
+  BonusCasterWeaponTier
+  BonusSmiteWeaponTier
+  BonusRangedWeaponTier
+  RangedArmorPiercing
+  MeleeArmorPiercing
+  CasterArmorPiercing
+  SmiteArmorPiercing
+  VampireArmorPiercing
+  ReduceTeleportCost
+  AncientKey
+  CanTravelOnWater
+  CanTravelOnForbidden
+  VoidTravel
+  UpgradedSettlement
+  RubyBlessing
+  EmeraldBlessing
+  SapphireBlessing
+  DiamondBlessing
+  CanOnlyTakeOneDamage
+}
+
+enum InventoryItemType {
+  Quest
+  MeleeWeapon
+  RangedWeapon
+  Shield
+  SpellFocus
+  BodyArmor
+  HandArmor
+  LegArmor
+  HeadArmor
+  FootArmor
+  Accessory
+}
+
+input TradeOfferInput {
+  to: ID!
+  item: String!
+  gold: Float!
+}
+
+type TradeOffer {
+  id: ID!
+  fromId: ID!
+  fromName: String!
+  toId: ID!
+  toName: String!
+  item: InventoryItem!
+  gold: Float!
+}
+
+type TradeOfferReply {
+  hero: Hero!
+  account: BaseAccount!
+  trade: TradeOffer!
+}
+
+type AccountListResponse {
+  count: Int!
+  accounts: [BaseAccount!]!
+}
+
+type AdminActionResponse {
+  success: Boolean!
+  account: BaseAccount
+}
+
+type GraalLedger {
+  total: Int!
+  wins: Int!
+  losses: Int!
+  bestStreak: Int!
+  currentStreak: Int!
+  lastChallengedAt: String
+  lastResult: String
+}
+
+enum GraalLossBenefit {
+  ShameForged
+  Scabsteel
+}
+
+type GraalDuelResult {
+  outcome: String!
+  hint: String
+  titleUnlocked: String
+  auraUnlocked: String
+  trophyAwarded: Boolean!
+  log: [CombatEntry!]!
+  ledger: GraalLedger!
+}

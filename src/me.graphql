@@ -13,6 +13,14 @@ query Me {
         name
         class
 
+        # Dungeon status and progress
+        dungeon {
+          id
+          remaining
+          selection
+          index
+        }
+
         level
         levelCap
         experience
