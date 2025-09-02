@@ -130,13 +130,28 @@ export function Combat(): JSX.Element | null {
       console.log("[AutoBattler] Healing!");
       return handleHeal();
     }
+    // Determine desired target based on dungeon rules
+    let desiredTargetId: string | null = autoBattleTarget;
+    if (isLockedOrder) {
+      desiredTargetId = expectedNextId ?? null;
+    } else if (isAnyOrder && dungeon?.remaining?.length) {
+      desiredTargetId = dungeon.remaining.includes(autoBattleTarget)
+        ? autoBattleTarget
+        : dungeon.remaining[0] ?? null;
+    }
+
     if (
       !fightingMonster ||
       fightingMonster.monster.combat.health === 0 ||
-      fightingMonster.monster.id !== autoBattleTarget
+      (desiredTargetId && fightingMonster.monster.id !== desiredTargetId)
     ) {
-      console.log("[AutoBattler] Challenging new mob!");
-      challengeTarget(autoBattleTarget);
+      if (!desiredTargetId) {
+        console.log("[AutoBattler] No valid target; disabling auto-battle.");
+        setAutoBattle(false);
+        return;
+      }
+      console.log("[AutoBattler] Challenging new mob!", desiredTargetId);
+      challengeTarget(desiredTargetId);
       return;
     }
     if (fightingMonster && fightMutationRef.current) {

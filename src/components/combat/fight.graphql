@@ -36,6 +36,12 @@ mutation Fight($monster: ID!, $attackType: AttackType, $stance: HeroStance) {
       attributePoints
       gold
       needed
+      dungeon {
+        id
+        remaining
+        selection
+        index
+      }
       skills {
         attackingAccuracy
         castingAccuracy
