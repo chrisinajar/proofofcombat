@@ -436,6 +436,9 @@ export function getEnchantmentDisplay(enchantment: string): string {
     case "void-vessel":
       return "Select to show void travel";
       break;
+    case "treasure-map":
+      return "Select to read the map";
+      break;
     case "crafting-goggles":
       return "Allows sorting and bulk crafting";
       break;
