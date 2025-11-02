@@ -12,6 +12,7 @@ import {
   itemAllowsRebirth,
   itemAllowsCrafting,
   itemAllowsVoidTravel,
+  itemAllowsMapReading,
   getEnchantmentDisplay,
   pureEnchantmentDisplayName,
 } from "src/helpers";
@@ -21,6 +22,7 @@ import { BuiltInModifiers } from "src/components/built-in-modifiers";
 import { RebirthMenu } from "../rebirth";
 import { CreaftingMenu } from "../crafting";
 import { VoidTravelMenu } from "../void-travel";
+import { ReadMapMenu } from "../treasure/read-map";
 import { EquipmentSlot } from "./equipment-slot";
 import { Slots } from "./types";
 import { QuestItems } from "./quest-items";
@@ -30,6 +32,7 @@ export function Inventory(): JSX.Element | null {
   const [currentDelay] = useDelay();
   const [equipItemMutation, { loading }] = useEquipItemMutation();
   const [selectedQuestItem, setSelectedQuestItem] = useState<string>("");
+  const [selectedQuestItemId, setSelectedQuestItemId] = useState<string>("");
   const hero = useHero();
 
   const shouldDisable = loading || currentDelay > 0;
@@ -126,6 +129,7 @@ export function Inventory(): JSX.Element | null {
             hero={hero}
             disabled={shouldDisable}
             onChange={setSelectedQuestItem}
+            onSelectItemId={setSelectedQuestItemId}
           />
         </Grid>
 
@@ -299,6 +303,15 @@ export function Inventory(): JSX.Element | null {
         {itemAllowsVoidTravel(selectedQuestItem) && (
           <Grid item xs={6}>
             <VoidTravelMenu hero={hero} disabled={shouldDisable} />
+          </Grid>
+        )}
+        {itemAllowsMapReading(selectedQuestItem) && (
+          <Grid item xs={6}>
+            <ReadMapMenu
+              hero={hero}
+              itemId={selectedQuestItemId || undefined}
+              disabled={shouldDisable}
+            />
           </Grid>
         )}
 

@@ -704,6 +704,12 @@ export function itemAllowsCrafting(item: string): boolean {
   }
   return false;
 }
+export function itemAllowsMapReading(item: string): boolean {
+  if (item === "treasure-map") {
+    return true;
+  }
+  return false;
+}
 export function itemImprovesCrafting(item: string): boolean {
   if (item === "crafting-goggles") {
     return true;

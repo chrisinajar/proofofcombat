@@ -1,0 +1,18 @@
+mutation ReadMap($itemId: ID!) {
+  readMap(itemId: $itemId) {
+    message
+    hero {
+      id
+      location {
+        map
+        x
+        y
+      }
+    }
+    account {
+      id
+      name
+    }
+  }
+}
+

@@ -7,8 +7,38 @@ mutation Talk {
     }
     hero {
       id
+      inventory {
+        id
+        baseItem
+        owner
+        name
+        type
+        level
+        baseDamage
+        baseArmor
+        enchantment
+        builtIns {
+          type
+          magnitude
+        }
+        imbue {
+          artifact {
+            id
+            owner
+            name
+            level
+            attributes {
+              namePrefix { type magnitude }
+              namePostfix { type magnitude }
+              titlePrefix { type magnitude }
+              titlePostfix { type magnitude }
+              bonusAffixes { type magnitude }
+            }
+          }
+          affixes
+        }
+      }
     }
     message
   }
 }
-

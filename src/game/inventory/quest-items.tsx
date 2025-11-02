@@ -13,10 +13,12 @@ export function QuestItems({
   hero,
   disabled,
   onChange,
+  onSelectItemId,
 }: {
   hero: Hero;
   disabled: boolean;
   onChange?: (val: string) => void;
+  onSelectItemId?: (id: string) => void;
 }): JSX.Element {
   const [value, setValue] = useState<string>("");
   const items = hero.inventory
@@ -64,6 +66,9 @@ export function QuestItems({
             disabled={disabled}
             onChange={(e) => {
               setValue(e.target.value);
+              if (onSelectItemId) {
+                onSelectItemId(e.target.value as string);
+              }
               if (onChange) {
                 const actualItem = items.find((i) => i.id === e.target.value);
                 if (actualItem) {
