@@ -1,23 +1,20 @@
-name: Publish UI
+name: Publish Classic UI
 
 on:
   push:
     branches:
-      - main
+      - classic-ui
 
 jobs:
-  create-release:
+  publish-classic:
     runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
-      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
         with:
-          ref: main
+          ref: classic-ui
           fetch-depth: 0
 
       - name: Read .nvmrc
@@ -33,25 +30,28 @@ jobs:
         run: |
           npm install --global yarn
           yarn
-      - name: graphql codegen
+
+      - name: graphql codegen (classic schema)
         env:
-          NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.CLASSIC_API_URL }}
         run: |
           yarn generate
-      - name: build project
+
+      - name: build project for /classic
+        env:
+          # Ensure the built app uses relative paths under /classic
+          NEXT_PUBLIC_BASE_URL: ""
+          NEXT_PUBLIC_BASE_PATH: /classic
+          NEXT_PUBLIC_API_PATH: /graphql
+          NEXT_PUBLIC_SOCKET_PATH: /classic/socket.io
         run: |
           yarn build
           touch out/.nojekyll
 
-      - name: Deploy 🚀
+      - name: Deploy classic to gh-pages/classic 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: out # The folder the action should deploy.
-          # Preserve the classic subfolder deployed by the classic UI workflow
-          clean-exclude: |
-            classic
-
-      - name: Send deploy notification
-        run: |
-          curl https://chrisinajar.com:8443/external-api/github-ui-release -H "Authorization: ${{ secrets.DEPLOY_SECRET }}"
+          branch: gh-pages
+          folder: out
+          target-folder: classic
+          clean: true
