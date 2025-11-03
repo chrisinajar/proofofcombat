@@ -12,11 +12,10 @@ import { ApolloProvider } from "@apollo/client";
 import { useSnackbar } from "notistack";
 
 import { useDelay } from "src/hooks/use-delay";
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+import { API_URL } from "src/config";
 
 const httpLink = createHttpLink({
-  uri: baseUrl,
+  uri: API_URL,
 });
 
 const authLink = setContext((req, { headers }) => {

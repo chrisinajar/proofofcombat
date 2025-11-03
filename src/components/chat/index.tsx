@@ -40,8 +40,7 @@ import { itemDisplayName } from "src/helpers";
 import { Trade } from "./trade";
 import { ArtifactModal } from "./artifact-modal";
 import { getArtifactNotification } from "src/helpers/artifact-notifications";
-
-const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL;
+import { SOCKET_ORIGIN, SOCKET_PATH } from "src/config";
 
 const chatLimit = 140;
 
@@ -130,7 +129,7 @@ export function Chat(): JSX.Element {
     if (socketRef.current) {
       return;
     }
-    if (!socketUrl || !data?.chat?.token) {
+    if (!data?.chat?.token) {
       return;
     }
 
@@ -150,8 +149,10 @@ export function Chat(): JSX.Element {
       settlement: "info",
     };
 
-    socketRef.current = io(socketUrl, {
+    const origin = SOCKET_ORIGIN || window.location.origin;
+    socketRef.current = io(origin, {
       withCredentials: true,
+      path: SOCKET_PATH || "/socket.io",
       auth: {
         token: data.chat.token,
       },
