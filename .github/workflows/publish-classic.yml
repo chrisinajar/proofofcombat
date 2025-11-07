@@ -8,6 +8,9 @@ on:
 jobs:
   publish-classic:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
+      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/classic/socket.io
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
@@ -40,10 +43,7 @@ jobs:
       - name: build project for /classic
         env:
           # Ensure the built app uses relative paths under /classic
-          NEXT_PUBLIC_BASE_URL: ""
           NEXT_PUBLIC_BASE_PATH: /classic
-          NEXT_PUBLIC_API_PATH: /graphql
-          NEXT_PUBLIC_SOCKET_PATH: /classic/socket.io
         run: |
           yarn build
           touch out/.nojekyll

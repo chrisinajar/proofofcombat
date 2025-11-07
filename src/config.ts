@@ -7,8 +7,21 @@ export const API_PATH = process.env.NEXT_PUBLIC_API_PATH || '/graphql';
 export const API_URL =
   process.env.NEXT_PUBLIC_BASE_URL || `${BASE_PATH}${API_PATH}`;
 
-// Socket origin: if unset, use current window origin in runtime; path defaults under basePath
-export const SOCKET_ORIGIN = process.env.NEXT_PUBLIC_SOCKET_ORIGIN || '';
-export const SOCKET_PATH =
-  process.env.NEXT_PUBLIC_SOCKET_PATH || `${BASE_PATH}/socket.io`;
+// Chat URL (preferred): a full URL pointing to the Socket.IO endpoint or its origin.
+// Example: https://chat.example.com/socket.io or https://chat.example.com:2096
+const CHAT_URL = process.env.NEXT_PUBLIC_CHAT_URL || '';
+let CHAT_ORIGIN = '';
+let CHAT_PATH = '';
+if (CHAT_URL) {
+  try {
+    const u = new URL(CHAT_URL);
+    CHAT_ORIGIN = `${u.protocol}//${u.host}`;
+    CHAT_PATH = u.pathname || '/socket.io';
+  } catch {
+    // ignore invalid URL; fall back to legacy envs
+  }
+}
 
+// Legacy envs remain supported, but NEXT_PUBLIC_CHAT_URL takes precedence
+export const SOCKET_ORIGIN = CHAT_ORIGIN || process.env.NEXT_PUBLIC_SOCKET_ORIGIN || '';
+export const SOCKET_PATH = CHAT_PATH || process.env.NEXT_PUBLIC_SOCKET_PATH || `${BASE_PATH}/socket.io`;
