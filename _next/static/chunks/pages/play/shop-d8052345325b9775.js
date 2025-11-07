@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[544],{4818:function(n,u,_){"use strict";_.r(u);var t=_(1377);u.default=t.Z},3795:function(n,u,_){(window.__NEXT_P=window.__NEXT_P||[]).push(["/play/shop",function(){return _(4818)}])}},function(n){n.O(0,[806,993,688,446,377,774,888,179],(function(){return u=3795,n(n.s=u);var u}));var u=n.O();_N_E=u}]);
