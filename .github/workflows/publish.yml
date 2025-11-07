@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_URL: ${{ secrets.PROD_API_URL }}
-      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/
+      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/socket.io
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV

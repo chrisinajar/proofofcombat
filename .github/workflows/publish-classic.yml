@@ -3,18 +3,21 @@ name: Publish Classic UI
 on:
   push:
     branches:
-      - classic-ui
+      - classic
 
 jobs:
   publish-classic:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_URL: ${{ secrets.CLASSIC_API_URL }}
+      NEXT_PUBLIC_CHAT_URL: https://chrisinajar.com:2096/classic/socket.io
     steps:
       - name: Allow setting envs
         run: echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
         with:
-          ref: classic-ui
+          ref: classic
           fetch-depth: 0
 
       - name: Read .nvmrc
@@ -40,10 +43,7 @@ jobs:
       - name: build project for /classic
         env:
           # Ensure the built app uses relative paths under /classic
-          NEXT_PUBLIC_BASE_URL: ""
           NEXT_PUBLIC_BASE_PATH: /classic
-          NEXT_PUBLIC_API_PATH: /graphql
-          NEXT_PUBLIC_SOCKET_PATH: /classic/socket.io
         run: |
           yarn build
           touch out/.nojekyll
