@@ -7,15 +7,6 @@ const nextConfig = {
   basePath: basePath || undefined,
   assetPrefix: assetPrefix || undefined,
   trailingSlash: true,
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/classic/",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
