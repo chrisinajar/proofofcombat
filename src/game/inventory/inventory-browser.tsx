@@ -137,16 +137,11 @@ function sortValueFor(item: InventoryItem, key: SortKey): string | number {
       return item.level;
     case "baseDmg":
       return isWeapon(item.type)
-        ? // prefer server-computed when available
-          (typeof (item as any).baseDamage === "number"
-            ? ((item as any).baseDamage as number)
-            : weaponDamageWithBuiltIns(item) ?? 0)
+        ? (item.baseDamage ?? weaponDamageWithBuiltIns(item) ?? 0)
         : 0;
     case "baseArmor":
       return isArmor(item.type)
-        ? (typeof (item as any).baseArmor === "number"
-            ? ((item as any).baseArmor as number)
-            : armorWithBuiltIns(item) ?? 0)
+        ? (item.baseArmor ?? armorWithBuiltIns(item) ?? 0)
         : 0;
   }
 }
@@ -322,8 +317,8 @@ export function InventoryBrowser({
           <TableBody>
             {pageItems.map((item) => {
               const name = itemDisplayName(item);
-              const baseDmg = (item as any).baseDamage ?? weaponDamageWithBuiltIns(item);
-              const baseArmor = (item as any).baseArmor ?? armorWithBuiltIns(item);
+              const baseDmg = item.baseDamage ?? weaponDamageWithBuiltIns(item);
+              const baseArmor = item.baseArmor ?? armorWithBuiltIns(item);
               const builtInText = (item.builtIns || []).map((b) => modifierText(b)).join(", ");
               const slots = allowedSlotsForItem(item);
               const equipped = isItemEquipped(hero, item);

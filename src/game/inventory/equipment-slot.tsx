@@ -121,9 +121,7 @@ function armorForTier(level: number, type: InventoryItemType): number {
 }
 
 function weaponDamageWithBuiltIns(item: InventoryItem): number | undefined {
-  // Prefer server-computed field when available
-  const serverVal = (item as any).baseDamage as number | undefined;
-  if (typeof serverVal === "number") return serverVal;
+  if (typeof item.baseDamage === "number") return item.baseDamage;
   if (!isWeapon(item.type)) return undefined;
   const base = computeBaseWeaponDamage(item.level);
   const flat = (item.builtIns || [])
@@ -137,9 +135,7 @@ function weaponDamageWithBuiltIns(item: InventoryItem): number | undefined {
 }
 
 function armorWithBuiltIns(item: InventoryItem): number | undefined {
-  // Prefer server-computed field when available
-  const serverVal = (item as any).baseArmor as number | undefined;
-  if (typeof serverVal === "number") return serverVal;
+  if (typeof item.baseArmor === "number") return item.baseArmor;
   if (!isArmor(item.type)) return undefined;
   const base = armorForTier(item.level, item.type);
   const flat = (item.builtIns || [])
